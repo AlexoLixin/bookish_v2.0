@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.94.206.26:3306/don9blog?useUnicode=true&characterEncoding=utf8
+    name: root
+    password: 921220
+
+# \u63A7\u5236spring security\u7684\u5F00\u5173
+management:
+  security:
+    enabled: false

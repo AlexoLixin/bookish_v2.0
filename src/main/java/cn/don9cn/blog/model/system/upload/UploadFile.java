@@ -1,0 +1,107 @@
+package cn.don9cn.blog.model.system.upload;
+
+
+import cn.don9cn.blog.annotation.DbColumn;
+import cn.don9cn.blog.annotation.DbTable;
+import cn.don9cn.blog.model.BaseModel;
+
+import java.io.Serializable;
+
+/**
+ *@Author: liuxindong
+ *@Description: 上传文件实体
+ *@Create: 2017/10/8 19:50
+ *@Modify:
+ **/
+@DbTable
+public class UploadFile extends BaseModel implements Serializable{
+
+    /**
+     * 实现序列化接口
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 名称
+     */
+    @DbColumn(length = "200",allowNull = false,content = "文件名称")
+    private String name;
+    /**
+     * 真实名称
+     */
+    @DbColumn(length = "200",allowNull = false,content = "真实名称")
+    private String realName;
+    /**
+     * 路径
+     */
+    @DbColumn(length = "200",allowNull = false,content = "文件路径")
+    private String path;
+    /**
+     * 来源
+     */
+    @DbColumn(allowNull = false,content = "关联来源")
+    private String link;
+
+    //开始时间(用于按时间段筛选功能,不存入数据库)
+    private String startDate;
+    //结束时间(用于按时间段筛选功能,不存入数据库)
+    private String endDate;
+
+    public UploadFile(){}
+
+    public UploadFile(String name, String realName, String path, String link){
+        this.name = name;
+        this.realName = realName;
+        this.path = path;
+        this.link = link;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+}
