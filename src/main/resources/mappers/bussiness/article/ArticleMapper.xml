@@ -116,6 +116,9 @@
 			<if test="content !=null and content !=''"> AND CONTENT = #{content,jdbcType=VARCHAR}</if>
 			<if test="files !=null and files !=''"> AND FILES = #{files,jdbcType=VARCHAR}</if>
 		</where>
+		<if test="orderBy !=null and orderBy !=''">
+			ORDER BY #{orderBy,jdbcType=VARCHAR}
+		</if>
 	</select>
 
 	<!-- 查询指定条件的实体集合 -->
@@ -177,7 +180,3 @@
 	</update>
 
 </mapper>
-	
-
-
- </mapper>

@@ -118,17 +118,13 @@ public interface BaseDao<T extends Serializable> {
      * @return
      */
     default Optional<PageResult<T>> findByPage(PageParamsBean<T> pageParamsBean){
-        String sidx = pageParamsBean.getSidx();
-        String sord = pageParamsBean.getSord();
         int page = pageParamsBean.getPage();
         int size = pageParamsBean.getSize();
-        T clazz = pageParamsBean.getT();
-        sidx = FieldParserUtil.parse2DbName(sidx);
-        sidx = sidx + " " + sord;
+        T entity = pageParamsBean.getT();
         page =(("null".equals(String.valueOf(page)))||("0".equals(String.valueOf(page))))?SqlConstant.DEFAULT_CURRENT_PAGE:page;
         size =(("null".equals(String.valueOf(size)))||("0".equals(String.valueOf(size))))?SqlConstant.DEFAULT_CURRENT_PAGE:size;
-        PageHelper.startPage(page, size, sidx);
-        return PageResult.build(Optional.ofNullable(this.getSessionTemplate().selectList(this.getSqlName(SqlConstant.FIND_BY_PAGE), clazz)));
+        PageHelper.startPage(page, size);
+        return PageResult.build(Optional.ofNullable(this.getSessionTemplate().selectList(this.getSqlName(SqlConstant.FIND_BY_PAGE), entity)));
     }
 
 }

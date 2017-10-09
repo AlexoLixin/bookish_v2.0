@@ -10,16 +10,12 @@ public class PageParamsBean<T> {
 
     private final int page;
     private final int size;
-    private final String sidx;
-    private final String sord;
     private final T t;
 
 
-    public PageParamsBean(int page, int size, String sidx, String sord, T t) {
+    public PageParamsBean(int page, int size,  T t) {
         this.page = page;
         this.size = size;
-        this.sidx = sidx;
-        this.sord = sord;
         this.t = t;
     }
 
@@ -32,15 +28,8 @@ public class PageParamsBean<T> {
         return size;
     }
 
-    public String getSidx() {
-        return sidx;
-    }
-
-    public String getSord() {
-        return sord;
-    }
-
     public T getT() {
         return t;
     }
+
 }

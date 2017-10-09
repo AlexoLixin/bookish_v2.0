@@ -71,6 +71,6 @@ public class ArticleAction extends BaseAction<Article> {
     @Override
     @GetMapping("/doFindByPage")
     protected Object doFindByPage(int page, int limit, Article article) {
-        return ActionMsgUtil.doFindByPage(articleService.findByPage(new PageParamsBean<>(page, limit, "createTime", "desc", article)));
+        return ActionMsgUtil.doFindByPage(articleService.findByPage(new PageParamsBean<>(page, limit,  article)));
     }
 }

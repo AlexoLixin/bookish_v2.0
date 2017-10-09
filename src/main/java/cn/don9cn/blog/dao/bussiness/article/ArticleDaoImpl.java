@@ -1,4 +1,4 @@
-package cn.don9cn.blog.dao.bussiness.article.impl;
+package cn.don9cn.blog.dao.bussiness.article;
 
 import cn.don9cn.blog.dao.BaseDao;
 import cn.don9cn.blog.model.bussiness.article.Article;

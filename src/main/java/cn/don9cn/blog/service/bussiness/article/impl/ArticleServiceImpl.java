@@ -1,6 +1,6 @@
 package cn.don9cn.blog.service.bussiness.article.impl;
 
-import cn.don9cn.blog.dao.bussiness.article.impl.ArticleDaoImpl;
+import cn.don9cn.blog.dao.bussiness.article.ArticleDaoImpl;
 import cn.don9cn.blog.model.bussiness.article.Article;
 import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
