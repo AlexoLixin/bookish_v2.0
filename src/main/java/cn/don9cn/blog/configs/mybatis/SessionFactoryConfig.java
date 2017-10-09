@@ -5,9 +5,12 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -23,7 +26,6 @@ import javax.sql.DataSource;
  **/
 @Configuration
 @EnableTransactionManagement
-@MapperScan("cn.don9cn.blog.dao")
 public class SessionFactoryConfig implements TransactionManagementConfigurer {
 
     /**
@@ -35,12 +37,20 @@ public class SessionFactoryConfig implements TransactionManagementConfigurer {
     /**
      * 实体别名
      */
-    private String typeAliasPackage = "cn.don9cn.blog.model";
+    @Value("${mybatis.type-aliases-package}")
+    private String typeAliasPackage;
 
     /**
      * mybatis配置文件
      */
-    private static String MYBATIS_CONFIG = "mybatis.xml";
+    @Value("${mybatis.config-location}")
+    private String configLocation;
+
+    /**
+     * mapper映射文件
+     */
+    @Value("${mybatis.mapper-locations}")
+    private String mapperLocations;
 
     /**
      *@Author: liuxindong
@@ -51,7 +61,11 @@ public class SessionFactoryConfig implements TransactionManagementConfigurer {
     @Bean(name = "sqlSessionFactory")
     public SqlSessionFactoryBean createSqlSessionFactoryBean() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setConfigLocation(new ClassPathResource(MYBATIS_CONFIG));
+        sqlSessionFactoryBean.setConfigLocation(new ClassPathResource(configLocation));
+        Resource[] resources = new PathMatchingResourcePatternResolver()
+                .getResources(mapperLocations);
+        System.out.println(resources.length);
+        sqlSessionFactoryBean.setMapperLocations(resources);
         sqlSessionFactoryBean.setDataSource(dataSource);
         sqlSessionFactoryBean.setTypeAliasesPackage(typeAliasPackage);
         return sqlSessionFactoryBean;

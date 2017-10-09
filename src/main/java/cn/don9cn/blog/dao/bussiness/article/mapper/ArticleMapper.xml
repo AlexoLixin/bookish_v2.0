@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="cn.don9cn.blog.dao.bussiness.article.mapper">
+	<!--<cache type="cn.don9.redis.core.LoggingRedisClusterCache" />-->
+	<resultMap type="Article" id="articleResult">
+		<id column="CODE" property="code" />
+		<result column="FLAG_DEL" jdbcType="VARCHAR" property="flagDel" />
+		<result column="CREATE_TIME" jdbcType="VARCHAR" property="createTime" />
+		<result column="MODIFY_TIME" jdbcType="VARCHAR" property="modifyTime" />
+		<result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+		<result column="MODIFY_BY" jdbcType="VARCHAR" property="modifyBy" />
+		<result column="Z_MORE01" jdbcType="VARCHAR" property="zMore01" />
+		<result column="Z_MORE02" jdbcType="VARCHAR" property="zMore02" />
+		<result column="Z_MORE03" jdbcType="VARCHAR" property="zMore03" />
+		<result column="Z_MORE04" jdbcType="VARCHAR" property="zMore04" />
+		<result column="Z_MORE05" jdbcType="VARCHAR" property="zMore05" />
+		<result column="REMARK" jdbcType="VARCHAR" property="remark" />
+		<result column="NUM" jdbcType="VARCHAR" property="num" />
+		<result column="TITLE" jdbcType="VARCHAR" property="title" />
+		<result column="AUTHOR" jdbcType="VARCHAR" property="author" />
+		<result column="CLASSIFY" jdbcType="VARCHAR" property="classify" />
+		<result column="CONTENT" jdbcType="VARCHAR" property="content" />
+		<result column="FILES" jdbcType="VARCHAR" property="files" />
+		<result column="CLASSIFY_NAME" jdbcType="VARCHAR" property="classifyName" />
+	</resultMap>
+
+	<!-- 添加实体 -->
+	<insert id="insert" parameterType="Article">
+		<selectKey keyProperty="code" resultType="String" order="BEFORE">
+			select replace(uuid(), '-', '') from dual
+		</selectKey>
+		INSERT INTO ARTICLE
+		(CODE,FLAG_DEL,CREATE_TIME,MODIFY_TIME,CREATE_BY,MODIFY_BY,
+		Z_MORE01,Z_MORE02,Z_MORE03,Z_MORE04,Z_MORE05,REMARK,NUM,
+		TITLE,AUTHOR,CLASSIFY,CONTENT,FILES)
+		VALUES
+		(#{code,jdbcType=VARCHAR},#{flagDel,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},
+		#{modifyTime,jdbcType=VARCHAR},#{createBy,jdbcType=VARCHAR},#{modifyBy,jdbcType=VARCHAR},
+		#{zMore01,jdbcType=VARCHAR},#{zMore02,jdbcType=VARCHAR},#{zMore03,jdbcType=VARCHAR},
+		#{zMore04,jdbcType=VARCHAR},#{zMore05,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{num,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR},#{author,jdbcType=VARCHAR},#{classify,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{files,jdbcType=VARCHAR})
+	</insert>
+
+	<!-- 更新实体 -->
+	<update id="update" parameterType="Article">
+		UPDATE ARTICLE
+		<set>
+			<if test="flagDel !=null and flagDel !=''">FLAG_DEL = #{flagDel,jdbcType=VARCHAR},</if>
+			<if test="createTime !=null and createTime !=''">CREATE_TIME = #{createTime,jdbcType=VARCHAR},</if>
+			<if test="modifyTime !=null and modifyTime !=''">MODIFY_TIME = #{modifyTime,jdbcType=VARCHAR},</if>
+			<if test="createBy !=null and createBy !=''">CREATE_BY = #{createBy,jdbcType=VARCHAR},</if>
+			<if test="modifyBy !=null and modifyBy !=''">MODIFY_BY = #{modifyBy,jdbcType=VARCHAR},</if>
+			<if test="zMore01 !=null and zMore01 !=''">Z_MORE01 = #{zMore01,jdbcType=VARCHAR},</if>
+			<if test="zMore02 !=null and zMore02 !=''">Z_MORE02 = #{zMore02,jdbcType=VARCHAR},</if>
+			<if test="zMore03 !=null and zMore03 !=''">Z_MORE03 = #{zMore03,jdbcType=VARCHAR},</if>
+			<if test="zMore04 !=null and zMore04 !=''">Z_MORE04 = #{zMore04,jdbcType=VARCHAR},</if>
+			<if test="zMore05 !=null and zMore05 !=''">Z_MORE05 = #{zMore05,jdbcType=VARCHAR},</if>
+			<if test="remark !=null and remark !=''">REMARK = #{remark,jdbcType=VARCHAR},</if>
+			<if test="num !=null and num !=''">NUM = #{num,jdbcType=VARCHAR},</if>
+			<if test="title !=null and title !=''">TITLE = #{title,jdbcType=VARCHAR},</if>
+			<if test="author !=null and author !=''">AUTHOR = #{author,jdbcType=VARCHAR},</if>
+			<if test="classify !=null and classify !=''">CLASSIFY = #{classify,jdbcType=VARCHAR},</if>
+			<if test="content !=null and content !=''">CONTENT = #{content,jdbcType=VARCHAR},</if>
+			<!-- 允许附件为空的更新 -->
+			<if test="files !=null">FILES = #{files,jdbcType=VARCHAR},</if>
+		</set>
+		<where>
+			<if test="code != null and code != ''">CODE = #{code,jdbcType=VARCHAR}</if>
+		</where>
+	</update>
+
+	<!-- 批量删除(为假删，规定:0为显示，1为删除) -->
+	<update id="deleteById" parameterType="String">
+		UPDATE ARTICLE SET FLAG_DEL = 1 WHERE CODE = #{value}
+	</update>
+
+	<!-- 批量删除(为假删，规定:0为显示，1为删除) -->
+	<update id="deleteBatch">
+		UPDATE ARTICLE SET FLAG_DEL = 1 WHERE CODE IN
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<foreach collection="list" item="code" separator=",">
+				#{code}
+			</foreach>
+		</trim>
+	</update>
+
+	<!-- 根据id查询当前实体 -->
+	<select id="findById" parameterType="String" resultMap="articleResult">
+		SELECT * FROM ARTICLE WHERE FLAG_DEL != 1 AND CODE = #{code}
+	</select>
+
+	<!-- 查询所有 -->
+	<select id="findAll"  resultMap="articleResult">
+		SELECT * FROM ARTICLE WHERE FLAG_DEL != 1
+	</select>
+
+	<!-- 带参数的分页查询 -->
+	<select id="findByPage" parameterType="Article" resultMap="articleResult">
+		SELECT * FROM ARTICLE_VIEW
+		<where>
+			FLAG_DEL != 1
+			<if test="createTime !=null and createTime !=''">AND CREATE_TIME = #{createTime,jdbcType=VARCHAR}</if>
+			<if test="modifyTime !=null and modifyTime !=''">AND MODIFY_TIME = #{modifyTime,jdbcType=VARCHAR}</if>
+			<if test="createBy !=null and createBy !=''">AND CREATE_BY = #{createBy,jdbcType=VARCHAR}</if>
+			<if test="modifyBy !=null and modifyBy !=''">AND MODIFY_BY = #{modifyBy,jdbcType=VARCHAR}</if>
+			<if test="zMore01 !=null and zMore01 !=''">AND Z_MORE01 = #{zMore01,jdbcType=VARCHAR}</if>
+			<if test="zMore02 !=null and zMore02 !=''">AND Z_MORE02 = #{zMore02,jdbcType=VARCHAR}</if>
+			<if test="zMore03 !=null and zMore03 !=''">AND Z_MORE03 = #{zMore03,jdbcType=VARCHAR}</if>
+			<if test="zMore04 !=null and zMore04 !=''">AND Z_MORE04 = #{zMore04,jdbcType=VARCHAR}</if>
+			<if test="zMore05 !=null and zMore05 !=''">AND Z_MORE05 = #{zMore05,jdbcType=VARCHAR}</if>
+			<if test="remark !=null and remark !=''">AND REMARK = #{remark,jdbcType=VARCHAR}</if>
+			<if test="num !=null and num !=''">AND NUM = #{num,jdbcType=VARCHAR}</if>
+			<if test="title !=null and title !=''"> AND TITLE = #{title,jdbcType=VARCHAR}</if>
+			<if test="author !=null and author !=''"> AND AUTHOR = #{author,jdbcType=VARCHAR}</if>
+			<if test="classify !=null and classify !=''"> AND CLASSIFY = #{classify,jdbcType=VARCHAR}</if>
+			<if test="content !=null and content !=''"> AND CONTENT = #{content,jdbcType=VARCHAR}</if>
+			<if test="files !=null and files !=''"> AND FILES = #{files,jdbcType=VARCHAR}</if>
+		</where>
+	</select>
+
+	<!-- 查询指定条件的实体集合 -->
+	<select id="findListByParams" parameterType="Article" resultMap="articleResult">
+		SELECT * FROM ARTICLE_VIEW
+		<where>
+			FLAG_DEL != 1
+			<if test="createTime !=null and createTime !=''">AND CREATE_TIME = #{createTime,jdbcType=VARCHAR}</if>
+			<if test="modifyTime !=null and modifyTime !=''">AND MODIFY_TIME = #{modifyTime,jdbcType=VARCHAR}</if>
+			<if test="createBy !=null and createBy !=''">AND CREATE_BY = #{createBy,jdbcType=VARCHAR}</if>
+			<if test="modifyBy !=null and modifyBy !=''">AND MODIFY_BY = #{modifyBy,jdbcType=VARCHAR}</if>
+			<if test="zMore01 !=null and zMore01 !=''">AND Z_MORE01 = #{zMore01,jdbcType=VARCHAR}</if>
+			<if test="zMore02 !=null and zMore02 !=''">AND Z_MORE02 = #{zMore02,jdbcType=VARCHAR}</if>
+			<if test="zMore03 !=null and zMore03 !=''">AND Z_MORE03 = #{zMore03,jdbcType=VARCHAR}</if>
+			<if test="zMore04 !=null and zMore04 !=''">AND Z_MORE04 = #{zMore04,jdbcType=VARCHAR}</if>
+			<if test="zMore05 !=null and zMore05 !=''">AND Z_MORE05 = #{zMore05,jdbcType=VARCHAR}</if>
+			<if test="remark !=null and remark !=''">AND REMARK = #{remark,jdbcType=VARCHAR}</if>
+			<if test="num !=null and num !=''">AND NUM = #{num,jdbcType=VARCHAR}</if>
+			<if test="title !=null and title !=''"> AND TITLE = #{title,jdbcType=VARCHAR}</if>
+			<if test="author !=null and author !=''"> AND AUTHOR = #{author,jdbcType=VARCHAR}</if>
+			<if test="classify !=null and classify !=''"> AND CLASSIFY = #{classify,jdbcType=VARCHAR}</if>
+			<if test="content !=null and content !=''"> AND CONTENT = #{content,jdbcType=VARCHAR}</if>
+			<if test="files !=null and files !=''"> AND FILES = #{files,jdbcType=VARCHAR}</if>
+		</where>
+		ORDER BY CREATE_TIME ASC
+	</select>
+
+	<!-- 根据用户删除文章(为假删，规定:0为显示，1为删除) -->
+	<update id="doRemoveByUser" parameterType="Map">
+		UPDATE ARTICLE SET FLAG_DEL = 1 WHERE CODE = #{articleCode} AND CREATE_BY = #{userCode}
+	</update>
+
+	<!-- 根据用户更新实体 -->
+	<update id="doUpdateByUser" parameterType="Article">
+		UPDATE ARTICLE
+		<set>
+			<if test="flagDel !=null and flagDel !=''">FLAG_DEL = #{flagDel,jdbcType=VARCHAR},</if>
+			<if test="createTime !=null and createTime !=''">CREATE_TIME = #{createTime,jdbcType=VARCHAR},</if>
+			<if test="modifyTime !=null and modifyTime !=''">MODIFY_TIME = #{modifyTime,jdbcType=VARCHAR},</if>
+			<if test="createBy !=null and createBy !=''">CREATE_BY = #{createBy,jdbcType=VARCHAR},</if>
+			<if test="modifyBy !=null and modifyBy !=''">MODIFY_BY = #{modifyBy,jdbcType=VARCHAR},</if>
+			<if test="zMore01 !=null and zMore01 !=''">Z_MORE01 = #{zMore01,jdbcType=VARCHAR},</if>
+			<if test="zMore02 !=null and zMore02 !=''">Z_MORE02 = #{zMore02,jdbcType=VARCHAR},</if>
+			<if test="zMore03 !=null and zMore03 !=''">Z_MORE03 = #{zMore03,jdbcType=VARCHAR},</if>
+			<if test="zMore04 !=null and zMore04 !=''">Z_MORE04 = #{zMore04,jdbcType=VARCHAR},</if>
+			<if test="zMore05 !=null and zMore05 !=''">Z_MORE05 = #{zMore05,jdbcType=VARCHAR},</if>
+			<if test="remark !=null and remark !=''">REMARK = #{remark,jdbcType=VARCHAR},</if>
+			<if test="num !=null and num !=''">NUM = #{num,jdbcType=VARCHAR},</if>
+			<if test="title !=null and title !=''">TITLE = #{title,jdbcType=VARCHAR},</if>
+			<if test="author !=null and author !=''">AUTHOR = #{author,jdbcType=VARCHAR},</if>
+			<if test="classify !=null and classify !=''">CLASSIFY = #{classify,jdbcType=VARCHAR},</if>
+			<if test="content !=null and content !=''">CONTENT = #{content,jdbcType=VARCHAR},</if>
+			<!-- 允许附件为空的更新 -->
+			<if test="files !=null">FILES = #{files,jdbcType=VARCHAR},</if>
+		</set>
+		<where>
+			CODE = #{code,jdbcType=VARCHAR} AND CREATE_BY = #{modifyBy,jdbcType=VARCHAR}
+		</where>
+	</update>
+
+</mapper>
+	
+
+
+ </mapper>

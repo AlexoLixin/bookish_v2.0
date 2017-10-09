@@ -1,13 +1,11 @@
-package cn.don9cn.blog.plugins.DaoHelper;
+package cn.don9cn.blog.plugins.daohelper.core;
 
-import cn.don9cn.blog.annotation.MapperNameSpace;
 import cn.don9cn.blog.configs.mybatis.SessionFactoryConfig;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Optional;
 
 /**
  * @Author: liuxindong
@@ -26,22 +24,11 @@ public class DaoHelper {
         DaoHelper.sqlSessionTemplate = sqlSessionTemplate;
     }
 
-    public static Optional<Integer> baseInsert(Object entity){
-        System.out.println(getSqlName(entity,SqlConstant.BASE_UPDATE));
-        return Optional.ofNullable(1);
-    }
-
     public static SqlSessionTemplate getSqlSessionTemplate() {
         return sqlSessionTemplate;
     }
 
-    private static String getMapperNamespace(Object entity){
-        MapperNameSpace annotation = entity.getClass().getAnnotation(MapperNameSpace.class);
-        String namespace = annotation.namespace();
-        return namespace;
-    }
 
-    private static String getSqlName(Object entity,String sqlName){
-        return getMapperNamespace(entity) + SqlConstant.SEPERATOR + sqlName;
-    }
+
+
 }

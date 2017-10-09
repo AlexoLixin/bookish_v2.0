@@ -1,11 +1,17 @@
 spring:
   datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.94.206.26:3306/don9blog?useUnicode=true&characterEncoding=utf8
-    name: root
-    password: 921220
+    url: jdbc:mysql://localhost:3306/don9blog?useUnicode=true&characterEncoding=utf8
+    username: liuxindong
+    password: 921127
 
 # \u63A7\u5236spring security\u7684\u5F00\u5173
 management:
   security:
     enabled: false
+
+mybatis:
+  type-aliases-package: cn.don9cn.blog.model
+  config-location: mybatis.xml
+  mapper-locations: classpath:cn/don9cn/blog/dao/**/*.xml
