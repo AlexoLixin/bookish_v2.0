@@ -16,7 +16,7 @@ public abstract class BaseAction<T> {
 
     protected abstract Object doFindById(String code);
 
-    protected abstract Object doFindAll(T t);
+    protected abstract Object doFindAll();
 
     protected abstract Object doFindListByParams(T t);
 

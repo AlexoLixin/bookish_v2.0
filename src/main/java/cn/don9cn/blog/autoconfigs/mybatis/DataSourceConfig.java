@@ -1,4 +1,4 @@
-package cn.don9cn.blog.configs.mybatis;
+package cn.don9cn.blog.autoconfigs.mybatis;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;

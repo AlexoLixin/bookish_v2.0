@@ -1,6 +1,6 @@
 package cn.don9cn.blog.plugins.daohelper.core;
 
-import cn.don9cn.blog.configs.mybatis.TransactionManagerConfig;
+import cn.don9cn.blog.autoconfigs.mybatis.TransactionManagerConfig;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;

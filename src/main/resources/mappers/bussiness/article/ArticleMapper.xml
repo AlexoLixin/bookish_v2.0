@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- <mapper namespace="cn.don9cn.blog.dao.bussiness.article.mapper">
+ <mapper namespace="cn.don9cn.blog.dao.bussiness.Article.mapper">
 	<!--<cache type="cn.don9.redis.core.LoggingRedisClusterCache" />-->
 	<resultMap type="Article" id="articleResult">
 		<id column="CODE" property="code" />
@@ -24,8 +24,10 @@
 		<result column="CLASSIFY_NAME" jdbcType="VARCHAR" property="classifyName" />
 	</resultMap>
 
-	<!-- 添加实体 -->
-	<insert id="insert" parameterType="Article">
+	<!-- ******************************* 基础功能 ******************************** -->
+
+	<!-- 添加 -->
+	<insert id="base_insert" parameterType="Article">
 		<selectKey keyProperty="code" resultType="String" order="BEFORE">
 			select replace(uuid(), '-', '') from dual
 		</selectKey>
@@ -41,8 +43,8 @@
 		#{title,jdbcType=VARCHAR},#{author,jdbcType=VARCHAR},#{classify,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{files,jdbcType=VARCHAR})
 	</insert>
 
-	<!-- 更新实体 -->
-	<update id="update" parameterType="Article">
+	<!-- 更新 -->
+	<update id="base_update" parameterType="Article">
 		UPDATE ARTICLE
 		<set>
 			<if test="flagDel !=null and flagDel !=''">FLAG_DEL = #{flagDel,jdbcType=VARCHAR},</if>
@@ -69,13 +71,13 @@
 		</where>
 	</update>
 
-	<!-- 批量删除(为假删，规定:0为显示，1为删除) -->
-	<update id="deleteById" parameterType="String">
+	<!-- 删除 -->
+	<update id="base_deleteById" parameterType="String">
 		UPDATE ARTICLE SET FLAG_DEL = 1 WHERE CODE = #{value}
 	</update>
 
-	<!-- 批量删除(为假删，规定:0为显示，1为删除) -->
-	<update id="deleteBatch">
+	<!-- 批量删除 -->
+	<update id="base_deleteBatch">
 		UPDATE ARTICLE SET FLAG_DEL = 1 WHERE CODE IN
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<foreach collection="list" item="code" separator=",">
@@ -84,18 +86,18 @@
 		</trim>
 	</update>
 
-	<!-- 根据id查询当前实体 -->
-	<select id="findById" parameterType="String" resultMap="articleResult">
+	<!-- 根据id查询 -->
+	<select id="base_findById" parameterType="String" resultMap="articleResult">
 		SELECT * FROM ARTICLE WHERE FLAG_DEL != 1 AND CODE = #{code}
 	</select>
 
 	<!-- 查询所有 -->
-	<select id="findAll"  resultMap="articleResult">
+	<select id="base_findAll"  resultMap="articleResult">
 		SELECT * FROM ARTICLE WHERE FLAG_DEL != 1
 	</select>
 
 	<!-- 带参数的分页查询 -->
-	<select id="findByPage" parameterType="Article" resultMap="articleResult">
+	<select id="base_findByPage" parameterType="Article" resultMap="articleResult">
 		SELECT * FROM ARTICLE_VIEW
 		<where>
 			FLAG_DEL != 1
@@ -117,12 +119,12 @@
 			<if test="files !=null and files !=''"> AND FILES = #{files,jdbcType=VARCHAR}</if>
 		</where>
 		<if test="orderBy !=null and orderBy !=''">
-			ORDER BY #{orderBy,jdbcType=VARCHAR}
+			ORDER BY ${orderBy}
 		</if>
 	</select>
 
 	<!-- 查询指定条件的实体集合 -->
-	<select id="findListByParams" parameterType="Article" resultMap="articleResult">
+	<select id="base_findListByParams" parameterType="Article" resultMap="articleResult">
 		SELECT * FROM ARTICLE_VIEW
 		<where>
 			FLAG_DEL != 1
@@ -143,8 +145,12 @@
 			<if test="content !=null and content !=''"> AND CONTENT = #{content,jdbcType=VARCHAR}</if>
 			<if test="files !=null and files !=''"> AND FILES = #{files,jdbcType=VARCHAR}</if>
 		</where>
-		ORDER BY CREATE_TIME ASC
+		<if test="orderBy !=null and orderBy !=''">
+			ORDER BY ${orderBy}
+		</if>
 	</select>
+
+	<!-- ******************************* 自定义功能 ******************************** -->
 
 	<!-- 根据用户删除文章(为假删，规定:0为显示，1为删除) -->
 	<update id="doRemoveByUser" parameterType="Map">

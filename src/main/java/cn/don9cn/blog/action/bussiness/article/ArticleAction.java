@@ -20,7 +20,7 @@ import java.util.List;
  * @Modify:
  */
 @RestController
-@RequestMapping(value = "/bussiness/article")
+@RequestMapping(value = "/bussiness")
 public class ArticleAction extends BaseAction<Article> {
 
     @Autowired
@@ -28,19 +28,19 @@ public class ArticleAction extends BaseAction<Article> {
 
 
     @Override
-    @PostMapping("/doSave")
+    @PostMapping("/article")
     protected Object doSave(Article article) {
         return ActionMsgUtil.doSave(articleService.insert(article));
     }
 
     @Override
-    @PostMapping("/doUpdate")
+    @PutMapping("/article")
     protected Object doUpdate(Article article) {
         return ActionMsgUtil.doUpdate(articleService.update(article));
     }
 
     @Override
-    @PostMapping("/doRemove")
+    @DeleteMapping("/article")
     protected Object doRemove(String codes) {
         if(StringUtils.isNotBlank(codes)){
             List<String> codesList = MyStringUtil.codesStr2List(codes);
@@ -51,26 +51,46 @@ public class ArticleAction extends BaseAction<Article> {
     }
 
     @Override
-    @GetMapping("/doFindById/{code}")
+    @GetMapping("/article/{code}")
     protected Object doFindById(@PathVariable String code) {
         return ActionMsgUtil.doFindById(articleService.findById(code));
     }
 
     @Override
-    @GetMapping("/doFindAll")
-    protected Object doFindAll(Article article) {
+    @GetMapping("/article/all")
+    protected Object doFindAll() {
         return ActionMsgUtil.doFindAll(articleService.findAll());
     }
 
     @Override
-    @GetMapping("/doFindListByParams")
+    @GetMapping("/article/list")
     protected Object doFindListByParams(Article article) {
         return ActionMsgUtil.doFindListByParams(articleService.findListByParams(article));
     }
 
     @Override
-    @GetMapping("/doFindByPage")
+    @GetMapping("/article/page")
     protected Object doFindByPage(int page, int limit, Article article) {
         return ActionMsgUtil.doFindByPage(articleService.findByPage(new PageParamsBean<>(page, limit,  article)));
+    }
+
+    /**
+     * 个人中心-普通用户更新文章(只能更新自己发布的文章,防止其他用户数据被恶意篡改)
+     * @param article
+     * @return
+     */
+    @PutMapping("/article/byUser")
+    public Object doUpdateByUser(Article article){
+        return ActionMsgUtil.doUpdate(articleService.doUpdateByUser(article));
+    }
+
+    /**
+     * 个人中心-普通用户删除文章(只能删除自己发布的文章,防止其他用户数据被恶意篡改)
+     * @param code
+     * @return
+     */
+    @DeleteMapping("/article/byUser")
+    public Object doRemoveByUser(String code) {
+        return ActionMsgUtil.doRemove(articleService.doRemoveByUser(code));
     }
 }

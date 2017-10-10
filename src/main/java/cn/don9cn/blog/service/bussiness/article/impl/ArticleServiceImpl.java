@@ -29,6 +29,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public Optional<Integer> insert(Article entity) {
+		entity.setAuthor("test");
 		return articleDaoImpl.insert(entity);
 	}
 
@@ -72,16 +73,31 @@ public class ArticleServiceImpl implements ArticleService {
 		return articleDaoImpl.findByPage(pageParamsBean);
 	}
 
+	/**
+	 * 个人中心-普通用户删除文章(只能删除自己发布的文章,防止其他用户数据被恶意篡改)
+	 * @param code
+	 * @return
+	 */
 	@Override
 	public Optional<Integer> doRemoveByUser(String code) {
 		return null;
 	}
 
+	/**
+	 * 个人中心-普通用户更新文章(只能更新自己发布的文章,防止其他用户数据被恶意篡改)
+	 * @param article
+	 * @return
+	 */
 	@Override
 	public Optional<Integer> doUpdateByUser(Article article) {
 		return null;
 	}
 
+	/**
+	 * 个人中心-普通获取文章列表(只能获取自己发布的文章列表,防止其他用户数据被恶意篡改)
+	 * @param pageParamsBean
+	 * @return
+	 */
 	@Override
 	public Optional<PageResult<Article>> doFindByPageByUser(PageParamsBean<Article> pageParamsBean) {
 		return null;

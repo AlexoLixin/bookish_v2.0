@@ -14,21 +14,21 @@ public class SqlConstant {
 
     public static final String SEPERATOR = ".";
 
-    public static final String INSERT = "insert";
+    public static final String INSERT = "base_insert";
 
-    public static final String INSERT_BATCH = "insertBatch";
+    public static final String INSERT_BATCH = "base_insertBatch";
 
-    public static final String UPDATE = "update";
+    public static final String UPDATE = "base_update";
 
-    public static final String DELETE = "delete";
+    public static final String DELETE = "base_delete";
 
-    public static final String DELETE_BATCH = "deleteBatch";
+    public static final String DELETE_BATCH = "base_deleteBatch";
 
-    public static final String FIND_BY_ID = "findById";
+    public static final String FIND_BY_ID = "base_findById";
 
-    public static final String FIND_ALL = "findAll";
+    public static final String FIND_ALL = "base_findAll";
 
-    public static final String FIND_LIST_BY_PARAMS = "findListByParams";
+    public static final String FIND_LIST_BY_PARAMS = "base_findListByParams";
 
-    public static final String FIND_BY_PAGE = "findByPage";
+    public static final String FIND_BY_PAGE = "base_findByPage";
 }

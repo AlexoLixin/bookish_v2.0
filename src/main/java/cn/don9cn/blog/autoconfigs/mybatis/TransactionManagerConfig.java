@@ -1,4 +1,4 @@
-package cn.don9cn.blog.configs.mybatis;
+package cn.don9cn.blog.autoconfigs.mybatis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
