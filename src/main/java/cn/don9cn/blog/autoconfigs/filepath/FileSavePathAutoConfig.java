@@ -1,4 +1,4 @@
-package cn.don9cn.blog.autoconfigs.upload;
+package cn.don9cn.blog.autoconfigs.filepath;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

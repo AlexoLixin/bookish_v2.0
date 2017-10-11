@@ -1,4 +1,4 @@
-package cn.don9cn.blog.autoconfigs.upload;
+package cn.don9cn.blog.autoconfigs.filepath;
 
 /**
  * @Author: liuxindong

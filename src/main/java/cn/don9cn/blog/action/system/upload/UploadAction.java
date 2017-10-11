@@ -1,6 +1,6 @@
 package cn.don9cn.blog.action.system.upload;
 
-import cn.don9cn.blog.autoconfigs.upload.FileSavePathConfig;
+import cn.don9cn.blog.autoconfigs.filepath.FileSavePathConfig;
 import cn.don9cn.blog.exception.ExceptionWrapper;
 import cn.don9cn.blog.model.system.file.UploadFile;
 import cn.don9cn.blog.plugins.actionmsg.core.ActionMsg;
