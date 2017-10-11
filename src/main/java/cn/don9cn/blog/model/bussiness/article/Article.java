@@ -5,7 +5,7 @@ import cn.don9cn.blog.annotation.DbColumn;
 import cn.don9cn.blog.annotation.DbTable;
 import cn.don9cn.blog.annotation.MapperNameSpace;
 import cn.don9cn.blog.model.BaseModel;
-import cn.don9cn.blog.model.system.upload.UploadFile;
+import cn.don9cn.blog.model.system.file.UploadFile;
 
 import java.io.Serializable;
 import java.util.List;

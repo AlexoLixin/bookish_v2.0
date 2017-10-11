@@ -15,7 +15,7 @@ import javax.sql.DataSource;
  *@Modify:
  **/
 @Configuration
-public class DataSourceConfig {
+public class DataSourceAutoConfig {
 
     /**
      *@Author: liuxindong

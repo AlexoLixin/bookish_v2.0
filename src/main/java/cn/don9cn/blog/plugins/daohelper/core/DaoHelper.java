@@ -1,6 +1,6 @@
 package cn.don9cn.blog.plugins.daohelper.core;
 
-import cn.don9cn.blog.autoconfigs.mybatis.TransactionManagerConfig;
+import cn.don9cn.blog.autoconfigs.mybatis.TransactionManagerAutoConfig;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * @Modify:
  */
 @Configuration
-@AutoConfigureAfter(value = {TransactionManagerConfig.class})
+@AutoConfigureAfter(value = {TransactionManagerAutoConfig.class})
 public class DaoHelper {
 
     private static SqlSessionTemplate sqlSessionTemplate;

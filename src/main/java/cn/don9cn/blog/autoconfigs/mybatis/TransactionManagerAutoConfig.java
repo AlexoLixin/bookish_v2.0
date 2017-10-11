@@ -18,7 +18,7 @@ import javax.sql.DataSource;
  **/
 @Configuration
 @EnableTransactionManagement
-public class TransactionManagerConfig implements TransactionManagementConfigurer {
+public class TransactionManagerAutoConfig implements TransactionManagementConfigurer {
 
     /**
      * 数据源

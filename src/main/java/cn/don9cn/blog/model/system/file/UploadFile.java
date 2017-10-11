@@ -1,8 +1,9 @@
-package cn.don9cn.blog.model.system.upload;
+package cn.don9cn.blog.model.system.file;
 
 
 import cn.don9cn.blog.annotation.DbColumn;
 import cn.don9cn.blog.annotation.DbTable;
+import cn.don9cn.blog.annotation.MapperNameSpace;
 import cn.don9cn.blog.model.BaseModel;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.io.Serializable;
  *@Modify:
  **/
 @DbTable
+@MapperNameSpace(namespace = "cn.don9cn.blog.dao.system.UploadFile.mapper")
 public class UploadFile extends BaseModel implements Serializable{
 
     /**
@@ -39,7 +41,7 @@ public class UploadFile extends BaseModel implements Serializable{
     /**
      * 来源
      */
-    @DbColumn(allowNull = false,content = "关联来源")
+    @DbColumn(content = "关联来源")
     private String link;
 
     //开始时间(用于按时间段筛选功能,不存入数据库)
@@ -49,11 +51,10 @@ public class UploadFile extends BaseModel implements Serializable{
 
     public UploadFile(){}
 
-    public UploadFile(String name, String realName, String path, String link){
-        this.name = name;
+    public UploadFile(String realName,String name,String path){
         this.realName = realName;
+        this.name = name;
         this.path = path;
-        this.link = link;
     }
 
 

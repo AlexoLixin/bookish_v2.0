@@ -3,6 +3,7 @@ package cn.don9cn.blog.plugins.actionmsg.util;
 import cn.don9cn.blog.plugins.actionmsg.core.ActionMsg;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * @Author: liuxindong
@@ -94,6 +95,16 @@ public class ActionMsgUtil {
             return new ActionMsg(true,"分页数据查询成功").setObj(optional.get());
         }
         return new ActionMsg(false,"分页数据查询失败");
+    }
+
+    /**
+     * 自定义实现
+     * @param optional
+     * @param function
+     * @return
+     */
+    public static Object apply(Optional optional,Function<Optional,Object> function){
+        return function.apply(optional);
     }
 
 

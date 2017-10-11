@@ -13,13 +13,17 @@ spring:
       enabled: true
     restart:
       additional-paths: src/main
+  # 多文件上传
+  http:
+    multipart:
+      enabled: true
 
-# 控制spring security开关
+##############  控制spring security开关  ##############
 management:
   security:
     enabled: false
 
-# mybatis
+##############  mybatis  ##############
 mybatis:
   type-aliases-package: cn.don9cn.blog.model
   mapper-locations: classpath*:mappers/**/*.xml
@@ -29,10 +33,18 @@ mybatis:
     default-statement-timeout: 60000
     lazy-loading-enabled: false
 
-# pageHelper
+##############  分页插件pageHelper  ##############
 pagehelper:
   offset-as-page-num: true
   row-bounds-with-count: false
   page-size-zero: true
   reasonable: false
+
+##############  文件保存路径  ##############
+fileSavePath:
+  serverUrl: http://localhost:9999
+  serverRoot: E:/Apache24/htdocs
+  images: /don9cn/images
+  uploadFiles: /don9cn/uploadFiles
+
 

@@ -1,10 +1,13 @@
 package cn.don9cn.blog.service.bussiness.article.impl;
 
 import cn.don9cn.blog.dao.bussiness.article.ArticleDaoImpl;
+import cn.don9cn.blog.dao.system.file.UploadFileDaoImpl;
 import cn.don9cn.blog.model.bussiness.article.Article;
 import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.service.bussiness.article.interf.ArticleService;
+import cn.don9cn.blog.util.MyStringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +28,9 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Autowired
 	private ArticleDaoImpl articleDaoImpl;
+
+	@Autowired
+	private UploadFileDaoImpl uploadFileDaoImpl;
 
 
 	@Override
@@ -55,7 +61,13 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public Optional<Article> findById(String id) {
-		return articleDaoImpl.findById(id);
+		Optional<Article> article = articleDaoImpl.findById(id);
+		article.ifPresent(a -> {
+			if(StringUtils.isNotBlank(a.getFiles())){
+				uploadFileDaoImpl.findListInCodes(MyStringUtil.codesStr2List(a.getFiles())).ifPresent(a::setFilesList);
+			}
+		});
+		return article;
 	}
 
 	@Override
