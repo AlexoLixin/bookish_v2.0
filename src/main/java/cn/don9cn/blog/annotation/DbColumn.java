@@ -14,21 +14,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DbColumn {
 
-    //字段类型
-    String type() default "varchar";
-
-    //是否主键
-    boolean primaryKey() default false;
-
-    //是否允许空
-    boolean allowNull() default true;
-
-    //是否有长度
-    boolean hasLength() default true;
-
     //列说明
     String content() default "";
-
-    //长度值
-    String length() default "50";
 }

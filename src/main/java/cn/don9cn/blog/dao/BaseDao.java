@@ -1,13 +1,7 @@
 package cn.don9cn.blog.dao;
 
-import cn.don9cn.blog.annotation.MapperNameSpace;
-import cn.don9cn.blog.plugins.daohelper.core.DaoHelper;
-import cn.don9cn.blog.plugins.daohelper.constant.SqlConstant;
 import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
-import cn.don9cn.blog.plugins.daohelper.util.FieldParserUtil;
-import com.github.pagehelper.PageHelper;
-import org.mybatis.spring.SqlSessionTemplate;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -23,33 +17,13 @@ import java.util.Optional;
  */
 public interface BaseDao<T extends Serializable> {
 
-    default SqlSessionTemplate getSessionTemplate(){
-        return DaoHelper.getSqlSessionTemplate();
-    }
-
-    default String getSqlName(String sqlName){
-        String nameSpace = this.getDefaultSqlNameSpace();
-        return nameSpace + SqlConstant.SEPERATOR + sqlName;
-    }
-
-    default String getDefaultSqlNameSpace(){
-        Type type = this.getClass().getGenericInterfaces()[0];
-        ParameterizedType type2 = (ParameterizedType) type;
-        Type[] actualTypeArguments = type2.getActualTypeArguments();
-        Type actualTypeArgument = actualTypeArguments[0];
-        Class<T> clazz = (Class<T>) actualTypeArgument;
-        MapperNameSpace annotation = clazz.getAnnotation(MapperNameSpace.class);
-        String namespace = annotation.namespace();
-        return namespace;
-    }
-
     /**
      * 添加实体对象
      * @param entity
      * @return
      */
     default Optional<Integer> insert(T entity){
-        return Optional.of(this.getSessionTemplate().insert(this.getSqlName(SqlConstant.INSERT),entity));
+        return Optional.empty();
     }
 
     /**
@@ -57,7 +31,7 @@ public interface BaseDao<T extends Serializable> {
      * @return
      */
     default Optional<Integer> insertBatch(final List<T> list){
-        return Optional.of(this.getSessionTemplate().insert(this.getSqlName(SqlConstant.INSERT_BATCH),list));
+        return Optional.empty();
     }
 
     /**
@@ -66,7 +40,7 @@ public interface BaseDao<T extends Serializable> {
      * @return
      */
     default Optional<Integer> update(T entity){
-        return Optional.of(this.getSessionTemplate().update(this.getSqlName(SqlConstant.UPDATE),entity));
+        return Optional.empty();
     }
 
     /**
@@ -75,7 +49,7 @@ public interface BaseDao<T extends Serializable> {
      * @return
      */
     default Optional<Integer> deleteById(String id){
-        return Optional.of(this.getSessionTemplate().delete(this.getSqlName(SqlConstant.DELETE),id));
+        return Optional.empty();
     }
 
     /**
@@ -83,7 +57,7 @@ public interface BaseDao<T extends Serializable> {
      * @return
      */
     default Optional<Integer> deleteBatch(List<String> list){
-        return Optional.of(this.getSessionTemplate().update(this.getSqlName(SqlConstant.DELETE_BATCH),list));
+        return Optional.empty();
     }
 
     /**
@@ -92,7 +66,7 @@ public interface BaseDao<T extends Serializable> {
      * @return
      */
     default Optional<T> findById(String id){
-        return Optional.ofNullable(this.getSessionTemplate().selectOne(this.getSqlName(SqlConstant.FIND_BY_ID),id));
+        return Optional.empty();
     }
 
     /**
@@ -100,7 +74,7 @@ public interface BaseDao<T extends Serializable> {
      * @return
      */
     default Optional<List<T>> findAll(){
-        return Optional.ofNullable(this.getSessionTemplate().selectList(this.getSqlName(SqlConstant.FIND_ALL)));
+        return Optional.empty();
     }
 
     /**
@@ -109,7 +83,7 @@ public interface BaseDao<T extends Serializable> {
      * @return
      */
     default Optional<List<T>> findListByParams(T entity){
-        return Optional.ofNullable(this.getSessionTemplate().selectList(this.getSqlName(SqlConstant.FIND_LIST_BY_PARAMS),entity));
+        return Optional.empty();
     }
 
     /**
@@ -118,13 +92,7 @@ public interface BaseDao<T extends Serializable> {
      * @return
      */
     default Optional<PageResult<T>> findByPage(PageParamsBean<T> pageParamsBean){
-        int page = pageParamsBean.getPage();
-        int size = pageParamsBean.getSize();
-        T entity = pageParamsBean.getT();
-        page =(("null".equals(String.valueOf(page)))||("0".equals(String.valueOf(page))))?SqlConstant.DEFAULT_CURRENT_PAGE:page;
-        size =(("null".equals(String.valueOf(size)))||("0".equals(String.valueOf(size))))?SqlConstant.DEFAULT_CURRENT_PAGE:size;
-        PageHelper.startPage(page, size);
-        return PageResult.build(Optional.ofNullable(this.getSessionTemplate().selectList(this.getSqlName(SqlConstant.FIND_BY_PAGE), entity)));
+        return Optional.empty();
     }
 
 }

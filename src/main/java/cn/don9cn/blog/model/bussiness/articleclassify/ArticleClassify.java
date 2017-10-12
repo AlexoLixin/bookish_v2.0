@@ -2,8 +2,7 @@ package cn.don9cn.blog.model.bussiness.articleclassify;
 
 
 import cn.don9cn.blog.annotation.DbColumn;
-import cn.don9cn.blog.annotation.DbTable;
-import cn.don9cn.blog.annotation.MapperNameSpace;
+import cn.don9cn.blog.annotation.DbCollection;
 import cn.don9cn.blog.model.BaseModel;
 
 import java.io.Serializable;
@@ -16,8 +15,7 @@ import java.util.List;
  * @Create: 2017/10/10 10:14
  * @Modify:
  */
-@DbTable
-@MapperNameSpace(namespace = "cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify.mapper")
+@DbCollection
 public class ArticleClassify extends BaseModel implements Serializable {
 
     /**
@@ -25,26 +23,16 @@ public class ArticleClassify extends BaseModel implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 分类名称
-     */
-    @DbColumn(allowNull = false,content = "分类名称")
+    @DbColumn(content = "分类名称")
     private String name;
-    /**
-     * 分类父节点
-     */
-    @DbColumn(allowNull = false,content = "分类父节点")
+
+    @DbColumn(content = "分类父节点")
     private String parent;
-    /**
-     * 分类等级
-     */
-    @DbColumn(allowNull = false,content = "分类等级")
+
+    @DbColumn(content = "分类等级")
     private String level;
 
-    /**
-     * 是否是叶子节点
-     */
-    @DbColumn(allowNull = false,length = "10",content = "是否是叶子节点")
+    @DbColumn(content = "是否是叶子节点")
     private String leaf;
 
     /**

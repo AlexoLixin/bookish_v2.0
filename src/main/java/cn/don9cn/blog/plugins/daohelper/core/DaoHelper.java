@@ -1,9 +1,5 @@
 package cn.don9cn.blog.plugins.daohelper.core;
 
-import cn.don9cn.blog.autoconfigs.mybatis.TransactionManagerAutoConfig;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
 
 
@@ -14,19 +10,8 @@ import org.springframework.context.annotation.Configuration;
  * @Modify:
  */
 @Configuration
-@AutoConfigureAfter(value = {TransactionManagerAutoConfig.class})
 public class DaoHelper {
 
-    private static SqlSessionTemplate sqlSessionTemplate;
-
-    @Autowired
-    public DaoHelper(SqlSessionTemplate sqlSessionTemplate) {
-        DaoHelper.sqlSessionTemplate = sqlSessionTemplate;
-    }
-
-    public static SqlSessionTemplate getSqlSessionTemplate() {
-        return sqlSessionTemplate;
-    }
 
 
 

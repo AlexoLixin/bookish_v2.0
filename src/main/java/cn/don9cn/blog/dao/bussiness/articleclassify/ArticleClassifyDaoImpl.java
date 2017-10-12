@@ -23,7 +23,7 @@ public class ArticleClassifyDaoImpl implements BaseDao<ArticleClassify> {
      * @return
      */
     public Optional<Integer> deleteCascade(String level) {
-        return Optional.of(this.getSessionTemplate().update(getSqlName("deleteCascade"),level));
+        return Optional.empty();
     }
 
     /**
@@ -32,6 +32,6 @@ public class ArticleClassifyDaoImpl implements BaseDao<ArticleClassify> {
      * @return
      */
     public Optional<Integer> updateLeaf(List<String> allCodes) {
-        return Optional.of(this.getSessionTemplate().update(getSqlName("updateLeaf"),allCodes));
+        return Optional.empty();
     }
 }

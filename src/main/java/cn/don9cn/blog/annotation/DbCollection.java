@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DbTable {
+public @interface DbCollection {
 
     public boolean value() default true;
 }

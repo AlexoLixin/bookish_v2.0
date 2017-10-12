@@ -23,7 +23,7 @@ public class ArticleDaoImpl implements BaseDao<Article> {
      * @return
      */
     public Optional<Integer> doRemoveByUser(Map<String, String> map) {
-        return Optional.of(this.getSessionTemplate().update(getSqlName("doRemoveByUser"),map));
+        return Optional.empty();
     }
 
     /**
@@ -32,6 +32,6 @@ public class ArticleDaoImpl implements BaseDao<Article> {
      * @return
      */
     public Optional<Integer> doUpdateByUser(Article entity) {
-        return Optional.of(this.getSessionTemplate().update(getSqlName("doUpdateByUser"),entity));
+        return Optional.empty();
     }
 }

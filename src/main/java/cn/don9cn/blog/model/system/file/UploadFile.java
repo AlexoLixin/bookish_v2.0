@@ -2,8 +2,7 @@ package cn.don9cn.blog.model.system.file;
 
 
 import cn.don9cn.blog.annotation.DbColumn;
-import cn.don9cn.blog.annotation.DbTable;
-import cn.don9cn.blog.annotation.MapperNameSpace;
+import cn.don9cn.blog.annotation.DbCollection;
 import cn.don9cn.blog.model.BaseModel;
 
 import java.io.Serializable;
@@ -14,8 +13,7 @@ import java.io.Serializable;
  *@Create: 2017/10/8 19:50
  *@Modify:
  **/
-@DbTable
-@MapperNameSpace(namespace = "cn.don9cn.blog.model.system.file.UploadFile.mapper")
+@DbCollection
 public class UploadFile extends BaseModel implements Serializable{
 
     /**
@@ -23,24 +21,16 @@ public class UploadFile extends BaseModel implements Serializable{
      */
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 名称
-     */
-    @DbColumn(length = "200",allowNull = false,content = "文件名称")
+
+    @DbColumn(content = "文件名称")
     private String name;
-    /**
-     * 真实名称
-     */
-    @DbColumn(length = "200",allowNull = false,content = "真实名称")
+
+    @DbColumn(content = "真实名称")
     private String realName;
-    /**
-     * 路径
-     */
-    @DbColumn(length = "200",allowNull = false,content = "文件路径")
+
+    @DbColumn(content = "文件路径")
     private String path;
-    /**
-     * 来源
-     */
+
     @DbColumn(content = "关联来源")
     private String link;
 

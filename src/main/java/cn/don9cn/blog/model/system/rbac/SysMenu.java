@@ -2,8 +2,7 @@ package cn.don9cn.blog.model.system.rbac;
 
 
 import cn.don9cn.blog.annotation.DbColumn;
-import cn.don9cn.blog.annotation.DbTable;
-import cn.don9cn.blog.annotation.MapperNameSpace;
+import cn.don9cn.blog.annotation.DbCollection;
 import cn.don9cn.blog.model.BaseModel;
 
 import java.io.Serializable;
@@ -15,8 +14,7 @@ import java.util.Set;
  * @author Don9
  * @create 2017-05-03-22:58
  **/
-@DbTable
-@MapperNameSpace(namespace = "cn.don9cn.blog.model.system.rbac.SysMenu.mapper")
+@DbCollection
 public class SysMenu extends BaseModel implements Serializable,Comparable<SysMenu> {
 
     /**
@@ -24,30 +22,20 @@ public class SysMenu extends BaseModel implements Serializable,Comparable<SysMen
      */
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 菜单名称
-     */
-    @DbColumn(allowNull = false,content = "菜单名称")
+
+    @DbColumn(content = "菜单名称")
     private String name;
-    /**
-     * 菜单路径
-     */
-    @DbColumn(length = "200",allowNull = false,content = "菜单路径")
+
+    @DbColumn(content = "菜单路径")
     private String url;
-    /**
-     * 父级菜单
-     */
-    @DbColumn(allowNull = false,content = "父级菜单")
+
+    @DbColumn(content = "父级菜单")
     private String parent;
-    /**
-     * 菜单等级
-     */
-    @DbColumn(allowNull = false,content = "菜单等级")
+
+    @DbColumn(content = "菜单等级")
     private String level;
-    /**
-     * 叶子状态
-     */
-    @DbColumn(allowNull = false,length = "10",content = "菜单等级")
+
+    @DbColumn(content = "是否是叶子节点")
     private String leaf;
     /**
      * 子菜单集合

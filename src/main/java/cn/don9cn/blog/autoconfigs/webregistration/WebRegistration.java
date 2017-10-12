@@ -1,11 +1,7 @@
 package cn.don9cn.blog.autoconfigs.webregistration;
 
 import cn.don9cn.blog.autoconfigs.webregistration.filter.CorsFilter;
-import cn.don9cn.blog.plugins.dbbuilder.dao.DatabaseBuilderDaoImpl;
-import cn.don9cn.blog.plugins.dbbuilder.listener.DatabaseBuilderListener;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -44,7 +40,6 @@ public class WebRegistration {
     @ConditionalOnBean(DatabaseBuilderDaoImpl.class)
     public ServletListenerRegistrationBean servletListenerRegistrationBean(){
         ServletListenerRegistrationBean servletListenerRegistrationBean = new ServletListenerRegistrationBean();
-        // 注册数据库建表工具监听器
         servletListenerRegistrationBean.setListener(new DatabaseBuilderListener());
         return servletListenerRegistrationBean;
     }*/

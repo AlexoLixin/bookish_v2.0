@@ -1,6 +1,5 @@
 package cn.don9cn.blog.plugins.daohelper.core;
 
-import com.github.pagehelper.Page;
 
 import java.io.Serializable;
 import java.util.List;
@@ -66,13 +65,14 @@ public class PageResult<T> implements Serializable {
     }
 
     public static <E> Optional<PageResult<E>> build(Optional<List<E>> optional){
-        if(optional.isPresent()){
+        /*if(optional.isPresent()){
             Page<E> page = (Page) optional.get();
             PageResult<E> pageResult = new PageResult(page.getPageNum(),page.getPageSize(),page.getTotal(),page.getPages(),page.getResult());
             return Optional.of(pageResult);
         }else{
             return Optional.empty();
-        }
+        }*/
+        return Optional.empty();
     }
 
     public Integer getNowPage() {

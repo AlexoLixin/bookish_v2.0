@@ -1,8 +1,7 @@
 package cn.don9cn.blog.model.system.file;
 
 import cn.don9cn.blog.annotation.DbColumn;
-import cn.don9cn.blog.annotation.DbTable;
-import cn.don9cn.blog.annotation.MapperNameSpace;
+import cn.don9cn.blog.annotation.DbCollection;
 import cn.don9cn.blog.model.BaseModel;
 
 import java.io.Serializable;
@@ -13,8 +12,7 @@ import java.io.Serializable;
  * @Create: 2017/10/12 9:24
  * @Modify:
  */
-@DbTable
-@MapperNameSpace(namespace = "cn.don9cn.blog.model.system.file.ArticleAndFile.mapper")
+@DbCollection
 public class ArticleAndFile extends BaseModel implements Serializable {
 
     /**
@@ -22,10 +20,10 @@ public class ArticleAndFile extends BaseModel implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    @DbColumn(allowNull = false,content = "文章主键")
+    @DbColumn(content = "文章主键")
     private String articleCode;
 
-    @DbColumn(allowNull = false,content = "附件主键")
+    @DbColumn(content = "附件主键")
     private String fileCode;
 
 

@@ -2,8 +2,7 @@ package cn.don9cn.blog.model.system.rbac;
 
 
 import cn.don9cn.blog.annotation.DbColumn;
-import cn.don9cn.blog.annotation.DbTable;
-import cn.don9cn.blog.annotation.MapperNameSpace;
+import cn.don9cn.blog.annotation.DbCollection;
 import cn.don9cn.blog.model.BaseModel;
 
 import java.io.Serializable;
@@ -15,27 +14,20 @@ import java.util.List;
  * @Create: 2017/10/12 9:03
  * @Modify:
  */
-@DbTable
-@MapperNameSpace(namespace = "cn.don9cn.blog.model.system.rbac.SysRole.mapper")
+@DbCollection
 public class SysRole extends BaseModel implements Serializable {
 
     /**
      * 实现序列化接口
      */
     private static final long serialVersionUID = 1L;
-    /**
-     * 角色名称
-     */
-    @DbColumn(allowNull = false,content = "角色名称")
+
+    @DbColumn(content = "角色名称")
     private String name;
-    /**
-     * 角色编码
-     */
-    @DbColumn(allowNull = false,content = "角色编码")
+
+    @DbColumn(content = "角色编码")
     private String encoding;
-    /**
-     * 图标
-     */
+
     @DbColumn(content = "图标")
     private String icon;
     /**

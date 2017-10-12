@@ -14,10 +14,10 @@ import java.util.Map;
  **/
 public class BaseModel implements Serializable {
 
-    @DbColumn(primaryKey = true,content = "主键")
+    @DbColumn(content = "主键")
     private String code;
 
-    @DbColumn(allowNull = false,content = "删除标记")
+    @DbColumn(content = "删除标记")
     private String flagDel = "0";
 
     @DbColumn(content = "创建时间")
@@ -47,10 +47,10 @@ public class BaseModel implements Serializable {
     @DbColumn(content = "备用字段5")
     private String zMore05;
 
-    @DbColumn(length = "200",content = "说明")
+    @DbColumn(content = "说明")
     private String remark;
 
-    @DbColumn(length = "20",content = "排序")
+    @DbColumn(content = "排序")
     private String num;
 
     private String orderBy;
@@ -60,13 +60,6 @@ public class BaseModel implements Serializable {
      */
     private Map<String,Object> dictMap;
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public String getFlagDel() {
         return flagDel;
@@ -178,5 +171,13 @@ public class BaseModel implements Serializable {
 
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }
