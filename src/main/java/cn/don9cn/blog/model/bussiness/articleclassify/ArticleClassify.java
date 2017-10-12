@@ -17,7 +17,7 @@ import java.util.List;
  * @Modify:
  */
 @DbTable
-@MapperNameSpace(namespace = "cn.don9cn.blog.dao.bussiness.ArticleClassify.mapper")
+@MapperNameSpace(namespace = "cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify.mapper")
 public class ArticleClassify extends BaseModel implements Serializable {
 
     /**

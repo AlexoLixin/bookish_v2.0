@@ -93,7 +93,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	}
 
 	/**
-	 * 构造文章分类树(目前只支持二级菜单)
+	 * 构造文章分类树(支持多级菜单)
 	 * @return
 	 */
 	@Override
@@ -111,7 +111,8 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 			temp.add(t);
 			temp.addAll(children);
 			return t;
-		}).sorted(Comparator.comparing(t -> Integer.parseInt(t.getLevel()))).collect(Collectors.toList());
+		}).filter(t -> t.getParent().equals("ROOT"))
+				.sorted(Comparator.comparing(t -> Integer.parseInt(t.getLevel()))).collect(Collectors.toList());
 		all.removeAll(temp);
 		result.addAll(all);
 		return Optional.ofNullable(result.stream().sorted(Comparator.comparing(t -> Integer.parseInt(t.getLevel()))).collect(Collectors.toList()));

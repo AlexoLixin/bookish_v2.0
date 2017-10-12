@@ -4,7 +4,10 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
- * 自定义线程执行器
+ * @Author: liuxindong
+ * @Description: 线程执行器工具类
+ * @Create: 2017/10/12 8:39
+ * @Modify:
  */
 public class ExecutorUtil {
 

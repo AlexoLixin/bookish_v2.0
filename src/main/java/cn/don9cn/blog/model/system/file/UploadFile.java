@@ -15,7 +15,7 @@ import java.io.Serializable;
  *@Modify:
  **/
 @DbTable
-@MapperNameSpace(namespace = "cn.don9cn.blog.dao.system.UploadFile.mapper")
+@MapperNameSpace(namespace = "cn.don9cn.blog.model.system.file.UploadFile.mapper")
 public class UploadFile extends BaseModel implements Serializable{
 
     /**

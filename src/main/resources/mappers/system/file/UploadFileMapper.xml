@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- <mapper namespace="cn.don9cn.blog.dao.system.UploadFile.mapper">
+ <mapper namespace="cn.don9cn.blog.model.system.file.UploadFile.mapper">
 	<!--<cache type="cn.don9.redis.core.LoggingRedisClusterCache" />-->
 	<resultMap type="UploadFile" id="uploadFileResult">
 		<id column="CODE" property="code" />

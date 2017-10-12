@@ -47,4 +47,9 @@ fileSavePath:
   images: /don9cn/images
   uploadFiles: /don9cn/uploadFiles
 
+##############  数据库建表工具  ##############
+dbBuilder:
+  databaseName: don9blog
+  modelPackage: cn.don9cn.blog.model
+
 
