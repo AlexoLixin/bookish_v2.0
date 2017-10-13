@@ -5,6 +5,7 @@ import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
 import cn.don9cn.blog.plugins.actionmsg.core.ActionMsg;
 import cn.don9cn.blog.plugins.actionmsg.util.ActionMsgUtil;
 import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
+import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.service.bussiness.articleclassify.interf.ArticleClassifyService;
 import cn.don9cn.blog.util.MyStringUtil;
 import com.mongodb.DBCollection;
@@ -82,8 +83,8 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 
 	@Override
 	@GetMapping("/articleClassify/page")
-	protected Object baseFindByPage(int page, int limit, ArticleClassify articleClassify) {
-		return ActionMsgUtil.baseFindByPage(articleClassifyService.baseFindByPage(new PageParamsBean<>(page, limit,  articleClassify)));
+	protected Object baseFindByPage(int page, int limit, String orderBy, ArticleClassify articleClassify) {
+		return ActionMsgUtil.baseFindByPage(articleClassifyService.baseFindByPage(new PageResult<>(page, limit, orderBy, articleClassify)));
 	}
 
 	/**

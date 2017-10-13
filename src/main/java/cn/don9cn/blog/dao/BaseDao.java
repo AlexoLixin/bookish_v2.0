@@ -113,11 +113,11 @@ public interface BaseDao<T extends Serializable> {
 
     /**
      * 带参数的分页查询
-     * @param pageParamsBean
+     * @param pageResult
      * @return
      */
-    default Optional<PageResult<T>> baseFindByPage(PageParamsBean<T> pageParamsBean){
-        return Optional.empty();
+    default Optional<PageResult<T>> baseFindByPage(PageResult<T> pageResult){
+        return getMyMongoOperator().baseFindByPage(pageResult);
     }
 
 }

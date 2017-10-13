@@ -1,6 +1,10 @@
 package cn.don9cn.blog.plugins.daohelper.core;
 
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
@@ -26,54 +30,62 @@ public class PageResult<T> implements Serializable {
      */
     private final Integer pageSize;
     /**
-     * 开始下标
+     * 跳过
      */
-    private final Integer startRow;
-    /**
-     * 结束下标
-     */
-    private final long endRow;
+    private Integer skip;
     /**
      * 总记录数
      */
-    private final long totalCount;
+    private long totalCount;
     /**
      * 总页数
      */
-    private final Integer total;
+    private Integer total;
     /**
      * 排序字段
      */
-    private String orderColumn;
+    private String orderField;
     /**
      * 排序方式
      */
-    private String orderTurn;
+    private Sort.Direction orderTurn;
+    /**
+     * 参数实体
+     */
+    private final T entity;
     /**
      * 查询结果集
      */
-    private final List<T> rows;
+    private List<T> rows;
 
-    public PageResult(Integer nowPage, Integer pageSize,long totalCount,Integer total,List<T> rows) {
+    private PageRequest pageRequest;
+
+    public PageResult(Integer nowPage, Integer pageSize, String orderBy, T entity) {
         this.nowPage = nowPage;
         this.pageSize = pageSize;
-        this.totalCount = totalCount;
-        this.total = total;
-        this.startRow = nowPage > 0 ? (nowPage - 1) * pageSize : 0;
-        this.endRow = nowPage * pageSize > totalCount ? totalCount : nowPage * pageSize;
-        this.rows = rows;
+        this.entity = entity;
+        this.skip = (nowPage-1) * pageSize;
+        parseOrderBy(orderBy);
+        this.pageRequest = new PageRequest(this.getNowPage()-1,this.getPageSize(),this.getOrderTurn(),this.getOrderField());
     }
 
-    public static <E> Optional<PageResult<E>> build(Optional<List<E>> optional){
-        /*if(optional.isPresent()){
-            Page<E> page = (Page) optional.get();
-            PageResult<E> pageResult = new PageResult(page.getPageNum(),page.getPageSize(),page.getTotal(),page.getPages(),page.getResult());
-            return Optional.of(pageResult);
+    private void parseOrderBy(String orderBy) {
+        if(StringUtils.isNotBlank(orderBy)){
+            String[] split = orderBy.split(" ");
+            this.orderField = split[0];
+            if(split[1].equalsIgnoreCase("asc")){
+                this.orderTurn = Sort.Direction.ASC;
+            }else if(split[1].equalsIgnoreCase("desc")){
+                this.orderTurn = Sort.Direction.DESC;
+            }else{
+                this.orderTurn = Sort.Direction.DESC;
+            }
         }else{
-            return Optional.empty();
-        }*/
-        return Optional.empty();
+            this.orderField = "createTime";
+            this.orderTurn = Sort.Direction.DESC;
+        }
     }
+
 
     public Integer getNowPage() {
         return nowPage;
@@ -83,39 +95,64 @@ public class PageResult<T> implements Serializable {
         return pageSize;
     }
 
-    public Integer getStartRow() {
-        return startRow;
+    public Integer getSkip() {
+        return skip;
     }
 
-    public long getEndRow() {
-        return endRow;
+    public void setSkip(Integer skip) {
+        this.skip = skip;
+    }
+
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public String getOrderField() {
+        return orderField;
+    }
+
+    public void setOrderField(String orderField) {
+        this.orderField = orderField;
+    }
+
+    public T getEntity() {
+        return entity;
+    }
+
+    public List<T> getRows() {
+        return rows;
+    }
+
+    public void setRows(List<T> rows) {
+        this.rows = rows;
     }
 
     public long getTotalCount() {
         return totalCount;
     }
 
-    public Integer getTotal() {
-        return total;
+    public void setTotalCount(long totalCount) {
+        this.totalCount = totalCount;
     }
 
-    public String getOrderColumn() {
-        return orderColumn;
-    }
-
-    public void setOrderColumn(String orderColumn) {
-        this.orderColumn = orderColumn;
-    }
-
-    public String getOrderTurn() {
+    public Sort.Direction getOrderTurn() {
         return orderTurn;
     }
 
-    public void setOrderTurn(String orderTurn) {
+    public void setOrderTurn(Sort.Direction orderTurn) {
         this.orderTurn = orderTurn;
     }
 
-    public List<T> getRows() {
-        return rows;
+    public PageRequest getPageRequest() {
+        return pageRequest;
+    }
+
+    public void setPageRequest(PageRequest pageRequest) {
+        this.pageRequest = pageRequest;
     }
 }

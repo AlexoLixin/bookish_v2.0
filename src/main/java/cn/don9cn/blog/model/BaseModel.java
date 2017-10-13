@@ -55,8 +55,6 @@ public class BaseModel implements Serializable {
     @DbColumn(content = "排序")
     private String num;
 
-    private String orderBy;
-
     /**
      * 字典缓存
      */
@@ -165,14 +163,6 @@ public class BaseModel implements Serializable {
 
     public void setNum(String num) {
         this.num = num;
-    }
-
-    public String getOrderBy() {
-        return orderBy;
-    }
-
-    public void setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
     }
 
     public String getCode() {

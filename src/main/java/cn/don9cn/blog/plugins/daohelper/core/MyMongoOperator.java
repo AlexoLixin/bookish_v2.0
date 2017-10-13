@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -79,10 +81,11 @@ public class MyMongoOperator {
 
     /**
      * 创建默认查询条件(只通过 id 值查找)
-     * @param fieldMap
+     * @param entity
      * @return
      */
-    public Query createDefaultQuery(Map<Field,Object> fieldMap){
+    public <T extends Serializable> Query createDefaultQuery(T entity){
+        Map<Field,Object> fieldMap = parseEntity(entity);
         Query query = new Query();
         for(Field field:fieldMap.keySet()){
             if(field.getAnnotation(Id.class)!=null){
@@ -94,20 +97,31 @@ public class MyMongoOperator {
     }
 
     /**
-     * 自定义查询条件
-     * @param fieldMap
+     * 创建查询条件(通过所有有值的字段查找)
+     * @param entity
      * @return
      */
-    public Query createQuery(Map<Field,Object> fieldMap, Function<Map<Field,Object>,Query> function){
-        return function.apply(fieldMap);
+    public <T extends Serializable> Query createQueryByAllFields(T entity){
+        return Query.query(new Criteria().alike(Example.of(entity)));
+    }
+
+
+    /**
+     * 自定义查询条件
+     * @param entity
+     * @return
+     */
+    public <T extends Serializable> Query createQuery(T entity, Function<Map<Field,Object>,Query> function){
+        return function.apply(parseEntity(entity));
     }
 
     /**
      * 创建默认更新条目(不重复更新id主键)
-     * @param fieldMap
+     * @param entity
      * @return
      */
-    public Update createDefaultUpdate(Map<Field,Object> fieldMap){
+    public <T extends Serializable> Update createDefaultUpdate(T entity){
+        Map<Field,Object> fieldMap = parseEntity(entity);
         Update update = new Update();
         fieldMap.keySet().forEach(field -> {
             if(field.getAnnotation(Id.class)==null){
@@ -119,11 +133,11 @@ public class MyMongoOperator {
 
     /**
      * 自定义更新条目
-     * @param fieldMap
+     * @param entity
      * @return
      */
-    public Update createUpdate(Map<Field,Object> fieldMap, Function<Map<Field,Object>,Update> function){
-        return function.apply(fieldMap);
+    public <T extends Serializable> Update createUpdate(T entity, Function<Map<Field,Object>,Update> function){
+        return function.apply(parseEntity(entity));
     }
 
     /**
@@ -167,11 +181,10 @@ public class MyMongoOperator {
      * @return
      */
     public <T extends Serializable> OptionalInt baseUpdate(T entity) {
-        Map<Field,Object> fieldMap = parseEntity(entity);
         int x;
         try{
-            x = mongoTemplate.updateFirst(createDefaultQuery(fieldMap),
-                    createDefaultUpdate(fieldMap),entity.getClass(),getCollectionName(entity)).getN();
+            x = mongoTemplate.updateFirst(createDefaultQuery(entity),
+                    createDefaultUpdate(entity),entity.getClass(),getCollectionName(entity)).getN();
         }catch (Exception e){
             logger.error("MyMongoOperator.baseUpdate 更新失败,异常信息:"+e.getMessage());
             return OptionalInt.empty();
@@ -237,14 +250,7 @@ public class MyMongoOperator {
      * @return
      */
     public <T extends Serializable> Optional<List<T>> baseFindListByParams(T entity) {
-        Map<Field, Object> map = parseEntity(entity);
-        Query query = createQuery(map,fieldMap -> {
-            Query result = new Query();
-            fieldMap.keySet().forEach(field ->
-                result.addCriteria(Criteria.where(field.getName()).is(fieldMap.get(field)))
-            );
-            return result;
-        });
+        Query query = createQueryByAllFields(entity);
         try{
             return Optional.ofNullable(mongoTemplate.find(query, (Class<T>) entity.getClass(),getCollectionName(entity)));
         }catch (Exception e){
@@ -283,5 +289,32 @@ public class MyMongoOperator {
         }
     }
 
+    /**
+     * 基础-分页查询
+     * @param pageResult
+     * @param <T>
+     * @return
+     */
+    public <T extends Serializable> Optional<PageResult<T>> baseFindByPage(PageResult<T> pageResult) {
+        Integer skip = pageResult.getSkip();
+        T entity = pageResult.getEntity();
+        Query query = createQueryByAllFields(entity);
+        try{
+            long count = mongoTemplate.count(query, entity.getClass(), getCollectionName(entity));
+            pageResult.setTotalCount(count);
+            List<T> list = new ArrayList<>();
+            if(skip<count){
+                list = mongoTemplate.find(
+                        query.with(pageResult.getPageRequest()),
+                        (Class<T>) entity.getClass(), getCollectionName(entity)
+                );
+            }
+            pageResult.setRows(list);
+            return Optional.of(pageResult);
+        }catch (Exception e){
+            logger.error("MyMongoOperator.baseFindByPage 获取失败,异常信息:"+e.getMessage());
+            return Optional.empty();
+        }
 
+    }
 }

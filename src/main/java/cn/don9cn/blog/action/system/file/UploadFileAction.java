@@ -5,6 +5,7 @@ import cn.don9cn.blog.model.system.file.UploadFile;
 import cn.don9cn.blog.plugins.actionmsg.core.ActionMsg;
 import cn.don9cn.blog.plugins.actionmsg.util.ActionMsgUtil;
 import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
+import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.service.system.file.interf.UploadFileService;
 import cn.don9cn.blog.util.MyStringUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -88,7 +89,7 @@ public class UploadFileAction extends BaseAction<UploadFile> {
 
     @Override
     @GetMapping("/uploadFile/page")
-    protected Object baseFindByPage(int page, int limit, UploadFile uploadFile) {
-        return ActionMsgUtil.baseFindByPage(uploadFileService.baseFindByPage(new PageParamsBean<>(page, limit,  uploadFile)));
+    protected Object baseFindByPage(int page, int limit, String orderBy, UploadFile uploadFile) {
+        return ActionMsgUtil.baseFindByPage(uploadFileService.baseFindByPage(new PageResult<>(page, limit, orderBy, uploadFile)));
     }
 }

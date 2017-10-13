@@ -70,8 +70,8 @@ public interface BaseService<T extends Serializable> {
 
     /**
      * 带参数的分页查询
-     * @param pageParamsBean
+     * @param pageResult
      * @return
      */
-    Optional<PageResult<T>> baseFindByPage(PageParamsBean<T> pageParamsBean);
+    Optional<PageResult<T>> baseFindByPage(PageResult<T> pageResult);
 }

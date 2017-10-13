@@ -70,8 +70,8 @@ public class UploadFileServiceImpl implements UploadFileService {
 	}
 
 	@Override
-	public Optional<PageResult<UploadFile>> baseFindByPage(PageParamsBean<UploadFile> pageParamsBean) {
-		return uploadFileDaoImpl.baseFindByPage(pageParamsBean);
+	public Optional<PageResult<UploadFile>> baseFindByPage(PageResult<UploadFile> pageResult) {
+		return uploadFileDaoImpl.baseFindByPage(pageResult);
 	}
 
 	/**

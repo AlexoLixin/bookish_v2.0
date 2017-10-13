@@ -5,6 +5,7 @@ import cn.don9cn.blog.model.bussiness.article.Article;
 import cn.don9cn.blog.plugins.actionmsg.core.ActionMsg;
 import cn.don9cn.blog.plugins.actionmsg.util.ActionMsgUtil;
 import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
+import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.service.bussiness.article.interf.ArticleService;
 import cn.don9cn.blog.util.MyStringUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -81,8 +82,8 @@ public class ArticleAction extends BaseAction<Article> {
 
     @Override
     @GetMapping("/article/page")
-    protected Object baseFindByPage(int page, int limit, Article article) {
-        return ActionMsgUtil.baseFindByPage(articleService.baseFindByPage(new PageParamsBean<>(page, limit,  article)));
+    protected Object baseFindByPage(int page, int limit, String orderBy, Article article) {
+        return ActionMsgUtil.baseFindByPage(articleService.baseFindByPage(new PageResult<>(page,limit,orderBy,article)));
     }
 
     /**

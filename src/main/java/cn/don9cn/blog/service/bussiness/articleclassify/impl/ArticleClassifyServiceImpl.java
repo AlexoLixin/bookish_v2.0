@@ -73,8 +73,8 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	}
 
 	@Override
-	public Optional<PageResult<ArticleClassify>> baseFindByPage(PageParamsBean<ArticleClassify> pageParamsBean) {
-		return articleClassifyDaoImpl.baseFindByPage(pageParamsBean);
+	public Optional<PageResult<ArticleClassify>> baseFindByPage(PageResult<ArticleClassify> pageResult) {
+		return articleClassifyDaoImpl.baseFindByPage(pageResult);
 	}
 
 	/**
