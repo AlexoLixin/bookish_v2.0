@@ -268,5 +268,20 @@ public class MyMongoOperator {
         }
     }
 
+    /**
+     * 基础-根据id批量查找
+     * @param <T>
+     * @param typeClass
+     * @return
+     */
+    public <T extends Serializable> Optional<List<T>> baseFindInIds(List<String> ids,Class<T> typeClass) {
+        try{
+            return Optional.ofNullable(mongoTemplate.find(Query.query(Criteria.where("_id").in(ids)),typeClass,typeClass.getSimpleName()));
+        }catch (Exception e){
+            logger.error("MyMongoOperator.baseFindInIds 获取失败,异常信息:"+e.getMessage());
+            return Optional.empty();
+        }
+    }
+
 
 }
