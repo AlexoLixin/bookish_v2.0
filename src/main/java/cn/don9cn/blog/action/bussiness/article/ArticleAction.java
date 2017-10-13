@@ -29,22 +29,33 @@ public class ArticleAction extends BaseAction<Article> {
 
     @Override
     @PostMapping("/article")
-    protected Object doSave(Article article) {
-        return ActionMsgUtil.doSave(articleService.insert(article));
+    protected Object baseSave(Article article) {
+        return ActionMsgUtil.baseSave(articleService.baseInsert(article));
+    }
+
+    @Override
+    protected Object baseSaveBatch(List<Article> list) {
+        return null;
     }
 
     @Override
     @PutMapping("/article")
-    protected Object doUpdate(Article article) {
-        return ActionMsgUtil.doUpdate(articleService.update(article));
+    protected Object baseUpdate(Article article) {
+        return ActionMsgUtil.baseUpdate(articleService.baseUpdate(article));
     }
 
     @Override
     @DeleteMapping("/article")
-    protected Object doRemove(String codes) {
+    protected Object baseRemove(String code) {
+        return ActionMsgUtil.baseRemove(articleService.baseDeleteById(code));
+    }
+
+    @Override
+    @DeleteMapping("/article/batch")
+    protected Object baseRemoveBatch(String codes) {
         if(StringUtils.isNotBlank(codes)){
             List<String> codesList = MyStringUtil.codesStr2List(codes);
-            return ActionMsgUtil.doRemove(articleService.deleteBatch(codesList));
+            return ActionMsgUtil.baseRemove(articleService.baseDeleteBatch(codesList));
         }else{
             return new ActionMsg(false,"删除失败,传入codes为空!");
         }
@@ -52,26 +63,26 @@ public class ArticleAction extends BaseAction<Article> {
 
     @Override
     @GetMapping("/article/{code}")
-    protected Object doFindById(@PathVariable String code) {
-        return ActionMsgUtil.doFindById(articleService.findById(code));
+    protected Object baseFindById(@PathVariable String code) {
+        return ActionMsgUtil.baseFindById(articleService.baseFindById(code));
     }
 
     @Override
     @GetMapping("/article/all")
-    protected Object doFindAll() {
-        return ActionMsgUtil.doFindAll(articleService.findAll());
+    protected Object baseFindAll() {
+        return ActionMsgUtil.baseFindAll(articleService.baseFindAll());
     }
 
     @Override
     @GetMapping("/article/list")
-    protected Object doFindListByParams(Article article) {
-        return ActionMsgUtil.doFindListByParams(articleService.findListByParams(article));
+    protected Object baseFindListByParams(Article article) {
+        return ActionMsgUtil.baseFindListByParams(articleService.baseFindListByParams(article));
     }
 
     @Override
     @GetMapping("/article/page")
-    protected Object doFindByPage(int page, int limit, Article article) {
-        return ActionMsgUtil.doFindByPage(articleService.findByPage(new PageParamsBean<>(page, limit,  article)));
+    protected Object baseFindByPage(int page, int limit, Article article) {
+        return ActionMsgUtil.baseFindByPage(articleService.baseFindByPage(new PageParamsBean<>(page, limit,  article)));
     }
 
     /**
@@ -81,7 +92,7 @@ public class ArticleAction extends BaseAction<Article> {
      */
     @PutMapping("/article/byUser")
     public Object doUpdateByUser(Article article){
-        return ActionMsgUtil.doUpdate(articleService.doUpdateByUser(article));
+        return ActionMsgUtil.baseUpdate(articleService.doUpdateByUser(article));
     }
 
     /**
@@ -91,6 +102,6 @@ public class ArticleAction extends BaseAction<Article> {
      */
     @DeleteMapping("/article/byUser")
     public Object doRemoveByUser(String code) {
-        return ActionMsgUtil.doRemove(articleService.doRemoveByUser(code));
+        return ActionMsgUtil.baseRemove(articleService.doRemoveByUser(code));
     }
 }

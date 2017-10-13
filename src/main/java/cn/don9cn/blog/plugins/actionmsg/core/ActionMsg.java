@@ -1,5 +1,6 @@
 package cn.don9cn.blog.plugins.actionmsg.core;
 
+
 import java.io.Serializable;
 
 /**

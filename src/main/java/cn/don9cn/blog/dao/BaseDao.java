@@ -1,5 +1,7 @@
 package cn.don9cn.blog.dao;
 
+import cn.don9cn.blog.plugins.daohelper.core.DaoHelper;
+import cn.don9cn.blog.plugins.daohelper.core.MyMongoOperator;
 import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 
@@ -8,6 +10,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 /**
  * @Author: liuxindong
@@ -18,29 +21,51 @@ import java.util.Optional;
 public interface BaseDao<T extends Serializable> {
 
     /**
+     * 获取 mongo 操作器
+     * @return
+     */
+    default MyMongoOperator getMyMongoOperator(){
+        return DaoHelper.getMyMongoOperator();
+    }
+
+    /**
+     * 获取参数类型
+     * @return
+     */
+    default Class<T> getTypeClass(){
+        Type type = this.getClass().getGenericInterfaces()[0];
+        ParameterizedType type2 = (ParameterizedType) type;
+        Type[] actualTypeArguments = type2.getActualTypeArguments();
+        Type actualTypeArgument = actualTypeArguments[0];
+        Class<T> clazz = (Class<T>) actualTypeArgument;
+        return clazz;
+    }
+
+
+    /**
      * 添加实体对象
      * @param entity
      * @return
      */
-    default Optional<Integer> insert(T entity){
-        return Optional.empty();
+    default OptionalInt baseInsert(T entity){
+        return getMyMongoOperator().baseInsert(entity);
     }
 
     /**
      * 批量添加实体对象
      * @return
      */
-    default Optional<Integer> insertBatch(final List<T> list){
-        return Optional.empty();
+    default OptionalInt baseInsertBatch(final List<T> list){
+        return getMyMongoOperator().baseInsertBatch(list);
     }
 
     /**
-     * 通过id更新实体
+     * 条件更新实体
      * @param entity
      * @return
      */
-    default Optional<Integer> update(T entity){
-        return Optional.empty();
+    default OptionalInt baseUpdate(T entity){
+        return getMyMongoOperator().baseUpdate(entity);
     }
 
     /**
@@ -48,16 +73,16 @@ public interface BaseDao<T extends Serializable> {
      * @param id
      * @return
      */
-    default Optional<Integer> deleteById(String id){
-        return Optional.empty();
+    default OptionalInt baseDeleteById(String id){
+        return getMyMongoOperator().baseDeleteById(id,getTypeClass());
     }
 
     /**
      * 批量删除实体对象
      * @return
      */
-    default Optional<Integer> deleteBatch(List<String> list){
-        return Optional.empty();
+    default OptionalInt baseDeleteBatch(List<String> list){
+        return getMyMongoOperator().baseDeleteBatch(list,getTypeClass());
     }
 
     /**
@@ -65,16 +90,16 @@ public interface BaseDao<T extends Serializable> {
      * @param id
      * @return
      */
-    default Optional<T> findById(String id){
-        return Optional.empty();
+    default Optional<T> baseFindById(String id){
+        return getMyMongoOperator().baseFindById(id,getTypeClass());
     }
 
     /**
      * 查询所有数据
      * @return
      */
-    default Optional<List<T>> findAll(){
-        return Optional.empty();
+    default Optional<List<T>> baseFindAll(){
+        return getMyMongoOperator().baseFindAll(getTypeClass());
     }
 
     /**
@@ -82,8 +107,8 @@ public interface BaseDao<T extends Serializable> {
      * @param entity
      * @return
      */
-    default Optional<List<T>> findListByParams(T entity){
-        return Optional.empty();
+    default Optional<List<T>> baseFindListByParams(T entity){
+        return getMyMongoOperator().baseFindListByParams(entity);
     }
 
     /**
@@ -91,7 +116,7 @@ public interface BaseDao<T extends Serializable> {
      * @param pageParamsBean
      * @return
      */
-    default Optional<PageResult<T>> findByPage(PageParamsBean<T> pageParamsBean){
+    default Optional<PageResult<T>> baseFindByPage(PageParamsBean<T> pageParamsBean){
         return Optional.empty();
     }
 

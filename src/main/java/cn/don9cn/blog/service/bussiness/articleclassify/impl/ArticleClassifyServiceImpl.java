@@ -1,6 +1,7 @@
 package cn.don9cn.blog.service.bussiness.articleclassify.impl;
 
 import cn.don9cn.blog.dao.bussiness.articleclassify.ArticleClassifyDaoImpl;
+import cn.don9cn.blog.model.BaseModel;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
 import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -30,48 +32,49 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 
 
 	@Override
-	public Optional<Integer> insert(ArticleClassify entity) {
-		return articleClassifyDaoImpl.insert(entity);
+	public OptionalInt baseInsert(ArticleClassify entity) {
+		entity.setLeaf("Y");
+		return articleClassifyDaoImpl.baseInsert(entity);
 	}
 
 	@Override
-	public Optional<Integer> insertBatch(List<ArticleClassify> list) {
-		return articleClassifyDaoImpl.insertBatch(list);
+	public OptionalInt baseInsertBatch(List<ArticleClassify> list) {
+		return articleClassifyDaoImpl.baseInsertBatch(list);
 	}
 
 	@Override
-	public Optional<Integer> update(ArticleClassify entity) {
-		return articleClassifyDaoImpl.update(entity);
+	public OptionalInt baseUpdate(ArticleClassify entity) {
+		return articleClassifyDaoImpl.baseUpdate(entity);
 	}
 
 	@Override
-	public Optional<Integer> deleteById(String id) {
-		return articleClassifyDaoImpl.deleteById(id);
+	public OptionalInt baseDeleteById(String id) {
+		return articleClassifyDaoImpl.baseDeleteById(id);
 	}
 
 	@Override
-	public Optional<Integer> deleteBatch(List<String> list) {
-		return articleClassifyDaoImpl.deleteBatch(list);
+	public OptionalInt baseDeleteBatch(List<String> list) {
+		return articleClassifyDaoImpl.baseDeleteBatch(list);
 	}
 
 	@Override
-	public Optional<ArticleClassify> findById(String id) {
-		return articleClassifyDaoImpl.findById(id);
+	public Optional<ArticleClassify> baseFindById(String id) {
+		return articleClassifyDaoImpl.baseFindById(id);
 	}
 
 	@Override
-	public Optional<List<ArticleClassify>> findAll() {
-		return articleClassifyDaoImpl.findAll();
+	public Optional<List<ArticleClassify>> baseFindAll() {
+		return articleClassifyDaoImpl.baseFindAll();
 	}
 
 	@Override
-	public Optional<List<ArticleClassify>> findListByParams(ArticleClassify entity) {
-		return articleClassifyDaoImpl.findListByParams(entity);
+	public Optional<List<ArticleClassify>> baseFindListByParams(ArticleClassify entity) {
+		return articleClassifyDaoImpl.baseFindListByParams(entity);
 	}
 
 	@Override
-	public Optional<PageResult<ArticleClassify>> findByPage(PageParamsBean<ArticleClassify> pageParamsBean) {
-		return articleClassifyDaoImpl.findByPage(pageParamsBean);
+	public Optional<PageResult<ArticleClassify>> baseFindByPage(PageParamsBean<ArticleClassify> pageParamsBean) {
+		return articleClassifyDaoImpl.baseFindByPage(pageParamsBean);
 	}
 
 	/**
@@ -80,14 +83,14 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	 * @return
 	 */
 	@Override
-	public Optional<Integer> doSave(ArticleClassify articleClassify) {
+	public OptionalInt doSave(ArticleClassify articleClassify) {
 		//将当前节点设置为叶子节点
 		articleClassify.setLeaf("Y");
 		//保存当前节点
-		Optional<Integer> optional = articleClassifyDaoImpl.insert(articleClassify);
+		OptionalInt optional = articleClassifyDaoImpl.baseInsert(articleClassify);
 		//更新父节点为非叶子节点
 		if(!articleClassify.getParent().equals("ROOT")){
-			articleClassifyDaoImpl.update(new ArticleClassify(articleClassify.getParent(),"N"));
+			articleClassifyDaoImpl.baseUpdate(new ArticleClassify(articleClassify.getParent(),"N"));
 		}
 		return optional;
 	}
@@ -98,24 +101,35 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	 */
 	@Override
 	public Optional<List<ArticleClassify>> getTree() {
-		List<ArticleClassify> all = articleClassifyDaoImpl.findAll().get();
-		List<ArticleClassify> temp = new ArrayList<>();
-		// 对所有节点按照父子关系进行重新组装
-		List<ArticleClassify> result = all.stream().filter(t -> t.getLeaf().equals("N")).map(t -> {
-			System.out.println(t.getCode());
-			List<ArticleClassify> children = all.stream()
-					.filter(sub -> sub.getParent().equals(t.getCode()))
-					.sorted(Comparator.comparing(sub -> Integer.parseInt(sub.getLevel())))
-					.collect(Collectors.toList());
-			t.setChildren(children);
-			temp.add(t);
-			temp.addAll(children);
-			return t;
-		}).filter(t -> t.getParent().equals("ROOT"))
-				.sorted(Comparator.comparing(t -> Integer.parseInt(t.getLevel()))).collect(Collectors.toList());
-		all.removeAll(temp);
-		result.addAll(all);
-		return Optional.ofNullable(result.stream().sorted(Comparator.comparing(t -> Integer.parseInt(t.getLevel()))).collect(Collectors.toList()));
+
+		Optional<List<ArticleClassify>> listOptional = articleClassifyDaoImpl.baseFindAll();
+
+		if(listOptional.isPresent()){
+			List<ArticleClassify> all = listOptional.get();
+			List<ArticleClassify> temp = new ArrayList<>();
+			// 对所有节点按照父子关系进行重新组装
+			List<ArticleClassify> result = all.stream().filter(t -> t.getLeaf().equals("N")).map(t -> {
+				List<ArticleClassify> children = all.stream()
+						.filter(sub -> sub.getParent().equals(t.getCode()))
+						.sorted(Comparator.comparing(sub -> Integer.parseInt(sub.getLevel())))
+						.collect(Collectors.toList());
+				if(children!=null){
+					t.setChildren(children);
+					temp.addAll(children);
+				}
+				temp.add(t);
+				return t;
+			}).filter(t -> t.getParent().equals("ROOT"))
+					.sorted(Comparator.comparing(t -> Integer.parseInt(t.getLevel()))).collect(Collectors.toList());
+			all.removeAll(temp);
+			result.addAll(all);
+			return Optional.ofNullable(result.stream()
+					.sorted(Comparator.comparing(t -> Integer.parseInt(t.getLevel())))
+					.collect(Collectors.toList()));
+		}else{
+			return Optional.of(new ArrayList<>());
+		}
+
 	}
 
 	/**
@@ -124,7 +138,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	 */
 	@Override
 	public Optional<List<VueSelectOption>> doGetSelectOptions() {
-		List<ArticleClassify> allClassifies = articleClassifyDaoImpl.findAll().get();
+		List<ArticleClassify> allClassifies = articleClassifyDaoImpl.baseFindAll().get();
 		Map<String, List<ArticleClassify>> map = allClassifies.stream().collect(Collectors.groupingBy(ArticleClassify::getCode));
 		List<VueSelectOption> result = allClassifies.stream().filter(t -> t.getLeaf().equals("Y")&&!t.getParent().equals("ROOT"))
 				.map(t -> new VueSelectOption("[" + map.get(t.getParent()).get(0).getName() + "] - " + t.getName(), t.getCode(), t.getLevel()))
@@ -140,44 +154,43 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	 * @return
 	 */
 	@Override
-	public Optional<Integer> doRemove(List<String> codesList, List<String> levelsList) {
+	public OptionalInt doRemove(List<String> codesList, List<String> levelsList) {
 		//删除当前分类
-		Optional<Integer> optional_1 = articleClassifyDaoImpl.deleteBatch(codesList);
+		OptionalInt optional_1 = articleClassifyDaoImpl.baseDeleteBatch(codesList);
 		//级联删除分类
-		Optional<Integer> optional_2 = deleteCascade(levelsList);
+		OptionalInt optional_2 = deleteCascade(levelsList);
 		//更新节点状态
 		updateLeaf();
-
-		return Optional.of(optional_1.orElse(0)+optional_2.orElse(0));
+		return OptionalInt.of(optional_1.orElse(0)+optional_2.orElse(0));
 	}
 
 	/**
 	 * 级联删除分类
 	 * @param levelsList
 	 */
-	private Optional<Integer> deleteCascade(List<String> levelsList) {
+	private OptionalInt deleteCascade(List<String> levelsList) {
 		int x = 0;
 		for(String level:levelsList){
-			int y = articleClassifyDaoImpl.deleteCascade(level).get();
+			int y = articleClassifyDaoImpl.deleteCascade(level).getAsInt();
 			x += y;
 		}
-		return Optional.ofNullable(x);
+		return OptionalInt.of(x);
 	}
 
 	/**
 	 * 更新节点状态
 	 * @return
 	 */
-	private Optional<Integer> updateLeaf() {
-		List<ArticleClassify> allClassifies = articleClassifyDaoImpl.findAll().get();
-		List<String> allCodes = new ArrayList<String>();
-		allClassifies.stream().forEach(classify -> allCodes.add(classify.getCode()));
+	private OptionalInt updateLeaf() {
+		List<ArticleClassify> allClassifies = articleClassifyDaoImpl.baseFindAll().get();
+		List<String> allCodes = allClassifies.stream().map(ArticleClassify::getCode).collect(Collectors.toList());
 		allCodes.add("ROOT");
-		allClassifies.stream().forEach(classify -> {
-			if(allCodes.contains(classify.getParent())){
-				allCodes.remove(classify.getParent());
+		List<String> temp = new ArrayList<>();
+		allClassifies.forEach(classify -> {
+			if(!allCodes.contains(classify.getParent())){
+				temp.add(classify.getParent());
 			}
 		});
-		return articleClassifyDaoImpl.updateLeaf(allCodes);
+		return articleClassifyDaoImpl.updateLeaf(temp);
 	}
 }

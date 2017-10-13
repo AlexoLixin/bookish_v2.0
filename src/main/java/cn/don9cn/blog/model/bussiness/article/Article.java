@@ -48,6 +48,11 @@ public class Article extends BaseModel implements Serializable {
      */
     private String classifyName;
 
+    @Override
+    public String toString() {
+        return "Article [code=" + getCode() + ", title=" + title + ", author=" + author + ", classify=" + classify + ", content=" + content + ", files=" + files + "]";
+    }
+
     public String getTitle() {
         return title;
     }

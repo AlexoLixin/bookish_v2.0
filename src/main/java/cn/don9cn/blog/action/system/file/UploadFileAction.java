@@ -33,24 +33,36 @@ public class UploadFileAction extends BaseAction<UploadFile> {
 
     @Override
     @PostMapping("/uploadFile")
-    protected Object doSave(UploadFile uploadFile) {
+    protected Object baseSave(UploadFile uploadFile) {
         return ActionMsgUtil.apply(uploadFileService.insertWithCode(uploadFile), optional ->
                 optional.map(value -> new ActionMsg(true,"文件上传成功"))
                         .orElseGet(() -> new ActionMsg(false,"文件上传信息保存至服务器失败")));
     }
 
     @Override
+    protected Object baseSaveBatch(List<UploadFile> list) {
+        return null;
+    }
+
+
+    @Override
     @PutMapping("/uploadFile")
-    protected Object doUpdate(UploadFile uploadFile) {
-        return ActionMsgUtil.doUpdate(uploadFileService.update(uploadFile));
+    protected Object baseUpdate(UploadFile uploadFile) {
+        return ActionMsgUtil.baseUpdate(uploadFileService.baseUpdate(uploadFile));
     }
 
     @Override
     @DeleteMapping("/uploadFile")
-    protected Object doRemove(String codes) {
+    protected Object baseRemove(String code) {
+        return ActionMsgUtil.baseRemove(uploadFileService.baseDeleteById(code));
+    }
+
+    @Override
+    @DeleteMapping("/uploadFile/batch")
+    protected Object baseRemoveBatch(String codes) {
         if(StringUtils.isNotBlank(codes)){
             List<String> codesList = MyStringUtil.codesStr2List(codes);
-            return ActionMsgUtil.doRemove(uploadFileService.deleteBatch(codesList));
+            return ActionMsgUtil.baseRemove(uploadFileService.baseDeleteBatch(codesList));
         }else{
             return new ActionMsg(false,"删除失败,传入codes为空!");
         }
@@ -58,25 +70,25 @@ public class UploadFileAction extends BaseAction<UploadFile> {
 
     @Override
     @GetMapping("/uploadFile/{code}")
-    protected Object doFindById(String code) {
-        return ActionMsgUtil.doFindById(uploadFileService.findById(code));
+    protected Object baseFindById(String code) {
+        return ActionMsgUtil.baseFindById(uploadFileService.baseFindById(code));
     }
 
     @Override
     @GetMapping("/uploadFile/all")
-    protected Object doFindAll() {
-        return ActionMsgUtil.doFindAll(uploadFileService.findAll());
+    protected Object baseFindAll() {
+        return ActionMsgUtil.baseFindAll(uploadFileService.baseFindAll());
     }
 
     @Override
     @GetMapping("/uploadFile/list")
-    protected Object doFindListByParams(UploadFile uploadFile) {
-        return ActionMsgUtil.doFindListByParams(uploadFileService.findListByParams(uploadFile));
+    protected Object baseFindListByParams(UploadFile uploadFile) {
+        return ActionMsgUtil.baseFindListByParams(uploadFileService.baseFindListByParams(uploadFile));
     }
 
     @Override
     @GetMapping("/uploadFile/page")
-    protected Object doFindByPage(int page, int limit, UploadFile uploadFile) {
-        return ActionMsgUtil.doFindByPage(uploadFileService.findByPage(new PageParamsBean<>(page, limit,  uploadFile)));
+    protected Object baseFindByPage(int page, int limit, UploadFile uploadFile) {
+        return ActionMsgUtil.baseFindByPage(uploadFileService.baseFindByPage(new PageParamsBean<>(page, limit,  uploadFile)));
     }
 }

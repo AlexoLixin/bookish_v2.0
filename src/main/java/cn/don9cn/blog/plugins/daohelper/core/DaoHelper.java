@@ -1,5 +1,8 @@
 package cn.don9cn.blog.plugins.daohelper.core;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 
 
@@ -10,10 +13,17 @@ import org.springframework.context.annotation.Configuration;
  * @Modify:
  */
 @Configuration
+@AutoConfigureAfter(value = {MyMongoOperator.class})
 public class DaoHelper {
 
+    private static MyMongoOperator myMongoOperator;
 
+    @Autowired
+    public DaoHelper(MyMongoOperator myMongoOperator) {
+        DaoHelper.myMongoOperator = myMongoOperator;
+    }
 
-
-
+    public static MyMongoOperator getMyMongoOperator() {
+        return myMongoOperator;
+    }
 }

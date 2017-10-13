@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
+import java.util.OptionalInt;
 
 
 /**
@@ -30,48 +30,48 @@ public class UploadFileServiceImpl implements UploadFileService {
 
 
 	@Override
-	public Optional<Integer> insert(UploadFile entity) {
-		return uploadFileDaoImpl.insert(entity);
+	public OptionalInt baseInsert(UploadFile entity) {
+		return uploadFileDaoImpl.baseInsert(entity);
 	}
 
 	@Override
-	public Optional<Integer> insertBatch(List<UploadFile> list) {
-		return uploadFileDaoImpl.insertBatch(list);
+	public OptionalInt baseInsertBatch(List<UploadFile> list) {
+		return uploadFileDaoImpl.baseInsertBatch(list);
 	}
 
 	@Override
-	public Optional<Integer> update(UploadFile entity) {
-		return uploadFileDaoImpl.update(entity);
+	public OptionalInt baseUpdate(UploadFile entity) {
+		return uploadFileDaoImpl.baseUpdate(entity);
 	}
 
 	@Override
-	public Optional<Integer> deleteById(String id) {
-		return uploadFileDaoImpl.deleteById(id);
+	public OptionalInt baseDeleteById(String id) {
+		return uploadFileDaoImpl.baseDeleteById(id);
 	}
 
 	@Override
-	public Optional<Integer> deleteBatch(List<String> list) {
-		return uploadFileDaoImpl.deleteBatch(list);
+	public OptionalInt baseDeleteBatch(List<String> list) {
+		return uploadFileDaoImpl.baseDeleteBatch(list);
 	}
 
 	@Override
-	public Optional<UploadFile> findById(String id) {
-		return uploadFileDaoImpl.findById(id);
+	public Optional<UploadFile> baseFindById(String id) {
+		return uploadFileDaoImpl.baseFindById(id);
 	}
 
 	@Override
-	public Optional<List<UploadFile>> findAll() {
-		return uploadFileDaoImpl.findAll();
+	public Optional<List<UploadFile>> baseFindAll() {
+		return uploadFileDaoImpl.baseFindAll();
 	}
 
 	@Override
-	public Optional<List<UploadFile>> findListByParams(UploadFile entity) {
-		return uploadFileDaoImpl.findListByParams(entity);
+	public Optional<List<UploadFile>> baseFindListByParams(UploadFile entity) {
+		return uploadFileDaoImpl.baseFindListByParams(entity);
 	}
 
 	@Override
-	public Optional<PageResult<UploadFile>> findByPage(PageParamsBean<UploadFile> pageParamsBean) {
-		return uploadFileDaoImpl.findByPage(pageParamsBean);
+	public Optional<PageResult<UploadFile>> baseFindByPage(PageParamsBean<UploadFile> pageParamsBean) {
+		return uploadFileDaoImpl.baseFindByPage(pageParamsBean);
 	}
 
 	/**
@@ -82,8 +82,8 @@ public class UploadFileServiceImpl implements UploadFileService {
 	@Override
 	public Optional<UploadFile> insertWithCode(UploadFile file) {
 		file.setCode(UuidUtil.getUuid());
-		Optional<Integer> optional = uploadFileDaoImpl.insert(file);
-		if(optional.isPresent() && optional.get()>0){
+		OptionalInt optional = uploadFileDaoImpl.baseInsert(file);
+		if(optional.isPresent() && optional.getAsInt()>0 ){
 			return Optional.of(file);
 		}else{
 			return Optional.empty();

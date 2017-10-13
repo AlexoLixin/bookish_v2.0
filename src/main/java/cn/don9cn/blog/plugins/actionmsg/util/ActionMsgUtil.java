@@ -3,6 +3,7 @@ package cn.don9cn.blog.plugins.actionmsg.util;
 import cn.don9cn.blog.plugins.actionmsg.core.ActionMsg;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.function.Function;
 
 /**
@@ -18,8 +19,20 @@ public class ActionMsgUtil {
      * @param optional
      * @return
      */
-    public static ActionMsg doSave(Optional<Integer> optional){
-        if(optional.isPresent() && optional.get()>0){
+    public static ActionMsg baseSave(OptionalInt optional){
+        if(optional.isPresent() && optional.getAsInt()>0){
+            return new ActionMsg(true,"添加成功");
+        }
+        return new ActionMsg(false,"添加失败");
+    }
+
+    /**
+     * 基础批量保存
+     * @param optional
+     * @return
+     */
+    public static ActionMsg baseSaveBatch(OptionalInt optional){
+        if(optional.isPresent() && optional.getAsInt()>0){
             return new ActionMsg(true,"添加成功");
         }
         return new ActionMsg(false,"添加失败");
@@ -30,8 +43,8 @@ public class ActionMsgUtil {
      * @param optional
      * @return
      */
-    public static ActionMsg doUpdate(Optional<Integer> optional){
-        if(optional.isPresent() && optional.get()>0){
+    public static ActionMsg baseUpdate(OptionalInt optional){
+        if(optional.isPresent() && optional.getAsInt()>0){
             return new ActionMsg(true,"更新成功");
         }
         return new ActionMsg(false,"更新失败");
@@ -42,9 +55,21 @@ public class ActionMsgUtil {
      * @param optional
      * @return
      */
-    public static ActionMsg doRemove(Optional<Integer> optional){
+    public static ActionMsg baseRemove(OptionalInt optional){
         if(optional.isPresent()){
-            return new ActionMsg(true,"删除成功,"+optional.get()+"条数据被删除");
+            return new ActionMsg(true,"删除成功,"+optional.getAsInt()+"条数据被删除");
+        }
+        return new ActionMsg(false,"删除失败");
+    }
+
+    /**
+     * 基础批量删除
+     * @param optional
+     * @return
+     */
+    public static ActionMsg baseRemoveBatch(OptionalInt optional){
+        if(optional.isPresent()){
+            return new ActionMsg(true,"删除成功,"+optional.getAsInt()+"条数据被删除");
         }
         return new ActionMsg(false,"删除失败");
     }
@@ -54,7 +79,7 @@ public class ActionMsgUtil {
      * @param optional
      * @return
      */
-    public static ActionMsg doFindById(Optional optional){
+    public static ActionMsg baseFindById(Optional optional){
         if(optional.isPresent()){
             return new ActionMsg(true,"查询成功").setObj(optional.get());
         }
@@ -66,7 +91,7 @@ public class ActionMsgUtil {
      * @param optional
      * @return
      */
-    public static ActionMsg doFindAll(Optional optional){
+    public static ActionMsg baseFindAll(Optional optional){
         if(optional.isPresent()){
             return new ActionMsg(true,"查询成功").setObj(optional.get());
         }
@@ -78,7 +103,7 @@ public class ActionMsgUtil {
      * @param optional
      * @return
      */
-    public static ActionMsg doFindListByParams(Optional optional){
+    public static ActionMsg baseFindListByParams(Optional optional){
         if(optional.isPresent()){
             return new ActionMsg(true,"查询成功").setObj(optional.get());
         }
@@ -90,7 +115,7 @@ public class ActionMsgUtil {
      * @param optional
      * @return
      */
-    public static ActionMsg doFindByPage(Optional optional){
+    public static ActionMsg baseFindByPage(Optional optional){
         if(optional.isPresent()){
             return new ActionMsg(true,"分页数据查询成功").setObj(optional.get());
         }

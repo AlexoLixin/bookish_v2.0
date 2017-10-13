@@ -2,6 +2,7 @@ package cn.don9cn.blog.model;
 
 
 import cn.don9cn.blog.annotation.DbColumn;
+import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -15,10 +16,11 @@ import java.util.Map;
 public class BaseModel implements Serializable {
 
     @DbColumn(content = "主键")
+    @Id
     private String code;
 
     @DbColumn(content = "删除标记")
-    private String flagDel = "0";
+    private String flagDel = "N";
 
     @DbColumn(content = "创建时间")
     private String createTime;

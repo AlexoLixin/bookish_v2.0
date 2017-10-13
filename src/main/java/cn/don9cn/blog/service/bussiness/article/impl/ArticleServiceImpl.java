@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 
 /**
@@ -34,34 +35,34 @@ public class ArticleServiceImpl implements ArticleService {
 
 
 	@Override
-	public Optional<Integer> insert(Article entity) {
+	public OptionalInt baseInsert(Article entity) {
 		entity.setAuthor("test");
-		return articleDaoImpl.insert(entity);
+		return articleDaoImpl.baseInsert(entity);
 	}
 
 	@Override
-	public Optional<Integer> insertBatch(List<Article> list) {
-		return articleDaoImpl.insertBatch(list);
+	public OptionalInt baseInsertBatch(List<Article> list) {
+		return articleDaoImpl.baseInsertBatch(list);
 	}
 
 	@Override
-	public Optional<Integer> update(Article entity) {
-		return articleDaoImpl.update(entity);
+	public OptionalInt baseUpdate(Article entity) {
+		return articleDaoImpl.baseUpdate(entity);
 	}
 
 	@Override
-	public Optional<Integer> deleteById(String id) {
-		return articleDaoImpl.deleteById(id);
+	public OptionalInt baseDeleteById(String id) {
+		return articleDaoImpl.baseDeleteById(id);
 	}
 
 	@Override
-	public Optional<Integer> deleteBatch(List<String> list) {
-		return articleDaoImpl.deleteBatch(list);
+	public OptionalInt baseDeleteBatch(List<String> list) {
+		return articleDaoImpl.baseDeleteBatch(list);
 	}
 
 	@Override
-	public Optional<Article> findById(String id) {
-		Optional<Article> article = articleDaoImpl.findById(id);
+	public Optional<Article> baseFindById(String id) {
+		Optional<Article> article = articleDaoImpl.baseFindById(id);
 		article.ifPresent(a -> {
 			if(StringUtils.isNotBlank(a.getFiles())){
 				uploadFileDaoImpl.findListInCodes(MyStringUtil.codesStr2List(a.getFiles())).ifPresent(a::setFilesList);
@@ -71,18 +72,18 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public Optional<List<Article>> findAll() {
-		return articleDaoImpl.findAll();
+	public Optional<List<Article>> baseFindAll() {
+		return articleDaoImpl.baseFindAll();
 	}
 
 	@Override
-	public Optional<List<Article>> findListByParams(Article entity) {
-		return articleDaoImpl.findListByParams(entity);
+	public Optional<List<Article>> baseFindListByParams(Article entity) {
+		return articleDaoImpl.baseFindListByParams(entity);
 	}
 
 	@Override
-	public Optional<PageResult<Article>> findByPage(PageParamsBean<Article> pageParamsBean) {
-		return articleDaoImpl.findByPage(pageParamsBean);
+	public Optional<PageResult<Article>> baseFindByPage(PageParamsBean<Article> pageParamsBean) {
+		return articleDaoImpl.baseFindByPage(pageParamsBean);
 	}
 
 	/**
@@ -91,7 +92,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @return
 	 */
 	@Override
-	public Optional<Integer> doRemoveByUser(String code) {
+	public OptionalInt doRemoveByUser(String code) {
 		return null;
 	}
 
@@ -101,7 +102,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @return
 	 */
 	@Override
-	public Optional<Integer> doUpdateByUser(Article article) {
+	public OptionalInt doUpdateByUser(Article article) {
 		return null;
 	}
 

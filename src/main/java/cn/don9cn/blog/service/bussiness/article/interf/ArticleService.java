@@ -7,6 +7,7 @@ import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.service.BaseService;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 
 /**
  * @Author: liuxindong
@@ -16,9 +17,9 @@ import java.util.Optional;
  */
 public interface ArticleService extends BaseService<Article> {
 
-    Optional<Integer> doRemoveByUser(String code);
+    OptionalInt doRemoveByUser(String code);
 
-    Optional<Integer> doUpdateByUser(Article article);
+    OptionalInt doUpdateByUser(Article article);
 
     Optional<PageResult<Article>> doFindByPageByUser(PageParamsBean<Article> pageParamsBean);
 }

@@ -7,6 +7,7 @@ import cn.don9cn.blog.support.vue.VueSelectOption;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 
 /**
@@ -23,7 +24,7 @@ public interface ArticleClassifyService extends BaseService<ArticleClassify> {
      * @param articleClassify
      * @return
      */
-    Optional<Integer> doSave(ArticleClassify articleClassify);
+    OptionalInt doSave(ArticleClassify articleClassify);
 
     /**
      * 获取分类树
@@ -37,7 +38,7 @@ public interface ArticleClassifyService extends BaseService<ArticleClassify> {
      * @param levelsList
      * @return
      */
-    Optional<Integer> doRemove(List<String> codesList,List<String> levelsList);
+    OptionalInt doRemove(List<String> codesList,List<String> levelsList);
 
     /**
      * 获取分类下拉列表

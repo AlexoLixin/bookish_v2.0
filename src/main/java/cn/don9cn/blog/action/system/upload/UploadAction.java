@@ -132,7 +132,7 @@ public class UploadAction {
     @GetMapping("fileDownLoad")
     public void doDownload(String code, HttpServletResponse response) {
 
-        Optional<UploadFile> fileInfo = uploadFileService.findById(code);
+        Optional<UploadFile> fileInfo = uploadFileService.baseFindById(code);
         fileInfo.ifPresent(file -> {
             try(
                     InputStream in = new FileInputStream(file.getPath() + "/" + file.getName());

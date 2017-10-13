@@ -1,5 +1,7 @@
 package cn.don9cn.blog.action;
 
+import java.util.List;
+
 /**
  * @Author: liuxindong
  * @Description: 基础action,定义了基础的增删改查
@@ -8,18 +10,22 @@ package cn.don9cn.blog.action;
  */
 public abstract class BaseAction<T> {
 
-    protected abstract Object doSave(T t);
+    protected abstract Object baseSave(T t);
 
-    protected abstract Object doUpdate(T t);
+    protected abstract Object baseSaveBatch(List<T> list);
 
-    protected abstract Object doRemove(String codes);
+    protected abstract Object baseUpdate(T t);
 
-    protected abstract Object doFindById(String code);
+    protected abstract Object baseRemove(String codes);
 
-    protected abstract Object doFindAll();
+    protected abstract Object baseRemoveBatch(String codes);
 
-    protected abstract Object doFindListByParams(T t);
+    protected abstract Object baseFindById(String code);
 
-    protected abstract Object doFindByPage(int page, int limit,T t);
+    protected abstract Object baseFindAll();
+
+    protected abstract Object baseFindListByParams(T t);
+
+    protected abstract Object baseFindByPage(int page, int limit,T t);
 
 }
