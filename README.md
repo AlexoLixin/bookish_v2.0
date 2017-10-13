@@ -14,4 +14,4 @@ CompletableFuture 利用多核处理IO及网络并发请求<br>
 * 数据库改为MongoDB
 
 ### 新的项目架构
-SpringBoot + MongoDB + Kafka + WebSocket
+SpringBoot + Redis + MongoDB + Kafka + WebSocket
