@@ -16,12 +16,8 @@ import java.util.List;
  *@Modify:
  **/
 @DbCollection
-public class Article extends BaseModel implements Serializable {
+public class Article extends BaseModel {
 
-    /**
-     * 实现序列化接口
-     */
-    private static final long serialVersionUID = 1L;
 
     @DbColumn(content = "文章标题")
     private String title;

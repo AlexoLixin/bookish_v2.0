@@ -83,8 +83,8 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 
 	@Override
 	@GetMapping("/articleClassify/page")
-	protected Object baseFindByPage(int page, int limit, String orderBy, ArticleClassify articleClassify) {
-		return ActionMsgUtil.baseFindByPage(articleClassifyService.baseFindByPage(new PageResult<>(page, limit, orderBy, articleClassify)));
+	protected Object baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,ArticleClassify articleClassify) {
+		return ActionMsgUtil.baseFindByPage(articleClassifyService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,articleClassify)));
 	}
 
 	/**

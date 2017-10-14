@@ -1,10 +1,13 @@
 package cn.don9cn.blog.service.system.file.impl;
 
+import cn.don9cn.blog.dao.bussiness.article.ArticleAndFileDaoImpl;
 import cn.don9cn.blog.dao.system.file.UploadFileDaoImpl;
+import cn.don9cn.blog.model.bussiness.article.ArticleAndFile;
 import cn.don9cn.blog.model.system.file.UploadFile;
 import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.service.system.file.interf.UploadFileService;
+import cn.don9cn.blog.util.DateUtil;
 import cn.don9cn.blog.util.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,9 @@ public class UploadFileServiceImpl implements UploadFileService {
 
 	@Autowired
 	private UploadFileDaoImpl uploadFileDaoImpl;
+
+	@Autowired
+	private ArticleAndFileDaoImpl articleAndFileDaoImpl;
 
 
 	@Override
@@ -71,7 +77,11 @@ public class UploadFileServiceImpl implements UploadFileService {
 
 	@Override
 	public Optional<PageResult<UploadFile>> baseFindByPage(PageResult<UploadFile> pageResult) {
-		return uploadFileDaoImpl.baseFindByPage(pageResult);
+		Optional<PageResult<UploadFile>> page = uploadFileDaoImpl.baseFindByPage(pageResult);
+		page.ifPresent(pageResult1 ->
+			pageResult1.getRows().forEach(uploadFile -> articleAndFileDaoImpl.fillLink(uploadFile))
+		);
+		return page;
 	}
 
 	/**

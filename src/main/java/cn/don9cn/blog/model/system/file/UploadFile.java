@@ -14,12 +14,8 @@ import java.io.Serializable;
  *@Modify:
  **/
 @DbCollection
-public class UploadFile extends BaseModel implements Serializable{
+public class UploadFile extends BaseModel{
 
-    /**
-     * 实现序列化接口
-     */
-    private static final long serialVersionUID = 1L;
 
 
     @DbColumn(content = "文件名称")
@@ -33,11 +29,6 @@ public class UploadFile extends BaseModel implements Serializable{
 
     @DbColumn(content = "关联来源")
     private String link;
-
-    //开始时间(用于按时间段筛选功能,不存入数据库)
-    private String startDate;
-    //结束时间(用于按时间段筛选功能,不存入数据库)
-    private String endDate;
 
     public UploadFile(){}
 
@@ -80,19 +71,4 @@ public class UploadFile extends BaseModel implements Serializable{
         this.realName = realName;
     }
 
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
 }

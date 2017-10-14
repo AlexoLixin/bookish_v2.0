@@ -15,12 +15,8 @@ import java.util.List;
  * @Modify:
  */
 @DbCollection
-public class SysUser extends BaseModel implements Serializable {
+public class SysUser extends BaseModel {
 
-    /**
-     * 实现序列化接口
-     */
-    private static final long serialVersionUID = 1L;
 
     @DbColumn(content = "用户名")
     private String username;

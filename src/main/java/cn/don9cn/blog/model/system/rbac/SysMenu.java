@@ -15,12 +15,8 @@ import java.util.Set;
  * @create 2017-05-03-22:58
  **/
 @DbCollection
-public class SysMenu extends BaseModel implements Serializable,Comparable<SysMenu> {
+public class SysMenu extends BaseModel {
 
-    /**
-     * 实现序列化接口
-     */
-    private static final long serialVersionUID = 1L;
 
 
     @DbColumn(content = "菜单名称")
@@ -102,10 +98,6 @@ public class SysMenu extends BaseModel implements Serializable,Comparable<SysMen
         this.leaf = leaf;
     }
 
-    @Override
-    public int compareTo(SysMenu o) {
-        return Integer.parseInt(this.level) - Integer.parseInt(o.getLevel());
-    }
 
     public boolean isChecked() {
         return checked;

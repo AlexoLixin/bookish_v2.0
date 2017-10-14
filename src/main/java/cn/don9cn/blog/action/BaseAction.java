@@ -26,6 +26,6 @@ public abstract class BaseAction<T> {
 
     protected abstract Object baseFindListByParams(T t);
 
-    protected abstract Object baseFindByPage(int page, int limit, String orderBy, T t);
+    protected abstract Object baseFindByPage(int page, int limit,String startTime,String endTime, String orderBy, T t);
 
 }

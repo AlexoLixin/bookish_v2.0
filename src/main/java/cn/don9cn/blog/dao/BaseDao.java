@@ -1,5 +1,6 @@
 package cn.don9cn.blog.dao;
 
+import cn.don9cn.blog.model.BaseModel;
 import cn.don9cn.blog.plugins.daohelper.core.DaoHelper;
 import cn.don9cn.blog.plugins.daohelper.core.MyMongoOperator;
 import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
@@ -11,6 +12,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.function.Supplier;
 
 /**
  * @Author: liuxindong
@@ -18,7 +20,7 @@ import java.util.OptionalInt;
  * @Create: don9 2017/10/8
  * @Modify:
  */
-public interface BaseDao<T extends Serializable> {
+public interface BaseDao<T extends BaseModel> {
 
     /**
      * 获取 mongo 操作器

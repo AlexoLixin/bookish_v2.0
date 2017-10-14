@@ -6,6 +6,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.WriteResult;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
@@ -57,8 +58,8 @@ public class MongoDbTest {
 
     public static void remove(MongoOperations mongoTemplate){
 
-        WriteResult remove = mongoTemplate.remove(query(where("leaf").is("Y")), "ArticleClassify");
-        System.out.println(remove.getN());
+        int article = mongoTemplate.remove(query(where("_class").is(Article.class.getTypeName())), "Article").getN();
+        System.out.println(article);
 
     }
 

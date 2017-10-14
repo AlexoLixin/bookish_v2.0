@@ -1,14 +1,16 @@
 package cn.don9cn.blog.plugins.daohelper.core;
 
 import cn.don9cn.blog.action.bussiness.articleclassify.ArticleClassifyAction;
+import cn.don9cn.blog.model.BaseModel;
+import cn.don9cn.blog.util.DateUtil;
 import cn.don9cn.blog.util.EntityParserUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -20,6 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * @Author: liuxindong
@@ -27,6 +30,7 @@ import java.util.function.Function;
  * @Create: 2017/10/13 10:15
  * @Modify:
  */
+@SuppressWarnings("Duplicates")
 @Configuration
 @AutoConfigureAfter(value = {MongoTemplate.class})
 public class MyMongoOperator {
@@ -50,7 +54,7 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    private <T extends Serializable> String getCollectionName(T entity){
+    private <T extends BaseModel> String getCollectionName(T entity){
         return entity.getClass().getSimpleName();
     }
 
@@ -60,7 +64,7 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends Serializable> Map<Field,Object> parseEntity(T entity) {
+    public <T extends BaseModel> Map<Field,Object> parseEntity(T entity) {
         Map<Field,Object> resultMap = new HashMap<>();
         Class<? extends Serializable> entityClass = entity.getClass();
         EntityParserUtil.getAllFields(entity).forEach(field -> {
@@ -84,16 +88,8 @@ public class MyMongoOperator {
      * @param entity
      * @return
      */
-    public <T extends Serializable> Query createDefaultQuery(T entity){
-        Map<Field,Object> fieldMap = parseEntity(entity);
-        Query query = new Query();
-        for(Field field:fieldMap.keySet()){
-            if(field.getAnnotation(Id.class)!=null){
-                query.addCriteria(Criteria.where(field.getName()).is(fieldMap.get(field)));
-                break;
-            }
-        }
-        return query;
+    public <T extends BaseModel> Query createDefaultQuery(T entity){
+        return Query.query(Criteria.where("_id").is(entity.getCode()));
     }
 
     /**
@@ -101,7 +97,7 @@ public class MyMongoOperator {
      * @param entity
      * @return
      */
-    public <T extends Serializable> Query createQueryByAllFields(T entity){
+    public <T extends BaseModel> Query createQueryByAllFields(T entity){
         return Query.query(new Criteria().alike(Example.of(entity)));
     }
 
@@ -111,7 +107,7 @@ public class MyMongoOperator {
      * @param entity
      * @return
      */
-    public <T extends Serializable> Query createQuery(T entity, Function<Map<Field,Object>,Query> function){
+    public <T extends BaseModel> Query createFreeQuery(T entity, Function<Map<Field,Object>,Query> function){
         return function.apply(parseEntity(entity));
     }
 
@@ -120,7 +116,7 @@ public class MyMongoOperator {
      * @param entity
      * @return
      */
-    public <T extends Serializable> Update createDefaultUpdate(T entity){
+    public <T extends BaseModel> Update createDefaultUpdate(T entity){
         Map<Field,Object> fieldMap = parseEntity(entity);
         Update update = new Update();
         fieldMap.keySet().forEach(field -> {
@@ -136,7 +132,7 @@ public class MyMongoOperator {
      * @param entity
      * @return
      */
-    public <T extends Serializable> Update createUpdate(T entity, Function<Map<Field,Object>,Update> function){
+    public <T extends BaseModel> Update createFreeUpdate(T entity, Function<Map<Field,Object>,Update> function){
         return function.apply(parseEntity(entity));
     }
 
@@ -146,8 +142,9 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends Serializable> OptionalInt baseInsert(T entity) {
+    public <T extends BaseModel> OptionalInt baseInsert(T entity) {
         try{
+            entity.setCreateTime(DateUtil.getCreateDateString());
             mongoTemplate.insert(entity,getCollectionName(entity));
         }catch (Exception e){
             logger.error("MyMongoOperator.baseInsert 插入失败,异常信息:"+e.getMessage());
@@ -163,7 +160,8 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends Serializable> OptionalInt baseInsertBatch(List<T> list) {
+    public <T extends BaseModel> OptionalInt baseInsertBatch(List<T> list) {
+        list.forEach(entity -> entity.setCreateTime(DateUtil.getCreateDateString()));
         String collectionName = list.get(0).getClass().getSimpleName();
         try{
             mongoTemplate.insert(list,collectionName);
@@ -180,9 +178,10 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends Serializable> OptionalInt baseUpdate(T entity) {
+    public <T extends BaseModel> OptionalInt baseUpdate(T entity) {
         int x;
         try{
+            entity.setModifyTime(DateUtil.getModifyDateString());
             x = mongoTemplate.updateFirst(createDefaultQuery(entity),
                     createDefaultUpdate(entity),entity.getClass(),getCollectionName(entity)).getN();
         }catch (Exception e){
@@ -216,12 +215,45 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends Serializable> OptionalInt baseDeleteBatch(List<String> list, Class<T> typeClass) {
+    public <T extends BaseModel> OptionalInt baseDeleteBatch(List<String> list, Class<T> typeClass) {
         int x;
         try{
             x = mongoTemplate.findAllAndRemove(Query.query(Criteria.where("_id").in(list)),typeClass,typeClass.getSimpleName()).size();
         }catch (Exception e){
             logger.error("MyMongoOperator.baseDeleteBatch 批量删除失败,异常信息:"+e.getMessage());
+            return OptionalInt.empty();
+        }
+        return OptionalInt.of(x);
+    }
+
+    /**
+     * 基础-删除所有
+     * @param typeClass
+     * @param <T>
+     * @return
+     */
+    public <T extends BaseModel> OptionalInt baseDeleteAll(Class<T> typeClass) {
+        int x;
+        try{
+            x = mongoTemplate.remove(Query.query(Criteria.where("_class").is(typeClass.getTypeName())),typeClass.getSimpleName()).getN();
+        }catch (Exception e){
+            logger.error("MyMongoOperator.baseDeleteAll 删除所有失败,异常信息:"+e.getMessage());
+            return OptionalInt.empty();
+        }
+        return OptionalInt.of(x);
+    }
+
+    /**
+     * 自定义删除
+     * @param supplier
+     * @return
+     */
+    public OptionalInt freeDelete(Supplier<Integer> supplier) {
+        int x;
+        try{
+            x = supplier.get();
+        }catch (Exception e){
+            logger.error("MyMongoOperator.freeDelete 自定义删除失败,异常信息:"+e.getMessage());
             return OptionalInt.empty();
         }
         return OptionalInt.of(x);
@@ -234,7 +266,7 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends Serializable> Optional<T> baseFindById(String id, Class<T> typeClass) {
+    public <T extends BaseModel> Optional<T> baseFindById(String id, Class<T> typeClass) {
         try{
             return Optional.ofNullable(mongoTemplate.findById(id,typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
@@ -249,7 +281,7 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends Serializable> Optional<List<T>> baseFindListByParams(T entity) {
+    public <T extends BaseModel> Optional<List<T>> baseFindListByParams(T entity) {
         Query query = createQueryByAllFields(entity);
         try{
             return Optional.ofNullable(mongoTemplate.find(query, (Class<T>) entity.getClass(),getCollectionName(entity)));
@@ -265,7 +297,7 @@ public class MyMongoOperator {
      * @param typeClass
      * @return
      */
-    public <T extends Serializable> Optional<List<T>> baseFindAll(Class<T> typeClass) {
+    public <T extends BaseModel> Optional<List<T>> baseFindAll(Class<T> typeClass) {
         try{
             return Optional.ofNullable(mongoTemplate.findAll(typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
@@ -280,7 +312,7 @@ public class MyMongoOperator {
      * @param typeClass
      * @return
      */
-    public <T extends Serializable> Optional<List<T>> baseFindInIds(List<String> ids,Class<T> typeClass) {
+    public <T extends BaseModel> Optional<List<T>> baseFindInIds(List<String> ids,Class<T> typeClass) {
         try{
             return Optional.ofNullable(mongoTemplate.find(Query.query(Criteria.where("_id").in(ids)),typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
@@ -295,10 +327,12 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends Serializable> Optional<PageResult<T>> baseFindByPage(PageResult<T> pageResult) {
+    public <T extends BaseModel> Optional<PageResult<T>> baseFindByPage(PageResult<T> pageResult) {
         Integer skip = pageResult.getSkip();
         T entity = pageResult.getEntity();
         Query query = createQueryByAllFields(entity);
+        if(StringUtils.isNotBlank(pageResult.getStartTime())) query.addCriteria(Criteria.where("createTime").gt(pageResult.getStartTime()));
+        if(StringUtils.isNotBlank(pageResult.getEndTime())) query.addCriteria(Criteria.where("createTime").lt(pageResult.getEndTime()));
         try{
             long count = mongoTemplate.count(query, entity.getClass(), getCollectionName(entity));
             pageResult.setTotalCount(count);
@@ -317,4 +351,67 @@ public class MyMongoOperator {
         }
 
     }
+
+    /**
+     * 自定义分页查询
+     * @param pageResult
+     * @param query
+     * @param <T>
+     * @return
+     */
+    public <T extends BaseModel> Optional<PageResult<T>> freeFindByPage(PageResult<T> pageResult,Query query) {
+        Integer skip = pageResult.getSkip();
+        T entity = pageResult.getEntity();
+        try{
+            long count = mongoTemplate.count(query, entity.getClass(), getCollectionName(entity));
+            pageResult.setTotalCount(count);
+            List<T> list = new ArrayList<>();
+            if(skip<count){
+                list = mongoTemplate.find(
+                        query.with(pageResult.getPageRequest()),
+                        (Class<T>) entity.getClass(), getCollectionName(entity)
+                );
+            }
+            pageResult.setRows(list);
+            return Optional.of(pageResult);
+        }catch (Exception e){
+            logger.error("MyMongoOperator.freeFindByPage 获取失败,异常信息:"+e.getMessage());
+            return Optional.empty();
+        }
+
+    }
+
+    /**
+     * 自定义查找单体
+     * @param query
+     * @param typeClass
+     * @param <T>
+     * @return
+     */
+    public <T extends BaseModel> Optional<T> freeFindOne(Query query,Class<T> typeClass){
+        try{
+            return Optional.ofNullable(mongoTemplate.findOne(query,typeClass,typeClass.getSimpleName()));
+        }catch (Exception e){
+            logger.error("MyMongoOperator.freeFindOne 获取失败,异常信息:"+e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * 自定义查找集合
+     * @param query
+     * @param typeClass
+     * @param <T>
+     * @return
+     */
+    public <T extends BaseModel> Optional<List<T>> freeFindList(Query query,Class<T> typeClass){
+        try{
+            return Optional.ofNullable(mongoTemplate.find(query,typeClass,typeClass.getSimpleName()));
+        }catch (Exception e){
+            logger.error("MyMongoOperator.freeFindOne 获取失败,异常信息:"+e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+
 }

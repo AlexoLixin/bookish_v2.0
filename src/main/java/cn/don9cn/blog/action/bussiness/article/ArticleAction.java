@@ -56,7 +56,7 @@ public class ArticleAction extends BaseAction<Article> {
     protected Object baseRemoveBatch(String codes) {
         if(StringUtils.isNotBlank(codes)){
             List<String> codesList = MyStringUtil.codesStr2List(codes);
-            return ActionMsgUtil.baseRemove(articleService.baseDeleteBatch(codesList));
+            return ActionMsgUtil.baseRemoveBatch(articleService.baseDeleteBatch(codesList));
         }else{
             return new ActionMsg(false,"删除失败,传入codes为空!");
         }
@@ -82,8 +82,8 @@ public class ArticleAction extends BaseAction<Article> {
 
     @Override
     @GetMapping("/article/page")
-    protected Object baseFindByPage(int page, int limit, String orderBy, Article article) {
-        return ActionMsgUtil.baseFindByPage(articleService.baseFindByPage(new PageResult<>(page,limit,orderBy,article)));
+    protected Object baseFindByPage(int page, int limit,String startTime,String endTime, String orderBy, Article article) {
+        return ActionMsgUtil.baseFindByPage(articleService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,article)));
     }
 
     /**

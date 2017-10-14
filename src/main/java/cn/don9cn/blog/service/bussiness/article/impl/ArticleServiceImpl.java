@@ -1,12 +1,17 @@
 package cn.don9cn.blog.service.bussiness.article.impl;
 
+import cn.don9cn.blog.dao.bussiness.article.ArticleAndFileDaoImpl;
 import cn.don9cn.blog.dao.bussiness.article.ArticleDaoImpl;
+import cn.don9cn.blog.dao.bussiness.articleclassify.ArticleClassifyDaoImpl;
 import cn.don9cn.blog.dao.system.file.UploadFileDaoImpl;
 import cn.don9cn.blog.model.bussiness.article.Article;
+import cn.don9cn.blog.model.bussiness.article.ArticleAndFile;
+import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
 import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.service.bussiness.article.interf.ArticleService;
 import cn.don9cn.blog.util.MyStringUtil;
+import cn.don9cn.blog.util.UuidUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.stream.Collectors;
 
 
 /**
@@ -31,12 +37,21 @@ public class ArticleServiceImpl implements ArticleService {
 	private ArticleDaoImpl articleDaoImpl;
 
 	@Autowired
+	private ArticleClassifyDaoImpl articleClassifyDaoImpl;
+
+	@Autowired
 	private UploadFileDaoImpl uploadFileDaoImpl;
 
+	@Autowired
+	private ArticleAndFileDaoImpl articleAndFileDaoImpl;
 
 	@Override
 	public OptionalInt baseInsert(Article entity) {
+		entity.setCode(UuidUtil.getUuid());
 		entity.setAuthor("test");
+		if(StringUtils.isNotBlank(entity.getFiles())){
+			articleAndFileDaoImpl.insertBatch(entity);
+		}
 		return articleDaoImpl.baseInsert(entity);
 	}
 
@@ -47,16 +62,22 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public OptionalInt baseUpdate(Article entity) {
+		articleAndFileDaoImpl.deleteByArticleCode(entity.getCode());
+		if(StringUtils.isNotBlank(entity.getFiles())){
+			articleAndFileDaoImpl.insertBatch(entity);
+		}
 		return articleDaoImpl.baseUpdate(entity);
 	}
 
 	@Override
 	public OptionalInt baseDeleteById(String id) {
+		articleAndFileDaoImpl.deleteByArticleCode(id);
 		return articleDaoImpl.baseDeleteById(id);
 	}
 
 	@Override
 	public OptionalInt baseDeleteBatch(List<String> list) {
+		articleAndFileDaoImpl.deleteByArticleCodes(list);
 		return articleDaoImpl.baseDeleteBatch(list);
 	}
 
@@ -83,7 +104,12 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public Optional<PageResult<Article>> baseFindByPage(PageResult<Article> pageResult) {
-		return articleDaoImpl.baseFindByPage(pageResult);
+		Optional<PageResult<Article>> resultOptional = articleDaoImpl.baseFindByPage(pageResult);
+		resultOptional.ifPresent(pageResult1 -> pageResult1.getRows().forEach(article -> {
+            Optional<ArticleClassify> articleClassify = articleClassifyDaoImpl.baseFindById(article.getClassify());
+            articleClassify.ifPresent(articleClassify1 -> article.setClassifyName(articleClassify1.getName()));
+        }));
+		return resultOptional;
 	}
 
 	/**

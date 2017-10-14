@@ -15,6 +15,11 @@ import java.util.Map;
  **/
 public class BaseModel implements Serializable {
 
+    /**
+     * 实现序列化接口
+     */
+    private static final long serialVersionUID = 1L;
+
     @DbColumn(content = "主键")
     @Id
     private String code;
