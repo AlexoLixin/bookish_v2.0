@@ -2,12 +2,9 @@ package cn.don9cn.blog.service.bussiness.article.interf;
 
 
 import cn.don9cn.blog.model.bussiness.article.Article;
-import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import cn.don9cn.blog.plugins.operation.core.OperaResult;
 import cn.don9cn.blog.service.BaseService;
-
-import java.util.Optional;
-import java.util.OptionalInt;
 
 /**
  * @Author: liuxindong
@@ -17,10 +14,10 @@ import java.util.OptionalInt;
  */
 public interface ArticleService extends BaseService<Article> {
 
-    OptionalInt doRemoveByUser(String code);
+    OperaResult doRemoveByUser(String code);
 
-    OptionalInt doUpdateByUser(Article article);
+    OperaResult doUpdateByUser(Article article);
 
-    Optional<PageResult<Article>> doFindByPageByUser(PageParamsBean<Article> pageParamsBean);
+    OperaResult doFindByPageByUser(PageResult<Article> pageResult);
 }
 

@@ -2,18 +2,14 @@ package cn.don9cn.blog.action.bussiness.articleclassify;
 
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
-import cn.don9cn.blog.plugins.actionmsg.core.ActionMsg;
-import cn.don9cn.blog.plugins.actionmsg.util.ActionMsgUtil;
-import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
+import cn.don9cn.blog.plugins.operation.core.OperaResult;
+import cn.don9cn.blog.plugins.operation.util.OperaResultUtil;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.service.bussiness.articleclassify.interf.ArticleClassifyService;
 import cn.don9cn.blog.util.MyStringUtil;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,20 +33,19 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 
 	@Override
 	@PostMapping("/articleClassify")
-	protected Object baseSave(ArticleClassify articleClassify) {
-		return ActionMsgUtil.baseSave(articleClassifyService.doSave(articleClassify));
+	protected Object baseInsert(ArticleClassify articleClassify) {
+		return articleClassifyService.doSave(articleClassify);
 	}
 
 	@Override
-	protected Object baseSaveBatch(List<ArticleClassify> list) {
+	protected Object baseInsertBatch(List<ArticleClassify> list) {
 		return null;
 	}
-
 
 	@Override
 	@PutMapping("/articleClassify")
 	protected Object baseUpdate(ArticleClassify articleClassify) {
-		return ActionMsgUtil.baseUpdate(articleClassifyService.baseUpdate(articleClassify));
+		return articleClassifyService.baseUpdate(articleClassify);
 	}
 
 	@Override
@@ -66,25 +61,25 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	@Override
 	@GetMapping("/articleClassify/{code}")
 	protected Object baseFindById(String code) {
-		return ActionMsgUtil.baseFindById(articleClassifyService.baseFindById(code));
+		return articleClassifyService.baseFindById(code);
 	}
 
 	@Override
 	@GetMapping("/articleClassify/all")
 	protected Object baseFindAll() {
-		return ActionMsgUtil.baseFindAll(articleClassifyService.baseFindAll());
+		return articleClassifyService.baseFindAll();
 	}
 
 	@Override
 	@GetMapping("/articleClassify/list")
 	protected Object baseFindListByParams(ArticleClassify articleClassify) {
-		return ActionMsgUtil.baseFindListByParams(articleClassifyService.baseFindListByParams(articleClassify));
+		return articleClassifyService.baseFindListByParams(articleClassify);
 	}
 
 	@Override
 	@GetMapping("/articleClassify/page")
 	protected Object baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,ArticleClassify articleClassify) {
-		return ActionMsgUtil.baseFindByPage(articleClassifyService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,articleClassify)));
+		return articleClassifyService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,articleClassify));
 	}
 
 	/**
@@ -95,13 +90,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 */
 	@DeleteMapping("/articleClassify")
 	protected Object doRemove(String codes,String levels) {
-		if(StringUtils.isNotBlank(codes) && StringUtils.isNotBlank(levels)){
-			List<String> codesList = MyStringUtil.codesStr2List(codes);
-			List<String> levelsList = MyStringUtil.codesStr2List(levels);
-			return ActionMsgUtil.baseRemove(articleClassifyService.doRemove(codesList,levelsList));
-		}else{
-			return new ActionMsg(false,"传入codes或者levels为空!");
-		}
+		return articleClassifyService.doRemove(codes,levels);
 	}
 
 	/**
@@ -110,7 +99,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 */
 	@GetMapping(value = "/articleClassify/selectOptions")
 	public Object doGetSelectOptions() {
-		return ActionMsgUtil.baseFindAll(articleClassifyService.doGetSelectOptions());
+		return articleClassifyService.doGetSelectOptions();
 	}
 
 	/**
@@ -119,6 +108,6 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 */
 	@GetMapping(value = "/articleClassify/tree")
 	public Object getTree() {
-		return ActionMsgUtil.baseFindAll(articleClassifyService.getTree());
+		return articleClassifyService.getTree();
 	}
 }

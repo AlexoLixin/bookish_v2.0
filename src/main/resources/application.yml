@@ -15,10 +15,6 @@ spring:
     mongodb:
       uri: mongodb://liuxindong:123456@127.0.0.1:27017/don9blog
 
-########## spring security
-management:
-  security:
-    enabled: false
 
 
 ######### 文件保存路径

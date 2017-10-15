@@ -1,13 +1,11 @@
 package cn.don9cn.blog.service;
 
 
-import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
+import cn.don9cn.blog.plugins.operation.core.OperaResult;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
-import java.util.OptionalInt;
 
 /**
  * @author Don9
@@ -20,58 +18,58 @@ public interface BaseService<T extends Serializable> {
      * @param entity
      * @return
      */
-    OptionalInt baseInsert(T entity);
+    OperaResult baseInsert(T entity);
 
     /**
      * 批量添加实体对象
      * @return
      */
-    OptionalInt baseInsertBatch(List<T> list);
+    OperaResult baseInsertBatch(List<T> list);
 
     /**
      * 通过id更新实体
      * @param entity
      * @return
      */
-    OptionalInt baseUpdate(T entity);
+    OperaResult baseUpdate(T entity);
 
     /**
      * 通过id删除实体
      * @param id
      * @return
      */
-    OptionalInt baseDeleteById(String id);
+    OperaResult baseDeleteById(String id);
 
     /**
      * 批量删除实体对象
      * @return
      */
-    OptionalInt baseDeleteBatch(List<String> list);
+    OperaResult baseDeleteBatch(String codes);
 
     /**
      * 通过id查找实体
      * @param id
      * @return
      */
-    Optional<T> baseFindById(String id);
+    OperaResult baseFindById(String id);
 
     /**
      * 查询所有数据
      * @return
      */
-    Optional<List<T>> baseFindAll();
+    OperaResult baseFindAll();
 
     /**
      * 查询指定条件的实体集合
      * @param entity
      * @return
      */
-    Optional<List<T>> baseFindListByParams(T entity);
+    OperaResult baseFindListByParams(T entity);
 
     /**
      * 带参数的分页查询
      * @param pageResult
      * @return
      */
-    Optional<PageResult<T>> baseFindByPage(PageResult<T> pageResult);
+    OperaResult baseFindByPage(PageResult<T> pageResult);
 }

@@ -5,7 +5,6 @@ import cn.don9cn.blog.annotation.DbColumn;
 import cn.don9cn.blog.annotation.DbCollection;
 import cn.don9cn.blog.model.BaseModel;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +14,7 @@ import java.util.Set;
  * @create 2017-05-03-22:58
  **/
 @DbCollection
-public class SysMenu extends BaseModel {
+public class SysPermission extends BaseModel {
 
 
 
@@ -36,16 +35,16 @@ public class SysMenu extends BaseModel {
     /**
      * 子菜单集合
      */
-    private Set<SysMenu> children = new HashSet<SysMenu>();
+    private Set<SysPermission> children = new HashSet<SysPermission>();
     /**
      * 角色进行菜单授权时,回显是否勾选当前菜单
      */
     private boolean checked;
 
-    public SysMenu() {
+    public SysPermission() {
     }
 
-    public SysMenu(String code, String leaf) {
+    public SysPermission(String code, String leaf) {
         this.setCode(code);
         this.leaf = leaf;
     }
@@ -74,11 +73,11 @@ public class SysMenu extends BaseModel {
         this.parent = parent;
     }
 
-    public Set<SysMenu> getChildren() {
+    public Set<SysPermission> getChildren() {
         return children;
     }
 
-    public void setChildren(Set<SysMenu> children) {
+    public void setChildren(Set<SysPermission> children) {
         this.children = children;
     }
 

@@ -2,9 +2,8 @@ package cn.don9cn.blog.action.system.file;
 
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.system.file.UploadFile;
-import cn.don9cn.blog.plugins.actionmsg.core.ActionMsg;
-import cn.don9cn.blog.plugins.actionmsg.util.ActionMsgUtil;
-import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
+import cn.don9cn.blog.plugins.operation.core.OperaResult;
+import cn.don9cn.blog.plugins.operation.util.OperaResultUtil;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.service.system.file.interf.UploadFileService;
 import cn.don9cn.blog.util.MyStringUtil;
@@ -34,14 +33,12 @@ public class UploadFileAction extends BaseAction<UploadFile> {
 
     @Override
     @PostMapping("/uploadFile")
-    protected Object baseSave(UploadFile uploadFile) {
-        return ActionMsgUtil.apply(uploadFileService.insertWithCode(uploadFile), optional ->
-                optional.map(value -> new ActionMsg(true,"文件上传成功"))
-                        .orElseGet(() -> new ActionMsg(false,"文件上传信息保存至服务器失败")));
+    protected Object baseInsert(UploadFile uploadFile) {
+        return uploadFileService.insertWithCode(uploadFile);
     }
 
     @Override
-    protected Object baseSaveBatch(List<UploadFile> list) {
+    protected Object baseInsertBatch(List<UploadFile> list) {
         return null;
     }
 
@@ -49,48 +46,43 @@ public class UploadFileAction extends BaseAction<UploadFile> {
     @Override
     @PutMapping("/uploadFile")
     protected Object baseUpdate(UploadFile uploadFile) {
-        return ActionMsgUtil.baseUpdate(uploadFileService.baseUpdate(uploadFile));
+        return uploadFileService.baseUpdate(uploadFile);
     }
 
     @Override
     @DeleteMapping("/uploadFile")
     protected Object baseRemove(String code) {
-        return ActionMsgUtil.baseRemove(uploadFileService.baseDeleteById(code));
+        return uploadFileService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/uploadFile/batch")
     protected Object baseRemoveBatch(String codes) {
-        if(StringUtils.isNotBlank(codes)){
-            List<String> codesList = MyStringUtil.codesStr2List(codes);
-            return ActionMsgUtil.baseRemoveBatch(uploadFileService.baseDeleteBatch(codesList));
-        }else{
-            return new ActionMsg(false,"删除失败,传入codes为空!");
-        }
+        return uploadFileService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping("/uploadFile/{code}")
     protected Object baseFindById(String code) {
-        return ActionMsgUtil.baseFindById(uploadFileService.baseFindById(code));
+        return uploadFileService.baseFindById(code);
     }
 
     @Override
     @GetMapping("/uploadFile/all")
     protected Object baseFindAll() {
-        return ActionMsgUtil.baseFindAll(uploadFileService.baseFindAll());
+        return uploadFileService.baseFindAll();
     }
 
     @Override
     @GetMapping("/uploadFile/list")
     protected Object baseFindListByParams(UploadFile uploadFile) {
-        return ActionMsgUtil.baseFindListByParams(uploadFileService.baseFindListByParams(uploadFile));
+        return uploadFileService.baseFindListByParams(uploadFile);
     }
 
     @Override
     @GetMapping("/uploadFile/page")
     protected Object baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,UploadFile uploadFile) {
-        return ActionMsgUtil.baseFindByPage(uploadFileService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,uploadFile)));
+        return uploadFileService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,uploadFile));
     }
 
 }

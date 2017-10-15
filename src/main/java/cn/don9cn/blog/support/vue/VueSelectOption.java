@@ -1,6 +1,7 @@
 package cn.don9cn.blog.support.vue;
 
-import java.io.Serializable;
+import cn.don9cn.blog.model.BaseModel;
+
 
 /**
  * @Author: liuxindong
@@ -8,12 +9,8 @@ import java.io.Serializable;
  * @Create: 2017/10/10 10:21
  * @Modify:
  */
-public class VueSelectOption implements Serializable {
+public class VueSelectOption extends BaseModel {
 
-    /**
-     * 实现序列化接口
-     */
-    private static final long serialVersionUID = 1L;
 
     private final String label;
 

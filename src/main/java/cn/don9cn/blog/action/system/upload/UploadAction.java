@@ -3,8 +3,8 @@ package cn.don9cn.blog.action.system.upload;
 import cn.don9cn.blog.autoconfigs.filepath.FileSavePathConfig;
 import cn.don9cn.blog.exception.ExceptionWrapper;
 import cn.don9cn.blog.model.system.file.UploadFile;
-import cn.don9cn.blog.plugins.actionmsg.core.ActionMsg;
-import cn.don9cn.blog.plugins.actionmsg.util.ActionMsgUtil;
+import cn.don9cn.blog.plugins.operation.core.OperaResult;
+import cn.don9cn.blog.plugins.operation.util.OperaResultUtil;
 import cn.don9cn.blog.service.system.file.interf.UploadFileService;
 import cn.don9cn.blog.support.vue.VueImageUploadMsg;
 import cn.don9cn.blog.util.ExecutorUtil;
@@ -84,14 +84,11 @@ public class UploadAction {
         if (file != null) {
             //将文件保存至服务器
             Optional<UploadFile> optional = FileSaveUtil.saveFile(file, fileSavePathConfig);
-            if(optional.isPresent()){
-                return ActionMsgUtil.apply(uploadFileService.insertWithCode(optional.get()),
-                        insertResult -> insertResult.map(value -> new ActionMsg(true,"文件上传成功"))
-                                                    .orElseGet(() -> new ActionMsg(false,"文件上传信息保存至服务器失败")));
-            }
-            return new ActionMsg(false,"文件上传失败");
+            //将文件信息保存到数据库
+            return optional.map(uploadFile -> uploadFileService.insertWithCode(uploadFile))
+                            .orElseGet(() -> new OperaResult(false, "文件上传失败"));
         }
-        return new ActionMsg(false,"文件上传失败,文件列表为空");
+        return new OperaResult(false,"文件上传失败,文件列表为空");
     }
 
     /**
@@ -111,15 +108,18 @@ public class UploadAction {
                 //将图片保存至服务器,并返回图片url地址
                 Optional<UploadFile> optional = FileSaveUtil.saveFile(file, fileSavePathConfig);
                 //数据库保存上传文件信息
-                optional.ifPresent(uploadFile -> uploadFileService.insertWithCode(uploadFile).ifPresent(successFiles::add));
+                optional.ifPresent(uploadFile -> {
+                    OperaResult operaResult = uploadFileService.insertWithCode(uploadFile);
+                    if(operaResult.isSuccess()) successFiles.add((UploadFile) operaResult.getObj());
+                });
             }, ExecutorUtil.build(files.size())));
 
             CompletableFuture[] futures = futureStream.toArray(size -> new CompletableFuture[size]);
             CompletableFuture.allOf(futures).join();
 
-            return new ActionMsg(true, "文件上传成功！").setObj(successFiles);
+            return new OperaResult(true, "文件上传成功！").setObj(successFiles);
         }else {
-            return new ActionMsg(false, "上传文件失败,上传文件列表为空！");
+            return new OperaResult(false, "上传文件失败,上传文件列表为空！");
         }
 
     }
@@ -131,9 +131,9 @@ public class UploadAction {
      */
     @GetMapping("fileDownLoad")
     public void doDownload(String code, HttpServletResponse response) {
-
-        Optional<UploadFile> fileInfo = uploadFileService.baseFindById(code);
-        fileInfo.ifPresent(file -> {
+        OperaResult operaResult = uploadFileService.baseFindById(code);
+        if(operaResult.isSuccess()){
+            UploadFile file = (UploadFile) operaResult.getObj();
             try(
                     InputStream in = new FileInputStream(file.getPath() + "/" + file.getName());
                     ServletOutputStream out = response.getOutputStream()
@@ -150,8 +150,8 @@ public class UploadAction {
             }catch (Exception e){
                 throw new ExceptionWrapper(e, "下载文件失败!");
             }
-        });
-
+        }
     }
+
 
 }

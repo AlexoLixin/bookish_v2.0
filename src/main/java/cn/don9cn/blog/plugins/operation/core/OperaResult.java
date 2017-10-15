@@ -1,4 +1,4 @@
-package cn.don9cn.blog.plugins.actionmsg.core;
+package cn.don9cn.blog.plugins.operation.core;
 
 
 import java.io.Serializable;
@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author Don9
  * @create 2017-08-08-16:22
  **/
-public class ActionMsg implements Serializable {
+public class OperaResult implements Serializable {
 
     /**
      * 实现序列化接口
@@ -20,12 +20,12 @@ public class ActionMsg implements Serializable {
 
     private Object obj;
 
-    public ActionMsg(boolean success, String message){
+    public OperaResult(boolean success, String message){
         this.success = success;
         this.message = message;
     }
 
-    public ActionMsg setObj(Object obj){
+    public OperaResult setObj(Object obj){
         this.obj = obj;
         return this;
     }

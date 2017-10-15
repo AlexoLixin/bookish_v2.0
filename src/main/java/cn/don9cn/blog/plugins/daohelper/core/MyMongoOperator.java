@@ -270,7 +270,7 @@ public class MyMongoOperator {
         try{
             return Optional.ofNullable(mongoTemplate.findById(id,typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseFindById 获取失败,异常信息:"+e.getMessage());
+            logger.error("MyMongoOperator.baseFindOne 获取失败,异常信息:"+e.getMessage());
             return Optional.empty();
         }
     }
@@ -286,7 +286,7 @@ public class MyMongoOperator {
         try{
             return Optional.ofNullable(mongoTemplate.find(query, (Class<T>) entity.getClass(),getCollectionName(entity)));
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseFindById 获取失败,异常信息:"+e.getMessage());
+            logger.error("MyMongoOperator.baseFindOne 获取失败,异常信息:"+e.getMessage());
             return Optional.empty();
         }
     }

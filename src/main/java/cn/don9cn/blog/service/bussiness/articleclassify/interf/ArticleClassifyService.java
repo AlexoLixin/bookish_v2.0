@@ -2,6 +2,7 @@ package cn.don9cn.blog.service.bussiness.articleclassify.interf;
 
 
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
+import cn.don9cn.blog.plugins.operation.core.OperaResult;
 import cn.don9cn.blog.service.BaseService;
 import cn.don9cn.blog.support.vue.VueSelectOption;
 
@@ -24,27 +25,27 @@ public interface ArticleClassifyService extends BaseService<ArticleClassify> {
      * @param articleClassify
      * @return
      */
-    OptionalInt doSave(ArticleClassify articleClassify);
+    OperaResult doSave(ArticleClassify articleClassify);
 
     /**
      * 获取分类树
      * @return
      */
-    Optional<List<ArticleClassify>> getTree();
+    OperaResult getTree();
 
     /**
      * 删除分类
-     * @param codesList
-     * @param levelsList
+     * @param codes
+     * @param levels
      * @return
      */
-    OptionalInt doRemove(List<String> codesList,List<String> levelsList);
+    OperaResult doRemove(String codes,String levels);
 
     /**
      * 获取分类下拉列表
      * @return
      */
-    Optional<List<VueSelectOption>> doGetSelectOptions();
+    OperaResult doGetSelectOptions();
 
 }
 

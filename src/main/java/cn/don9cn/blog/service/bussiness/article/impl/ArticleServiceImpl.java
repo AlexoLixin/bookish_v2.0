@@ -5,10 +5,10 @@ import cn.don9cn.blog.dao.bussiness.article.ArticleDaoImpl;
 import cn.don9cn.blog.dao.bussiness.articleclassify.ArticleClassifyDaoImpl;
 import cn.don9cn.blog.dao.system.file.UploadFileDaoImpl;
 import cn.don9cn.blog.model.bussiness.article.Article;
-import cn.don9cn.blog.model.bussiness.article.ArticleAndFile;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
-import cn.don9cn.blog.plugins.daohelper.core.PageParamsBean;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import cn.don9cn.blog.plugins.operation.core.OperaResult;
+import cn.don9cn.blog.plugins.operation.util.OperaResultUtil;
 import cn.don9cn.blog.service.bussiness.article.interf.ArticleService;
 import cn.don9cn.blog.util.MyStringUtil;
 import cn.don9cn.blog.util.UuidUtil;
@@ -19,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.stream.Collectors;
 
 
 /**
@@ -46,70 +44,75 @@ public class ArticleServiceImpl implements ArticleService {
 	private ArticleAndFileDaoImpl articleAndFileDaoImpl;
 
 	@Override
-	public OptionalInt baseInsert(Article entity) {
+	public OperaResult baseInsert(Article entity) {
 		entity.setCode(UuidUtil.getUuid());
 		entity.setAuthor("test");
 		if(StringUtils.isNotBlank(entity.getFiles())){
 			articleAndFileDaoImpl.insertBatch(entity);
 		}
-		return articleDaoImpl.baseInsert(entity);
+		return OperaResultUtil.baseInsert(articleDaoImpl.baseInsert(entity));
 	}
 
 	@Override
-	public OptionalInt baseInsertBatch(List<Article> list) {
-		return articleDaoImpl.baseInsertBatch(list);
+	public OperaResult baseInsertBatch(List<Article> list) {
+		return OperaResultUtil.baseInsertBatch(articleDaoImpl.baseInsertBatch(list));
 	}
 
 	@Override
-	public OptionalInt baseUpdate(Article entity) {
+	public OperaResult baseUpdate(Article entity) {
 		articleAndFileDaoImpl.deleteByArticleCode(entity.getCode());
 		if(StringUtils.isNotBlank(entity.getFiles())){
 			articleAndFileDaoImpl.insertBatch(entity);
 		}
-		return articleDaoImpl.baseUpdate(entity);
+		return OperaResultUtil.baseUpdate(articleDaoImpl.baseUpdate(entity));
 	}
 
 	@Override
-	public OptionalInt baseDeleteById(String id) {
+	public OperaResult baseDeleteById(String id) {
 		articleAndFileDaoImpl.deleteByArticleCode(id);
-		return articleDaoImpl.baseDeleteById(id);
+		return OperaResultUtil.baseRemove(articleDaoImpl.baseDeleteById(id));
 	}
 
 	@Override
-	public OptionalInt baseDeleteBatch(List<String> list) {
-		articleAndFileDaoImpl.deleteByArticleCodes(list);
-		return articleDaoImpl.baseDeleteBatch(list);
+	public OperaResult baseDeleteBatch(String codes) {
+		if(StringUtils.isNotBlank(codes)){
+			List<String> codesList = MyStringUtil.codesStr2List(codes);
+			articleAndFileDaoImpl.deleteByArticleCodes(codesList);
+			return OperaResultUtil.baseRemoveBatch(articleDaoImpl.baseDeleteBatch(codesList));
+		}else{
+			return new OperaResult(false,"删除失败,传入codes为空!");
+		}
 	}
 
 	@Override
-	public Optional<Article> baseFindById(String id) {
+	public OperaResult baseFindById(String id) {
 		Optional<Article> article = articleDaoImpl.baseFindById(id);
 		article.ifPresent(a -> {
 			if(StringUtils.isNotBlank(a.getFiles())){
 				uploadFileDaoImpl.findListInCodes(MyStringUtil.codesStr2List(a.getFiles())).ifPresent(a::setFilesList);
 			}
 		});
-		return article;
+		return OperaResultUtil.baseFindOne(article);
 	}
 
 	@Override
-	public Optional<List<Article>> baseFindAll() {
-		return articleDaoImpl.baseFindAll();
+	public OperaResult baseFindAll() {
+		return OperaResultUtil.baseFindAll(articleDaoImpl.baseFindAll());
 	}
 
 	@Override
-	public Optional<List<Article>> baseFindListByParams(Article entity) {
-		return articleDaoImpl.baseFindListByParams(entity);
+	public OperaResult baseFindListByParams(Article entity) {
+		return OperaResultUtil.baseFindListByParams(articleDaoImpl.baseFindListByParams(entity));
 	}
 
 	@Override
-	public Optional<PageResult<Article>> baseFindByPage(PageResult<Article> pageResult) {
+	public OperaResult baseFindByPage(PageResult<Article> pageResult) {
 		Optional<PageResult<Article>> resultOptional = articleDaoImpl.baseFindByPage(pageResult);
 		resultOptional.ifPresent(pageResult1 -> pageResult1.getRows().forEach(article -> {
             Optional<ArticleClassify> articleClassify = articleClassifyDaoImpl.baseFindById(article.getClassify());
             articleClassify.ifPresent(articleClassify1 -> article.setClassifyName(articleClassify1.getName()));
         }));
-		return resultOptional;
+		return OperaResultUtil.baseFindByPage(resultOptional);
 	}
 
 	/**
@@ -118,7 +121,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @return
 	 */
 	@Override
-	public OptionalInt doRemoveByUser(String code) {
+	public OperaResult doRemoveByUser(String code) {
 		return null;
 	}
 
@@ -128,17 +131,17 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @return
 	 */
 	@Override
-	public OptionalInt doUpdateByUser(Article article) {
+	public OperaResult doUpdateByUser(Article article) {
 		return null;
 	}
 
 	/**
 	 * 个人中心-普通获取文章列表(只能获取自己发布的文章列表,防止其他用户数据被恶意篡改)
-	 * @param pageParamsBean
+	 * @param pageResult
 	 * @return
 	 */
 	@Override
-	public Optional<PageResult<Article>> doFindByPageByUser(PageParamsBean<Article> pageParamsBean) {
+	public OperaResult doFindByPageByUser(PageResult<Article> pageResult) {
 		return null;
 	}
 }

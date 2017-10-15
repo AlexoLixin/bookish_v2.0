@@ -10,13 +10,13 @@ import java.util.List;
  */
 public abstract class BaseAction<T> {
 
-    protected abstract Object baseSave(T t);
+    protected abstract Object baseInsert(T t);
 
-    protected abstract Object baseSaveBatch(List<T> list);
+    protected abstract Object baseInsertBatch(List<T> list);
 
     protected abstract Object baseUpdate(T t);
 
-    protected abstract Object baseRemove(String codes);
+    protected abstract Object baseRemove(String code);
 
     protected abstract Object baseRemoveBatch(String codes);
 

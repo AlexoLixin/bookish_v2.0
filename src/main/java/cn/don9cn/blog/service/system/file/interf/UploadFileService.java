@@ -2,6 +2,7 @@ package cn.don9cn.blog.service.system.file.interf;
 
 
 import cn.don9cn.blog.model.system.file.UploadFile;
+import cn.don9cn.blog.plugins.operation.core.OperaResult;
 import cn.don9cn.blog.service.BaseService;
 
 import java.util.Optional;
@@ -19,6 +20,6 @@ public interface UploadFileService extends BaseService<UploadFile> {
      * @param file
      * @return
      */
-    Optional<UploadFile> insertWithCode(UploadFile file);
+    OperaResult insertWithCode(UploadFile file);
 
 }

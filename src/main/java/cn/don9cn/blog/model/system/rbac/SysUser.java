@@ -38,11 +38,6 @@ public class SysUser extends BaseModel {
 
     @DbColumn(content = "性别")
     private String dicGender;
-    /**
-     * 识别码,用于忘记密码后的帐号找回
-     */
-    @DbColumn(content = "识别码")
-    private String icNum;
 
     /**
      * 角色集合
@@ -52,7 +47,7 @@ public class SysUser extends BaseModel {
     /**
      * 角色名称,用于前端显示
      */
-    private String rolesStr;
+    private String roleNames;
 
 
     public String getUsername() {
@@ -111,14 +106,6 @@ public class SysUser extends BaseModel {
         this.dicGender = dicGender;
     }
 
-    public String getIcNum() {
-        return icNum;
-    }
-
-    public void setIcNum(String icNum) {
-        this.icNum = icNum;
-    }
-
     public List<SysRole> getRoleList() {
         return roleList;
     }
@@ -127,11 +114,11 @@ public class SysUser extends BaseModel {
         this.roleList = roleList;
     }
 
-    public String getRolesStr() {
-        return rolesStr;
+    public String getRoleNames() {
+        return roleNames;
     }
 
-    public void setRolesStr(String rolesStr) {
-        this.rolesStr = rolesStr;
+    public void setRoleNames(String roleNames) {
+        this.roleNames = roleNames;
     }
 }
