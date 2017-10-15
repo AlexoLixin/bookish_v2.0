@@ -8,26 +8,37 @@ package cn.don9cn.blog.exception;
  */
 public class ExceptionWrapper extends RuntimeException {
 
-    private final String info;
+    private String info;
 
-    private final Exception exception;
+    private Exception exception;
+
+    public ExceptionWrapper(){
+        super();
+    }
 
     public ExceptionWrapper(Exception exception,String info) {
         this.info = info;
         this.exception = exception;
     }
 
-
     public String getInfo() {
         return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     public Exception getException() {
         return exception;
     }
 
+    public void setException(Exception exception) {
+        this.exception = exception;
+    }
+
     @Override
     public String getMessage() {
-        return info;
+        return info + " " + exception.getMessage();
     }
 }

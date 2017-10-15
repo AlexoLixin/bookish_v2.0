@@ -1,6 +1,7 @@
 package cn.don9cn.blog.plugins.daohelper.core;
 
 import cn.don9cn.blog.action.bussiness.articleclassify.ArticleClassifyAction;
+import cn.don9cn.blog.exception.MyMongoOperatorException;
 import cn.don9cn.blog.model.BaseModel;
 import cn.don9cn.blog.util.DateUtil;
 import cn.don9cn.blog.util.EntityParserUtil;
@@ -147,8 +148,7 @@ public class MyMongoOperator {
             entity.setCreateTime(DateUtil.getCreateDateString());
             mongoTemplate.insert(entity,getCollectionName(entity));
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseInsert 插入失败,异常信息:"+e.getMessage());
-            return OptionalInt.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.baseInsert 插入失败");
         }
         int x = 1;
         return OptionalInt.of(x);
@@ -166,8 +166,7 @@ public class MyMongoOperator {
         try{
             mongoTemplate.insert(list,collectionName);
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseInsertBatch 批量插入失败,异常信息:"+e.getMessage());
-            return OptionalInt.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.baseInsertBatch 批量插入失败");
         }
         return OptionalInt.of(list.size());
     }
@@ -185,8 +184,7 @@ public class MyMongoOperator {
             x = mongoTemplate.updateFirst(createDefaultQuery(entity),
                     createDefaultUpdate(entity),entity.getClass(),getCollectionName(entity)).getN();
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseUpdate 更新失败,异常信息:"+e.getMessage());
-            return OptionalInt.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.baseUpdate 更新失败");
         }
         return OptionalInt.of(x);
     }
@@ -197,13 +195,12 @@ public class MyMongoOperator {
      * @param typeClass
      * @return
      */
-    public OptionalInt baseDeleteById(String id, Class<?> typeClass) {
+    public <T extends BaseModel> OptionalInt baseDeleteById(String id, Class<T> typeClass) {
         int x;
         try{
             x = mongoTemplate.remove(Query.query(Criteria.where("_id").is(id)),typeClass,typeClass.getSimpleName()).getN();
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseDeleteById 删除失败,异常信息:"+e.getMessage());
-            return OptionalInt.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.baseDeleteById 删除失败");
         }
         return OptionalInt.of(x);
     }
@@ -220,8 +217,7 @@ public class MyMongoOperator {
         try{
             x = mongoTemplate.findAllAndRemove(Query.query(Criteria.where("_id").in(list)),typeClass,typeClass.getSimpleName()).size();
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseDeleteBatch 批量删除失败,异常信息:"+e.getMessage());
-            return OptionalInt.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.baseDeleteBatch 批量删除失败");
         }
         return OptionalInt.of(x);
     }
@@ -237,8 +233,7 @@ public class MyMongoOperator {
         try{
             x = mongoTemplate.remove(Query.query(Criteria.where("_class").is(typeClass.getTypeName())),typeClass.getSimpleName()).getN();
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseDeleteAll 删除所有失败,异常信息:"+e.getMessage());
-            return OptionalInt.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.baseDeleteAll 删除所有失败");
         }
         return OptionalInt.of(x);
     }
@@ -253,8 +248,7 @@ public class MyMongoOperator {
         try{
             x = supplier.get();
         }catch (Exception e){
-            logger.error("MyMongoOperator.freeDelete 自定义删除失败,异常信息:"+e.getMessage());
-            return OptionalInt.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.freeDelete 自定义删除失败");
         }
         return OptionalInt.of(x);
     }
@@ -270,8 +264,7 @@ public class MyMongoOperator {
         try{
             return Optional.ofNullable(mongoTemplate.findById(id,typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseFindOne 获取失败,异常信息:"+e.getMessage());
-            return Optional.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.baseFindById 查询失败");
         }
     }
 
@@ -286,8 +279,7 @@ public class MyMongoOperator {
         try{
             return Optional.ofNullable(mongoTemplate.find(query, (Class<T>) entity.getClass(),getCollectionName(entity)));
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseFindOne 获取失败,异常信息:"+e.getMessage());
-            return Optional.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.baseFindListByParams 查询失败");
         }
     }
 
@@ -301,8 +293,7 @@ public class MyMongoOperator {
         try{
             return Optional.ofNullable(mongoTemplate.findAll(typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseFindAll 获取失败,异常信息:"+e.getMessage());
-            return Optional.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.baseFindAll 查询失败");
         }
     }
 
@@ -316,8 +307,7 @@ public class MyMongoOperator {
         try{
             return Optional.ofNullable(mongoTemplate.find(Query.query(Criteria.where("_id").in(ids)),typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseFindInIds 获取失败,异常信息:"+e.getMessage());
-            return Optional.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.baseFindInIds 查询失败");
         }
     }
 
@@ -346,8 +336,7 @@ public class MyMongoOperator {
             pageResult.setRows(list);
             return Optional.of(pageResult);
         }catch (Exception e){
-            logger.error("MyMongoOperator.baseFindByPage 获取失败,异常信息:"+e.getMessage());
-            return Optional.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.baseFindByPage 查询失败");
         }
 
     }
@@ -375,8 +364,7 @@ public class MyMongoOperator {
             pageResult.setRows(list);
             return Optional.of(pageResult);
         }catch (Exception e){
-            logger.error("MyMongoOperator.freeFindByPage 获取失败,异常信息:"+e.getMessage());
-            return Optional.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.freeFindByPage 查询失败");
         }
 
     }
@@ -392,8 +380,7 @@ public class MyMongoOperator {
         try{
             return Optional.ofNullable(mongoTemplate.findOne(query,typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
-            logger.error("MyMongoOperator.freeFindOne 获取失败,异常信息:"+e.getMessage());
-            return Optional.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.freeFindOne 查询失败");
         }
     }
 
@@ -408,8 +395,7 @@ public class MyMongoOperator {
         try{
             return Optional.ofNullable(mongoTemplate.find(query,typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
-            logger.error("MyMongoOperator.freeFindOne 获取失败,异常信息:"+e.getMessage());
-            return Optional.empty();
+            throw new MyMongoOperatorException(e,"MyMongoOperator.freeFindList 查询失败");
         }
     }
 
