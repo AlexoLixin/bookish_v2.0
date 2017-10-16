@@ -37,9 +37,7 @@ public class ArticleAndFileDaoImpl implements BaseDao<ArticleAndFile> {
      * @return
      */
     public OptionalInt deleteByArticleCode(String articleCode){
-        return getMyMongoOperator().freeDelete(
-                () -> mongoTemplate.remove(Query.query(Criteria.where("articleCode").is(articleCode)),"ArticleAndFile").getN()
-        );
+        return getMyMongoOperator().freeDelete(Query.query(Criteria.where("articleCode").is(articleCode)),ArticleAndFile.class);
     }
 
     /**
@@ -48,9 +46,7 @@ public class ArticleAndFileDaoImpl implements BaseDao<ArticleAndFile> {
      * @return
      */
     public OptionalInt deleteByArticleCodes(List<String> list) {
-        return getMyMongoOperator().freeDelete(
-                () -> mongoTemplate.remove(Query.query(Criteria.where("articleCode").in(list)),"ArticleAndFile").getN()
-        );
+        return getMyMongoOperator().freeDelete(Query.query(Criteria.where("articleCode").in(list)),ArticleAndFile.class);
     }
 
     /**

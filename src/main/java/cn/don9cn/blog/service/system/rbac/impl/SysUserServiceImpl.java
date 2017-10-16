@@ -91,8 +91,19 @@ public class SysUserServiceImpl implements SysUserService {
 	@Override
 	public OperaResult checkUserName(String username) {
 		if(sysUserDaoImpl.checkUserName(username)){
-			new OperaResult(true,"用户名可用");
+			return new OperaResult(true,"用户名可用");
 		}
 		return new OperaResult(false,"用户名不可用");
+	}
+
+	@Override
+	public OperaResult authorizeUser(String userCode, String roleCodes) {
+		SysUser user;
+		if(StringUtils.isNotBlank(roleCodes)){
+			user = new SysUser(userCode,roleCodes);
+		}else{
+			user = new SysUser(userCode,"");
+		}
+		return OperaResultUtil.baseUpdate(sysUserDaoImpl.baseUpdate(user));
 	}
 }

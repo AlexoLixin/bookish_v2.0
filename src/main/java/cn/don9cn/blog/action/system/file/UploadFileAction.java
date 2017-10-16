@@ -63,7 +63,7 @@ public class UploadFileAction extends BaseAction<UploadFile> {
 
     @Override
     @GetMapping("/uploadFile/{code}")
-    protected Object baseFindById(String code) {
+    protected Object baseFindById(@PathVariable String code) {
         return uploadFileService.baseFindById(code);
     }
 

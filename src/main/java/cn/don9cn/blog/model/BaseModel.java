@@ -60,12 +60,6 @@ public class BaseModel implements Serializable {
     @DbColumn(content = "排序")
     private String num;
 
-    /**
-     * 字典缓存
-     */
-    private Map<String,Object> dictMap;
-
-
     public String getFlagDel() {
         return flagDel;
     }
@@ -152,14 +146,6 @@ public class BaseModel implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public Map<String, Object> getDictMap() {
-        return dictMap;
-    }
-
-    public void setDictMap(Map<String, Object> dictMap) {
-        this.dictMap = dictMap;
     }
 
     public String getNum() {

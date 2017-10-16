@@ -6,36 +6,41 @@ import cn.don9cn.blog.annotation.DbCollection;
 import cn.don9cn.blog.model.BaseModel;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
- * 菜单实体
- * @author Don9
- * @create 2017-05-03-22:58
- **/
+ * @Author: liuxindong
+ * @Description: 权限实体
+ * @Create: 2017/10/16 13:58
+ * @Modify:
+ */
 @DbCollection
 public class SysPermission extends BaseModel {
 
-
-
-    @DbColumn(content = "菜单名称")
+    @DbColumn(content = "权限名称")
     private String name;
 
-    @DbColumn(content = "菜单路径")
+    @DbColumn(content = "权限路径")
     private String url;
 
-    @DbColumn(content = "父级菜单")
+    @DbColumn(content = "请求方法")
+    private String httpMethod;
+
+    @DbColumn(content = "父节点")
     private String parent;
 
-    @DbColumn(content = "菜单等级")
+    @DbColumn(content = "节点等级")
     private String level;
 
     @DbColumn(content = "是否是叶子节点")
     private String leaf;
+
     /**
      * 子菜单集合
      */
-    private Set<SysPermission> children = new HashSet<SysPermission>();
+    private List<SysPermission> children;
+
     /**
      * 角色进行菜单授权时,回显是否勾选当前菜单
      */
@@ -73,14 +78,6 @@ public class SysPermission extends BaseModel {
         this.parent = parent;
     }
 
-    public Set<SysPermission> getChildren() {
-        return children;
-    }
-
-    public void setChildren(Set<SysPermission> children) {
-        this.children = children;
-    }
-
     public String getLevel() {
         return level;
     }
@@ -97,7 +94,6 @@ public class SysPermission extends BaseModel {
         this.leaf = leaf;
     }
 
-
     public boolean isChecked() {
         return checked;
     }
@@ -105,5 +101,22 @@ public class SysPermission extends BaseModel {
     public void setChecked(boolean checked) {
         this.checked = checked;
     }
+
+    public String getHttpMethod() {
+        return httpMethod;
+    }
+
+    public void setHttpMethod(String httpMethod) {
+        this.httpMethod = httpMethod;
+    }
+
+    public List<SysPermission> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<SysPermission> children) {
+        this.children = children;
+    }
+
 }
 

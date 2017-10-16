@@ -138,6 +138,15 @@ public class MyMongoOperator {
     }
 
     /**
+     * 自定义更新条目
+     * @param update
+     * @return
+     */
+    public <T extends BaseModel> Update createFreeUpdate(Update update, Function<Update,Update> function){
+        return function.apply(update);
+    }
+
+    /**
      * 基础-添加
      * @param entity
      * @param <T>
@@ -145,6 +154,7 @@ public class MyMongoOperator {
      */
     public <T extends BaseModel> OptionalInt baseInsert(T entity) {
         try{
+            if(entity.getCode()!=null && entity.getCode().trim().equals("")) entity.setCode(null);
             entity.setCreateTime(DateUtil.getCreateDateString());
             mongoTemplate.insert(entity,getCollectionName(entity));
         }catch (Exception e){
@@ -161,7 +171,10 @@ public class MyMongoOperator {
      * @return
      */
     public <T extends BaseModel> OptionalInt baseInsertBatch(List<T> list) {
-        list.forEach(entity -> entity.setCreateTime(DateUtil.getCreateDateString()));
+        list.forEach(entity -> {
+            if(entity.getCode()!=null && entity.getCode().trim().equals("")) entity.setCode(null);
+            entity.setCreateTime(DateUtil.getCreateDateString());
+        });
         String collectionName = list.get(0).getClass().getSimpleName();
         try{
             mongoTemplate.insert(list,collectionName);
@@ -185,6 +198,34 @@ public class MyMongoOperator {
                     createDefaultUpdate(entity),entity.getClass(),getCollectionName(entity)).getN();
         }catch (Exception e){
             throw new MyMongoOperatorException(e,"MyMongoOperator.baseUpdate 更新失败");
+        }
+        return OptionalInt.of(x);
+    }
+
+    /**
+     * 基础-自定义更新单体
+     * @return
+     */
+    public <T extends BaseModel> OptionalInt freeUpdateOne(Query query,Update update,Class<T> clazz) {
+        int x;
+        try{
+            x = mongoTemplate.updateFirst(query,update,clazz,clazz.getSimpleName()).getN();
+        }catch (Exception e){
+            throw new MyMongoOperatorException(e,"MyMongoOperator.freeUpdateOne 更新失败");
+        }
+        return OptionalInt.of(x);
+    }
+
+    /**
+     * 基础-自定义更新多个
+     * @return
+     */
+    public <T extends BaseModel> OptionalInt freeUpdateMulti(Query query,Update update,Class<T> clazz) {
+        int x;
+        try{
+            x = mongoTemplate.updateMulti(query,update,clazz,clazz.getSimpleName()).getN();
+        }catch (Exception e){
+            throw new MyMongoOperatorException(e,"MyMongoOperator.freeUpdateMulti 更新失败");
         }
         return OptionalInt.of(x);
     }
@@ -240,13 +281,14 @@ public class MyMongoOperator {
 
     /**
      * 自定义删除
-     * @param supplier
+     * @param query
+     * @param clazz
      * @return
      */
-    public OptionalInt freeDelete(Supplier<Integer> supplier) {
+    public <T extends BaseModel> OptionalInt freeDelete(Query query,Class<T> clazz) {
         int x;
         try{
-            x = supplier.get();
+            x = mongoTemplate.remove(query,clazz,clazz.getSimpleName()).getN();
         }catch (Exception e){
             throw new MyMongoOperatorException(e,"MyMongoOperator.freeDelete 自定义删除失败");
         }

@@ -5,6 +5,7 @@ import cn.don9cn.blog.annotation.DbColumn;
 import cn.don9cn.blog.annotation.DbCollection;
 import cn.don9cn.blog.model.BaseModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,10 +26,16 @@ public class SysRole extends BaseModel {
 
     @DbColumn(content = "图标")
     private String icon;
+
+    /**
+     * 权限菜单主键集合
+     */
+    private List<SysPermission> menuCodesList = new ArrayList<>();
+
     /**
      * 权限菜单集合
      */
-    private List<SysPermission> menuList;
+    private List<SysPermission> menuList = new ArrayList<>();
 
     public String getIcon() {
         return icon;
@@ -61,5 +68,13 @@ public class SysRole extends BaseModel {
 
     public void setMenuList(List<SysPermission> menuList) {
         this.menuList = menuList;
+    }
+
+    public List<SysPermission> getMenuCodesList() {
+        return menuCodesList;
+    }
+
+    public void setMenuCodesList(List<SysPermission> menuCodesList) {
+        this.menuCodesList = menuCodesList;
     }
 }

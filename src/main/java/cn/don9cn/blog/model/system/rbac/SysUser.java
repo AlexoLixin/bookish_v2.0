@@ -4,8 +4,10 @@ package cn.don9cn.blog.model.system.rbac;
 import cn.don9cn.blog.annotation.DbColumn;
 import cn.don9cn.blog.annotation.DbCollection;
 import cn.don9cn.blog.model.BaseModel;
+import cn.don9cn.blog.util.MyStringUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,17 +39,35 @@ public class SysUser extends BaseModel {
     private Integer age;
 
     @DbColumn(content = "性别")
-    private String dicGender;
+    private String gender;
 
     /**
-     * 角色集合
+     * 角色主键
      */
-    private List<SysRole> roleList ;
+    private List<String> roleCodes;
+
+    /**
+     * 角色实体集合
+     */
+    private List<SysRole> roleList;
 
     /**
      * 角色名称,用于前端显示
      */
     private String roleNames;
+
+    public SysUser(){
+
+    }
+
+    public SysUser(String code){
+        this.setCode(code);
+    }
+
+    public SysUser(String code, String roleCodes){
+        this.setCode(code);
+        this.roleCodes = MyStringUtil.codesStr2List(roleCodes);
+    }
 
 
     public String getUsername() {
@@ -98,13 +118,6 @@ public class SysUser extends BaseModel {
         this.age = age;
     }
 
-    public String getDicGender() {
-        return dicGender;
-    }
-
-    public void setDicGender(String dicGender) {
-        this.dicGender = dicGender;
-    }
 
     public List<SysRole> getRoleList() {
         return roleList;
@@ -120,5 +133,21 @@ public class SysUser extends BaseModel {
 
     public void setRoleNames(String roleNames) {
         this.roleNames = roleNames;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public List<String> getRoleCodes() {
+        return roleCodes;
+    }
+
+    public void setRoleCodes(List<String> roleCodes) {
+        this.roleCodes = roleCodes;
     }
 }

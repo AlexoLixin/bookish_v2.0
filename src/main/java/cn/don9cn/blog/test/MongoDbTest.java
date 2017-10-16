@@ -2,6 +2,7 @@ package cn.don9cn.blog.test;
 
 import cn.don9cn.blog.model.bussiness.article.Article;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
+import cn.don9cn.blog.model.system.rbac.SysPermission;
 import com.mongodb.MongoClient;
 import com.mongodb.WriteResult;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -41,6 +42,16 @@ public class MongoDbTest {
 
         //update(mongoTemplate);
 
+        //push(mongoTemplate);
+
+    }
+
+    private static void push(MongoOperations mongoTemplate) {
+
+        Update update = new Update();
+        update.push("roleCodes","asdasd");
+        mongoTemplate.updateFirst(query(where("username").is("123123")),update,"SysUser");
+
     }
 
     public static void update(MongoOperations mongoTemplate){
@@ -58,7 +69,7 @@ public class MongoDbTest {
 
     public static void remove(MongoOperations mongoTemplate){
 
-        int article = mongoTemplate.remove(query(where("_class").is(Article.class.getTypeName())), "Article").getN();
+        int article = mongoTemplate.remove(query(where("_class").is(SysPermission.class.getTypeName())), "SysPermission").getN();
         System.out.println(article);
 
     }

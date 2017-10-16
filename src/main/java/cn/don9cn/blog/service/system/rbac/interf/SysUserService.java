@@ -27,7 +27,13 @@ public interface SysUserService extends BaseService<SysUser> {
      */
     OperaResult checkUserName(String username);
 
-
+    /**
+     * 为用户进行角色授权
+     * @param userCode
+     * @param roleCodes
+     * @return
+     */
+    OperaResult authorizeUser(String userCode,String roleCodes);
 
 }
 

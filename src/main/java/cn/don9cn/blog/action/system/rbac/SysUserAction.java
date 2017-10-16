@@ -17,7 +17,7 @@ import java.util.List;
  * @Modify:
  */
 @RestController
-@RequestMapping(value = "/system")
+@RequestMapping(value = "/system/rbac")
 public class SysUserAction extends BaseAction<SysUser> {
 
     @Autowired
@@ -54,8 +54,8 @@ public class SysUserAction extends BaseAction<SysUser> {
     }
 
     @Override
-    @GetMapping("/user")
-    protected Object baseFindById(String code) {
+    @GetMapping("/user/{code}")
+    protected Object baseFindById(@PathVariable String code) {
         return sysUserService.baseFindById(code);
     }
 
@@ -75,5 +75,15 @@ public class SysUserAction extends BaseAction<SysUser> {
     @GetMapping("/user/page")
     protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysUser sysUser) {
         return sysUserService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysUser));
+    }
+
+    @GetMapping("/user/checkName")
+    protected Object checkUserName(String username) {
+        return sysUserService.checkUserName(username);
+    }
+
+    @PutMapping("/user/authorize")
+    protected Object authorizeUser(String userCode,String roleCodes) {
+        return sysUserService.authorizeUser(userCode,roleCodes);
     }
 }

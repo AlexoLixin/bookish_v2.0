@@ -60,7 +60,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 
 	@Override
 	@GetMapping("/articleClassify/{code}")
-	protected Object baseFindById(String code) {
+	protected Object baseFindById(@PathVariable String code) {
 		return articleClassifyService.baseFindById(code);
 	}
 
