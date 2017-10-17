@@ -29,7 +29,6 @@ public class MyShiroFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
 
-
         //请求路径
         String requestURI = request.getRequestURI();
         //请求方法

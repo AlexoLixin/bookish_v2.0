@@ -4,6 +4,8 @@ import cn.don9cn.blog.autoconfigs.shiro.core.MyShiroFilter;
 import cn.don9cn.blog.autoconfigs.shiro.core.MyShiroRealm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.authc.AnonymousFilter;
+import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +27,7 @@ public class ShiroAutoConfig {
 
 
     @Bean
-    public ShiroFilterFactoryBean shirFilterBean(SecurityManager securityManager,MyShiroFilter myShiroFilter) {
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
 
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 
@@ -52,12 +54,11 @@ public class ShiroAutoConfig {
 
         // 将权限验证拦截器替换成自定义的MyShiroFilter
         Map<String, Filter> filterMap = new LinkedHashMap<>();
-        filterMap.put("authc",myShiroFilter);
+        filterMap.put("authc",new MyShiroFilter());
         shiroFilterFactoryBean.setFilters(filterMap);
 
         return shiroFilterFactoryBean;
     }
-
 
     @Bean
     public SecurityManager securityManager() {
@@ -67,23 +68,10 @@ public class ShiroAutoConfig {
         return securityManager;
     }
 
-
-    @Bean
-    public MyShiroFilter myShiroFilter(){
-        MyShiroFilter myShiroFilter = new MyShiroFilter();
-        return myShiroFilter;
-    }
-
     @Bean
     public MyShiroRealm myShiroRealm(){
         MyShiroRealm myShiroRealm = new MyShiroRealm();
         return myShiroRealm;
-    }
-
-    @Bean
-    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor(){
-        LifecycleBeanPostProcessor lifecycleBeanPostProcessor = new LifecycleBeanPostProcessor();
-        return lifecycleBeanPostProcessor;
     }
 
 }
