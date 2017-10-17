@@ -1,10 +1,10 @@
 package cn.don9cn.blog.service.system.rbac.impl;
 
-import cn.don9cn.blog.dao.system.rbac.SysPermissionDaoImpl;
+import cn.don9cn.blog.dao.system.rbac.interf.SysPermissionDao;
 import cn.don9cn.blog.model.system.rbac.SysPermission;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
-import cn.don9cn.blog.plugins.operation.core.OperaResult;
-import cn.don9cn.blog.plugins.operation.util.OperaResultUtil;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
+import cn.don9cn.blog.plugins.operaresult.util.OperaResultUtil;
 import cn.don9cn.blog.service.system.rbac.interf.SysPermissionService;
 import cn.don9cn.blog.util.MyStringUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -26,34 +26,34 @@ import java.util.stream.Collectors;
 public class SysPermissionServiceImpl implements SysPermissionService {
 
     @Autowired
-    private SysPermissionDaoImpl sysPermissionDaoImpl;
+    private SysPermissionDao sysPermissionDao;
 
     @Override
     public OperaResult baseInsert(SysPermission entity) {
         entity.setLeaf("Y");
-        return OperaResultUtil.baseInsert(sysPermissionDaoImpl.baseInsert(entity));
+        return OperaResultUtil.baseInsert(sysPermissionDao.baseInsert(entity));
     }
 
     @Override
     public OperaResult baseInsertBatch(List<SysPermission> list) {
-        return OperaResultUtil.baseInsertBatch(sysPermissionDaoImpl.baseInsertBatch(list));
+        return OperaResultUtil.baseInsertBatch(sysPermissionDao.baseInsertBatch(list));
     }
 
     @Override
     public OperaResult baseUpdate(SysPermission entity) {
-        return OperaResultUtil.baseUpdate(sysPermissionDaoImpl.baseUpdate(entity));
+        return OperaResultUtil.baseUpdate(sysPermissionDao.baseUpdate(entity));
     }
 
     @Override
     public OperaResult baseDeleteById(String id) {
-        return OperaResultUtil.baseRemove(sysPermissionDaoImpl.baseDeleteById(id));
+        return OperaResultUtil.baseRemove(sysPermissionDao.baseDeleteById(id));
     }
 
     @Override
     public OperaResult baseDeleteBatch(String codes) {
         if(StringUtils.isNotBlank(codes)){
             List<String> codesList = MyStringUtil.codesStr2List(codes);
-            return OperaResultUtil.baseRemoveBatch(sysPermissionDaoImpl.baseDeleteBatch(codesList));
+            return OperaResultUtil.baseRemoveBatch(sysPermissionDao.baseDeleteBatch(codesList));
         }else{
             return new OperaResult(false,"删除失败,传入codes为空!");
         }
@@ -61,22 +61,22 @@ public class SysPermissionServiceImpl implements SysPermissionService {
 
     @Override
     public OperaResult baseFindById(String id) {
-        return OperaResultUtil.baseFindOne(sysPermissionDaoImpl.baseFindById(id));
+        return OperaResultUtil.baseFindOne(sysPermissionDao.baseFindById(id));
     }
 
     @Override
     public OperaResult baseFindAll() {
-        return OperaResultUtil.baseFindAll(sysPermissionDaoImpl.baseFindAll());
+        return OperaResultUtil.baseFindAll(sysPermissionDao.baseFindAll());
     }
 
     @Override
     public OperaResult baseFindListByParams(SysPermission entity) {
-        return OperaResultUtil.baseFindListByParams(sysPermissionDaoImpl.baseFindListByParams(entity));
+        return OperaResultUtil.baseFindListByParams(sysPermissionDao.baseFindListByParams(entity));
     }
 
     @Override
     public OperaResult baseFindByPage(PageResult<SysPermission> pageResult) {
-        return OperaResultUtil.baseFindByPage(sysPermissionDaoImpl.baseFindByPage(pageResult));
+        return OperaResultUtil.baseFindByPage(sysPermissionDao.baseFindByPage(pageResult));
     }
 
 
@@ -85,17 +85,17 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         //将当前节点设置为叶子节点
         sysPermission.setLeaf("Y");
         //保存当前节点
-        OptionalInt optional = sysPermissionDaoImpl.baseInsert(sysPermission);
+        OptionalInt optional = sysPermissionDao.baseInsert(sysPermission);
         //更新父节点为非叶子节点
         if(!sysPermission.getParent().equals("ROOT")){
-            sysPermissionDaoImpl.baseUpdate(new SysPermission(sysPermission.getParent(),"N"));
+            sysPermissionDao.baseUpdate(new SysPermission(sysPermission.getParent(),"N"));
         }
         return OperaResultUtil.baseInsert(optional);
     }
 
     @Override
     public OperaResult getTree() {
-        Optional<List<SysPermission>> listOptional = sysPermissionDaoImpl.baseFindAll();
+        Optional<List<SysPermission>> listOptional = sysPermissionDao.baseFindAll();
         Optional<List<SysPermission>> resultOptional;
         if(listOptional.isPresent()){
             List<SysPermission> all = listOptional.get();
@@ -131,7 +131,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
             List<String> codesList = MyStringUtil.codesStr2List(codes);
             List<String> levelsList = MyStringUtil.codesStr2List(levels);
             //删除当前分类
-            OptionalInt optional_1 = sysPermissionDaoImpl.baseDeleteBatch(codesList);
+            OptionalInt optional_1 = sysPermissionDao.baseDeleteBatch(codesList);
             //级联删除分类
             OptionalInt optional_2 = deleteCascade(levelsList);
             //更新节点状态
@@ -149,7 +149,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     private OptionalInt deleteCascade(List<String> levelsList) {
         int x = 0;
         for(String level:levelsList){
-            int y = sysPermissionDaoImpl.deleteCascade(level).getAsInt();
+            int y = sysPermissionDao.deleteCascade(level).getAsInt();
             x += y;
         }
         return OptionalInt.of(x);
@@ -160,7 +160,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @return
      */
     private OptionalInt updateLeaf() {
-        List<SysPermission> allPermissions = sysPermissionDaoImpl.baseFindAll().get();
+        List<SysPermission> allPermissions = sysPermissionDao.baseFindAll().get();
         List<String> allCodes = allPermissions.stream().map(SysPermission::getCode).collect(Collectors.toList());
         allCodes.add("ROOT");
         List<String> temp = new ArrayList<>();
@@ -169,7 +169,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
                 temp.add(classify.getParent());
             }
         });
-        return sysPermissionDaoImpl.updateLeaf(temp);
+        return sysPermissionDao.updateLeaf(temp);
     }
 
 }

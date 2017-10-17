@@ -17,72 +17,72 @@ import java.util.List;
  * @Modify:
  */
 @RestController
-@RequestMapping(value = "/system/rbac")
+@RequestMapping(value = "/system/rbac/user")
 public class SysUserAction extends BaseAction<SysUser> {
 
     @Autowired
     private SysUserService sysUserService;
 
     @Override
-    @PostMapping("/user")
+    @PostMapping
     protected Object baseInsert(SysUser sysUser) {
         return sysUserService.baseInsert(sysUser);
     }
 
     @Override
-    @PostMapping("/user/batch")
+    @PostMapping("/batch")
     protected Object baseInsertBatch(List<SysUser> list) {
         return sysUserService.baseInsertBatch(list);
     }
 
     @Override
-    @PutMapping("/user")
+    @PutMapping
     protected Object baseUpdate(SysUser sysUser) {
         return sysUserService.baseUpdate(sysUser);
     }
 
     @Override
-    @DeleteMapping("/user")
+    @DeleteMapping
     protected Object baseRemove(String code) {
         return sysUserService.baseDeleteById(code);
     }
 
     @Override
-    @DeleteMapping("/user/batch")
+    @DeleteMapping("/batch")
     protected Object baseRemoveBatch(String codes) {
         return sysUserService.baseDeleteBatch(codes);
     }
 
     @Override
-    @GetMapping("/user/{code}")
-    protected Object baseFindById(@PathVariable String code) {
+    @GetMapping
+    protected Object baseFindById(String code) {
         return sysUserService.baseFindById(code);
     }
 
     @Override
-    @GetMapping("/user/all")
+    @GetMapping("/all")
     protected Object baseFindAll() {
         return sysUserService.baseFindAll();
     }
 
     @Override
-    @GetMapping("/user/list")
+    @GetMapping("/list")
     protected Object baseFindListByParams(SysUser sysUser) {
         return sysUserService.baseFindListByParams(sysUser);
     }
 
     @Override
-    @GetMapping("/user/page")
+    @GetMapping("/page")
     protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysUser sysUser) {
         return sysUserService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysUser));
     }
 
-    @GetMapping("/user/checkName")
+    @GetMapping("/checkName")
     protected Object checkUserName(String username) {
         return sysUserService.checkUserName(username);
     }
 
-    @PutMapping("/user/authorize")
+    @PutMapping("/authorize")
     protected Object authorizeUser(String userCode,String roleCodes) {
         return sysUserService.authorizeUser(userCode,roleCodes);
     }

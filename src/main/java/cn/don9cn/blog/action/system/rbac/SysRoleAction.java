@@ -17,7 +17,7 @@ import java.util.List;
  * @Modify:
  */
 @RestController
-@RequestMapping(value = "/system/rbac")
+@RequestMapping(value = "/system/rbac/role")
 public class SysRoleAction extends BaseAction<SysRole> {
 
     @Autowired
@@ -25,56 +25,61 @@ public class SysRoleAction extends BaseAction<SysRole> {
 
 
     @Override
-    @PostMapping("/role")
+    @PostMapping
     protected Object baseInsert(SysRole sysRole) {
         return sysRoleService.baseInsert(sysRole);
     }
 
     @Override
-    @PostMapping("/role/batch")
+    @PostMapping("/batch")
     protected Object baseInsertBatch(List<SysRole> list) {
         return sysRoleService.baseInsertBatch(list);
     }
 
     @Override
-    @PutMapping("/role")
+    @PutMapping
     protected Object baseUpdate(SysRole sysRole) {
         return sysRoleService.baseUpdate(sysRole);
     }
 
     @Override
-    @DeleteMapping("/role")
+    @DeleteMapping
     protected Object baseRemove(String code) {
         return sysRoleService.baseDeleteById(code);
     }
 
     @Override
-    @DeleteMapping("/role/batch")
+    @DeleteMapping("/batch")
     protected Object baseRemoveBatch(String codes) {
         return sysRoleService.baseDeleteBatch(codes);
     }
 
     @Override
-    @GetMapping("/role/{code}")
-    protected Object baseFindById(@PathVariable String code) {
+    @GetMapping
+    protected Object baseFindById(String code) {
         return sysRoleService.baseFindById(code);
     }
 
     @Override
-    @GetMapping("/role/all")
+    @GetMapping("/all")
     protected Object baseFindAll() {
         return sysRoleService.baseFindAll();
     }
 
     @Override
-    @GetMapping("/role/list")
+    @GetMapping("/list")
     protected Object baseFindListByParams(SysRole sysRole) {
         return sysRoleService.baseFindListByParams(sysRole);
     }
 
     @Override
-    @GetMapping("/role/page")
+    @GetMapping("/page")
     protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysRole sysRole) {
         return sysRoleService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysRole));
+    }
+
+    @PutMapping("/authorize")
+    protected Object authorizeRole(String roleCode,String permissionCodes) {
+        return sysRoleService.authorizeRole(roleCode,permissionCodes);
     }
 }

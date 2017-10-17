@@ -1,8 +1,8 @@
-package cn.don9cn.blog.plugins.operation.util;
+package cn.don9cn.blog.plugins.operaresult.util;
 
 import cn.don9cn.blog.model.BaseModel;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
-import cn.don9cn.blog.plugins.operation.core.OperaResult;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 
 import java.util.List;
 import java.util.Optional;

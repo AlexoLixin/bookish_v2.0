@@ -1,14 +1,18 @@
 package cn.don9cn.blog.service.bussiness.article.impl;
 
-import cn.don9cn.blog.dao.bussiness.article.ArticleAndFileDaoImpl;
-import cn.don9cn.blog.dao.bussiness.article.ArticleDaoImpl;
-import cn.don9cn.blog.dao.bussiness.articleclassify.ArticleClassifyDaoImpl;
-import cn.don9cn.blog.dao.system.file.UploadFileDaoImpl;
+import cn.don9cn.blog.dao.bussiness.article.impl.ArticleAndFileDaoImpl;
+import cn.don9cn.blog.dao.bussiness.article.impl.ArticleDaoImpl;
+import cn.don9cn.blog.dao.bussiness.article.interf.ArticleAndFileDao;
+import cn.don9cn.blog.dao.bussiness.article.interf.ArticleDao;
+import cn.don9cn.blog.dao.bussiness.articleclassify.impl.ArticleClassifyDaoImpl;
+import cn.don9cn.blog.dao.bussiness.articleclassify.interf.ArticleClassifyDao;
+import cn.don9cn.blog.dao.system.file.impl.UploadFileDaoImpl;
+import cn.don9cn.blog.dao.system.file.interf.UploadFileDao;
 import cn.don9cn.blog.model.bussiness.article.Article;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
-import cn.don9cn.blog.plugins.operation.core.OperaResult;
-import cn.don9cn.blog.plugins.operation.util.OperaResultUtil;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
+import cn.don9cn.blog.plugins.operaresult.util.OperaResultUtil;
 import cn.don9cn.blog.service.bussiness.article.interf.ArticleService;
 import cn.don9cn.blog.util.MyStringUtil;
 import cn.don9cn.blog.util.UuidUtil;
@@ -32,53 +36,53 @@ import java.util.Optional;
 public class ArticleServiceImpl implements ArticleService {
 
 	@Autowired
-	private ArticleDaoImpl articleDaoImpl;
+	private ArticleDao articleDao;
 
 	@Autowired
-	private ArticleClassifyDaoImpl articleClassifyDaoImpl;
+	private ArticleClassifyDao articleClassifyDao;
 
 	@Autowired
-	private UploadFileDaoImpl uploadFileDaoImpl;
+	private UploadFileDao uploadFileDao;
 
 	@Autowired
-	private ArticleAndFileDaoImpl articleAndFileDaoImpl;
+	private ArticleAndFileDao articleAndFileDao;
 
 	@Override
 	public OperaResult baseInsert(Article entity) {
 		entity.setCode(UuidUtil.getUuid());
 		entity.setAuthor("test");
 		if(StringUtils.isNotBlank(entity.getFiles())){
-			articleAndFileDaoImpl.insertBatch(entity);
+			articleAndFileDao.insertBatch(entity);
 		}
-		return OperaResultUtil.baseInsert(articleDaoImpl.baseInsert(entity));
+		return OperaResultUtil.baseInsert(articleDao.baseInsert(entity));
 	}
 
 	@Override
 	public OperaResult baseInsertBatch(List<Article> list) {
-		return OperaResultUtil.baseInsertBatch(articleDaoImpl.baseInsertBatch(list));
+		return OperaResultUtil.baseInsertBatch(articleDao.baseInsertBatch(list));
 	}
 
 	@Override
 	public OperaResult baseUpdate(Article entity) {
-		articleAndFileDaoImpl.deleteByArticleCode(entity.getCode());
+		articleAndFileDao.deleteByArticleCode(entity.getCode());
 		if(StringUtils.isNotBlank(entity.getFiles())){
-			articleAndFileDaoImpl.insertBatch(entity);
+			articleAndFileDao.insertBatch(entity);
 		}
-		return OperaResultUtil.baseUpdate(articleDaoImpl.baseUpdate(entity));
+		return OperaResultUtil.baseUpdate(articleDao.baseUpdate(entity));
 	}
 
 	@Override
 	public OperaResult baseDeleteById(String id) {
-		articleAndFileDaoImpl.deleteByArticleCode(id);
-		return OperaResultUtil.baseRemove(articleDaoImpl.baseDeleteById(id));
+		articleAndFileDao.deleteByArticleCode(id);
+		return OperaResultUtil.baseRemove(articleDao.baseDeleteById(id));
 	}
 
 	@Override
 	public OperaResult baseDeleteBatch(String codes) {
 		if(StringUtils.isNotBlank(codes)){
 			List<String> codesList = MyStringUtil.codesStr2List(codes);
-			articleAndFileDaoImpl.deleteByArticleCodes(codesList);
-			return OperaResultUtil.baseRemoveBatch(articleDaoImpl.baseDeleteBatch(codesList));
+			articleAndFileDao.deleteByArticleCodes(codesList);
+			return OperaResultUtil.baseRemoveBatch(articleDao.baseDeleteBatch(codesList));
 		}else{
 			return new OperaResult(false,"删除失败,传入codes为空!");
 		}
@@ -86,10 +90,10 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public OperaResult baseFindById(String id) {
-		Optional<Article> article = articleDaoImpl.baseFindById(id);
+		Optional<Article> article = articleDao.baseFindById(id);
 		article.ifPresent(a -> {
 			if(StringUtils.isNotBlank(a.getFiles())){
-				uploadFileDaoImpl.findListInCodes(MyStringUtil.codesStr2List(a.getFiles())).ifPresent(a::setFilesList);
+				uploadFileDao.findListInCodes(MyStringUtil.codesStr2List(a.getFiles())).ifPresent(a::setFilesList);
 			}
 		});
 		return OperaResultUtil.baseFindOne(article);
@@ -97,19 +101,19 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public OperaResult baseFindAll() {
-		return OperaResultUtil.baseFindAll(articleDaoImpl.baseFindAll());
+		return OperaResultUtil.baseFindAll(articleDao.baseFindAll());
 	}
 
 	@Override
 	public OperaResult baseFindListByParams(Article entity) {
-		return OperaResultUtil.baseFindListByParams(articleDaoImpl.baseFindListByParams(entity));
+		return OperaResultUtil.baseFindListByParams(articleDao.baseFindListByParams(entity));
 	}
 
 	@Override
 	public OperaResult baseFindByPage(PageResult<Article> pageResult) {
-		Optional<PageResult<Article>> resultOptional = articleDaoImpl.baseFindByPage(pageResult);
+		Optional<PageResult<Article>> resultOptional = articleDao.baseFindByPage(pageResult);
 		resultOptional.ifPresent(pageResult1 -> pageResult1.getRows().forEach(article -> {
-            Optional<ArticleClassify> articleClassify = articleClassifyDaoImpl.baseFindById(article.getClassify());
+            Optional<ArticleClassify> articleClassify = articleClassifyDao.baseFindById(article.getClassify());
             articleClassify.ifPresent(articleClassify1 -> article.setClassifyName(articleClassify1.getName()));
         }));
 		return OperaResultUtil.baseFindByPage(resultOptional);

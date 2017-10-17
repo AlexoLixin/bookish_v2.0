@@ -16,14 +16,14 @@ import java.util.List;
  * @Modify:
  */
 @RestController
-@RequestMapping(value = "/system/rbac")
+@RequestMapping(value = "/system/rbac/permission")
 public class SysPermissionAction extends BaseAction<SysPermission> {
 
     @Autowired
     private SysPermissionService sysPermissionService;
 
     @Override
-    @PostMapping("/permission")
+    @PostMapping
     protected Object baseInsert(SysPermission sysPermission) {
         return sysPermissionService.doSave(sysPermission);
     }
@@ -34,7 +34,7 @@ public class SysPermissionAction extends BaseAction<SysPermission> {
     }
 
     @Override
-    @PutMapping("/permission")
+    @PutMapping
     protected Object baseUpdate(SysPermission sysPermission) {
         return sysPermissionService.baseUpdate(sysPermission);
     }
@@ -50,25 +50,25 @@ public class SysPermissionAction extends BaseAction<SysPermission> {
     }
 
     @Override
-    @GetMapping("/permission/{code}")
-    protected Object baseFindById(@PathVariable String code) {
+    @GetMapping
+    protected Object baseFindById(String code) {
         return sysPermissionService.baseFindById(code);
     }
 
     @Override
-    @GetMapping("/permission/all")
+    @GetMapping("/all")
     protected Object baseFindAll() {
         return sysPermissionService.baseFindAll();
     }
 
     @Override
-    @GetMapping("/permission/list")
+    @GetMapping("/list")
     protected Object baseFindListByParams(SysPermission sysPermission) {
         return sysPermissionService.baseFindListByParams(sysPermission);
     }
 
     @Override
-    @GetMapping("/permission/page")
+    @GetMapping("/page")
     protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysPermission sysPermission) {
         return sysPermissionService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysPermission));
     }
@@ -79,7 +79,7 @@ public class SysPermissionAction extends BaseAction<SysPermission> {
      * @param levels
      * @return
      */
-    @DeleteMapping("/permission")
+    @DeleteMapping
     protected Object doRemove(String codes,String levels) {
         return sysPermissionService.doRemove(codes,levels);
     }
@@ -88,7 +88,7 @@ public class SysPermissionAction extends BaseAction<SysPermission> {
      * 获取权限树
      * @return
      */
-    @GetMapping(value = "/permission/tree")
+    @GetMapping("/tree")
     public Object getTree() {
         return sysPermissionService.getTree();
     }

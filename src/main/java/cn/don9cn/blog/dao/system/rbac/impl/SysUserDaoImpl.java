@@ -1,6 +1,7 @@
-package cn.don9cn.blog.dao.system.rbac;
+package cn.don9cn.blog.dao.system.rbac.impl;
 
 import cn.don9cn.blog.dao.BaseDao;
+import cn.don9cn.blog.dao.system.rbac.interf.SysUserDao;
 import cn.don9cn.blog.model.system.rbac.SysUser;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -16,13 +17,14 @@ import java.util.Optional;
  *@Modify:
  **/
 @Repository
-public class SysUserDaoImpl implements BaseDao<SysUser> {
+public class SysUserDaoImpl implements SysUserDao {
 
     /**
      * 根据用户名查找用户
      * @param username
      * @return
      */
+    @Override
     public Optional<SysUser> findByUserName(String username) {
         return getMyMongoOperator().freeFindOne(Query.query(Criteria.where("username").is(username)),SysUser.class);
     }
@@ -32,6 +34,7 @@ public class SysUserDaoImpl implements BaseDao<SysUser> {
      * @param username
      * @return
      */
+    @Override
     public boolean checkUserName(String username) {
         boolean result = true;
         if(findByUserName(username).isPresent()){

@@ -1,6 +1,6 @@
-package cn.don9cn.blog.dao.system.file;
+package cn.don9cn.blog.dao.system.file.impl;
 
-import cn.don9cn.blog.dao.BaseDao;
+import cn.don9cn.blog.dao.system.file.interf.UploadFileDao;
 import cn.don9cn.blog.model.system.file.UploadFile;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
  * @Modify:
  */
 @Repository
-public class UploadFileDaoImpl implements BaseDao<UploadFile> {
+public class UploadFileDaoImpl implements UploadFileDao {
 
     public Optional<List<UploadFile>> findListInCodes(List<String> codes){
         return getMyMongoOperator().baseFindInIds(codes,UploadFile.class);

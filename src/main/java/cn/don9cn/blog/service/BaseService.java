@@ -1,7 +1,7 @@
 package cn.don9cn.blog.service;
 
 
-import cn.don9cn.blog.plugins.operation.core.OperaResult;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 
 import java.io.Serializable;

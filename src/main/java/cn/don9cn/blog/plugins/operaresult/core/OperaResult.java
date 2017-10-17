@@ -1,4 +1,4 @@
-package cn.don9cn.blog.plugins.operation.core;
+package cn.don9cn.blog.plugins.operaresult.core;
 
 
 import java.io.Serializable;

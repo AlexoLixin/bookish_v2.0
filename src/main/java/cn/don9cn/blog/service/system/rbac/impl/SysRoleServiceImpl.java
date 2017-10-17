@@ -1,10 +1,10 @@
 package cn.don9cn.blog.service.system.rbac.impl;
 
-import cn.don9cn.blog.dao.system.rbac.SysRoleDaoImpl;
+import cn.don9cn.blog.dao.system.rbac.interf.SysRoleDao;
 import cn.don9cn.blog.model.system.rbac.SysRole;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
-import cn.don9cn.blog.plugins.operation.core.OperaResult;
-import cn.don9cn.blog.plugins.operation.util.OperaResultUtil;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
+import cn.don9cn.blog.plugins.operaresult.util.OperaResultUtil;
 import cn.don9cn.blog.service.system.rbac.interf.SysRoleService;
 import cn.don9cn.blog.util.MyStringUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -26,34 +26,34 @@ import java.util.List;
 public class SysRoleServiceImpl implements SysRoleService {
 
 	@Autowired
-	private SysRoleDaoImpl sysRoleDaoImpl;
+	private SysRoleDao sysRoleDao;
 
 
 	@Override
 	public OperaResult baseInsert(SysRole entity) {
-		return OperaResultUtil.baseInsert(sysRoleDaoImpl.baseInsert(entity));
+		return OperaResultUtil.baseInsert(sysRoleDao.baseInsert(entity));
 	}
 
 	@Override
 	public OperaResult baseInsertBatch(List<SysRole> list) {
-		return OperaResultUtil.baseInsertBatch(sysRoleDaoImpl.baseInsertBatch(list));
+		return OperaResultUtil.baseInsertBatch(sysRoleDao.baseInsertBatch(list));
 	}
 
 	@Override
 	public OperaResult baseUpdate(SysRole entity) {
-		return OperaResultUtil.baseUpdate(sysRoleDaoImpl.baseUpdate(entity));
+		return OperaResultUtil.baseUpdate(sysRoleDao.baseUpdate(entity));
 	}
 
 	@Override
 	public OperaResult baseDeleteById(String id) {
-		return OperaResultUtil.baseRemove(sysRoleDaoImpl.baseDeleteById(id));
+		return OperaResultUtil.baseRemove(sysRoleDao.baseDeleteById(id));
 	}
 
 	@Override
 	public OperaResult baseDeleteBatch(String codes) {
 		if(StringUtils.isNotBlank(codes)){
 			List<String> codesList = MyStringUtil.codesStr2List(codes);
-			return OperaResultUtil.baseRemoveBatch(sysRoleDaoImpl.baseDeleteBatch(codesList));
+			return OperaResultUtil.baseRemoveBatch(sysRoleDao.baseDeleteBatch(codesList));
 		}else{
 			return new OperaResult(false,"删除失败,传入codes为空!");
 		}
@@ -61,21 +61,32 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 	@Override
 	public OperaResult baseFindById(String id) {
-		return OperaResultUtil.baseFindOne(sysRoleDaoImpl.baseFindById(id));
+		return OperaResultUtil.baseFindOne(sysRoleDao.baseFindById(id));
 	}
 
 	@Override
 	public OperaResult baseFindAll() {
-		return OperaResultUtil.baseFindAll(sysRoleDaoImpl.baseFindAll());
+		return OperaResultUtil.baseFindAll(sysRoleDao.baseFindAll());
 	}
 
 	@Override
 	public OperaResult baseFindListByParams(SysRole entity) {
-		return OperaResultUtil.baseFindListByParams(sysRoleDaoImpl.baseFindListByParams(entity));
+		return OperaResultUtil.baseFindListByParams(sysRoleDao.baseFindListByParams(entity));
 	}
 
 	@Override
 	public OperaResult baseFindByPage(PageResult<SysRole> pageResult) {
-		return OperaResultUtil.baseFindByPage(sysRoleDaoImpl.baseFindByPage(pageResult));
+		return OperaResultUtil.baseFindByPage(sysRoleDao.baseFindByPage(pageResult));
+	}
+
+	@Override
+	public OperaResult authorizeRole(String roleCode, String permissionCodes) {
+		SysRole role;
+		if(StringUtils.isNotBlank(permissionCodes)){
+			role = new SysRole(roleCode,permissionCodes);
+		}else{
+			role = new SysRole(roleCode,"");
+		}
+		return OperaResultUtil.baseUpdate(sysRoleDao.baseUpdate(role));
 	}
 }

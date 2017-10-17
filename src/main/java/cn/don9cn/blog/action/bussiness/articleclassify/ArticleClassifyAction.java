@@ -2,12 +2,8 @@ package cn.don9cn.blog.action.bussiness.articleclassify;
 
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
-import cn.don9cn.blog.plugins.operation.core.OperaResult;
-import cn.don9cn.blog.plugins.operation.util.OperaResultUtil;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.service.bussiness.articleclassify.interf.ArticleClassifyService;
-import cn.don9cn.blog.util.MyStringUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +19,7 @@ import java.util.List;
  * @createDate 2017-08-11 16:31:11
  */
 @RestController
-@RequestMapping(value = "/bussiness")
+@RequestMapping(value = "/bussiness/articleClassify")
 public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	
     private static Logger logger = Logger.getLogger(ArticleClassifyAction.class);
@@ -32,7 +28,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	private ArticleClassifyService articleClassifyService;
 
 	@Override
-	@PostMapping("/articleClassify")
+	@PostMapping
 	protected Object baseInsert(ArticleClassify articleClassify) {
 		return articleClassifyService.doSave(articleClassify);
 	}
@@ -43,7 +39,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	}
 
 	@Override
-	@PutMapping("/articleClassify")
+	@PutMapping
 	protected Object baseUpdate(ArticleClassify articleClassify) {
 		return articleClassifyService.baseUpdate(articleClassify);
 	}
@@ -59,25 +55,25 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	}
 
 	@Override
-	@GetMapping("/articleClassify/{code}")
-	protected Object baseFindById(@PathVariable String code) {
+	@GetMapping
+	protected Object baseFindById(String code) {
 		return articleClassifyService.baseFindById(code);
 	}
 
 	@Override
-	@GetMapping("/articleClassify/all")
+	@GetMapping("/all")
 	protected Object baseFindAll() {
 		return articleClassifyService.baseFindAll();
 	}
 
 	@Override
-	@GetMapping("/articleClassify/list")
+	@GetMapping("/list")
 	protected Object baseFindListByParams(ArticleClassify articleClassify) {
 		return articleClassifyService.baseFindListByParams(articleClassify);
 	}
 
 	@Override
-	@GetMapping("/articleClassify/page")
+	@GetMapping("/page")
 	protected Object baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,ArticleClassify articleClassify) {
 		return articleClassifyService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,articleClassify));
 	}
@@ -88,7 +84,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 * @param levels
 	 * @return
 	 */
-	@DeleteMapping("/articleClassify")
+	@DeleteMapping
 	protected Object doRemove(String codes,String levels) {
 		return articleClassifyService.doRemove(codes,levels);
 	}
@@ -97,7 +93,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 * 获取分类下拉列表
 	 * @return
 	 */
-	@GetMapping(value = "/articleClassify/selectOptions")
+	@GetMapping("/selectOptions")
 	public Object doGetSelectOptions() {
 		return articleClassifyService.doGetSelectOptions();
 	}
@@ -106,7 +102,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 * 获取分类树
 	 * @return
 	 */
-	@GetMapping(value = "/articleClassify/tree")
+	@GetMapping("/tree")
 	public Object getTree() {
 		return articleClassifyService.getTree();
 	}

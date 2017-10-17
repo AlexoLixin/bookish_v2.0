@@ -2,12 +2,8 @@ package cn.don9cn.blog.action.bussiness.article;
 
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.bussiness.article.Article;
-import cn.don9cn.blog.plugins.operation.core.OperaResult;
-import cn.don9cn.blog.plugins.operation.util.OperaResultUtil;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.service.bussiness.article.interf.ArticleService;
-import cn.don9cn.blog.util.MyStringUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +16,7 @@ import java.util.List;
  * @Modify:
  */
 @RestController
-@RequestMapping(value = "/bussiness")
+@RequestMapping(value = "/bussiness/article")
 public class ArticleAction extends BaseAction<Article> {
 
     @Autowired
@@ -28,7 +24,7 @@ public class ArticleAction extends BaseAction<Article> {
 
 
     @Override
-    @PostMapping("/article")
+    @PostMapping
     protected Object baseInsert(Article article) {
         return articleService.baseInsert(article);
     }
@@ -39,43 +35,43 @@ public class ArticleAction extends BaseAction<Article> {
     }
 
     @Override
-    @PutMapping("/article")
+    @PutMapping
     protected Object baseUpdate(Article article) {
         return articleService.baseUpdate(article);
     }
 
     @Override
-    @DeleteMapping("/article")
+    @DeleteMapping
     protected Object baseRemove(String code) {
         return articleService.baseDeleteById(code);
     }
 
     @Override
-    @DeleteMapping("/article/batch")
+    @DeleteMapping("/batch")
     protected Object baseRemoveBatch(String codes) {
         return articleService.baseDeleteBatch(codes);
     }
 
     @Override
-    @GetMapping("/article/{code}")
-    protected Object baseFindById(@PathVariable String code) {
+    @GetMapping
+    protected Object baseFindById(String code) {
         return articleService.baseFindById(code);
     }
 
     @Override
-    @GetMapping("/article/all")
+    @GetMapping("/all")
     protected Object baseFindAll() {
         return articleService.baseFindAll();
     }
 
     @Override
-    @GetMapping("/article/list")
+    @GetMapping("/list")
     protected Object baseFindListByParams(Article article) {
         return articleService.baseFindListByParams(article);
     }
 
     @Override
-    @GetMapping("/article/page")
+    @GetMapping("/page")
     protected Object baseFindByPage(int page, int limit,String startTime,String endTime, String orderBy, Article article) {
         return articleService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,article));
     }
@@ -85,7 +81,7 @@ public class ArticleAction extends BaseAction<Article> {
      * @param article
      * @return
      */
-    @PutMapping("/article/byUser")
+    @PutMapping("/byUser")
     public Object doUpdateByUser(Article article){
         return articleService.doUpdateByUser(article);
     }
@@ -95,7 +91,7 @@ public class ArticleAction extends BaseAction<Article> {
      * @param code
      * @return
      */
-    @DeleteMapping("/article/byUser")
+    @DeleteMapping("/byUser")
     public Object doRemoveByUser(String code) {
         return articleService.doRemoveByUser(code);
     }
@@ -105,7 +101,7 @@ public class ArticleAction extends BaseAction<Article> {
      * @param pageResult
      * @return
      */
-    @GetMapping("/article/page/byUser")
+    @GetMapping("/page/byUser")
     public Object doFindByPageByUser(PageResult<Article> pageResult) {
         return articleService.doFindByPageByUser(pageResult);
     }

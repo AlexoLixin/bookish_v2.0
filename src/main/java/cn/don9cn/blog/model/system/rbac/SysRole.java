@@ -4,6 +4,7 @@ package cn.don9cn.blog.model.system.rbac;
 import cn.don9cn.blog.annotation.DbColumn;
 import cn.don9cn.blog.annotation.DbCollection;
 import cn.don9cn.blog.model.BaseModel;
+import cn.don9cn.blog.util.MyStringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +31,20 @@ public class SysRole extends BaseModel {
     /**
      * 权限菜单主键集合
      */
-    private List<SysPermission> menuCodesList = new ArrayList<>();
+    private List<String> menuCodesList;
 
     /**
      * 权限菜单集合
      */
     private List<SysPermission> menuList = new ArrayList<>();
+
+    public SysRole(){}
+
+    public SysRole(String roleCode, String permissionCodes) {
+        this.setCode(roleCode);
+        this.menuCodesList = MyStringUtil.codesStr2List(permissionCodes);
+    }
+
 
     public String getIcon() {
         return icon;
@@ -70,11 +79,11 @@ public class SysRole extends BaseModel {
         this.menuList = menuList;
     }
 
-    public List<SysPermission> getMenuCodesList() {
+    public List<String> getMenuCodesList() {
         return menuCodesList;
     }
 
-    public void setMenuCodesList(List<SysPermission> menuCodesList) {
+    public void setMenuCodesList(List<String> menuCodesList) {
         this.menuCodesList = menuCodesList;
     }
 }

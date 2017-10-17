@@ -2,7 +2,7 @@ package cn.don9cn.blog.service.system.rbac.interf;
 
 
 import cn.don9cn.blog.model.system.rbac.SysUser;
-import cn.don9cn.blog.plugins.operation.core.OperaResult;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.BaseService;
 
 /**

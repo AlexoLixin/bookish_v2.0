@@ -1,6 +1,7 @@
-package cn.don9cn.blog.dao.bussiness.article;
+package cn.don9cn.blog.dao.bussiness.article.impl;
 
 import cn.don9cn.blog.dao.BaseDao;
+import cn.don9cn.blog.dao.bussiness.article.interf.ArticleAndFileDao;
 import cn.don9cn.blog.model.bussiness.article.Article;
 import cn.don9cn.blog.model.bussiness.article.ArticleAndFile;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
@@ -26,10 +27,7 @@ import java.util.stream.Collectors;
  * @Modify:
  */
 @Repository
-public class ArticleAndFileDaoImpl implements BaseDao<ArticleAndFile> {
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
+public class ArticleAndFileDaoImpl implements ArticleAndFileDao {
 
     /**
      * 根据articleCode删除记录

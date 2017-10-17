@@ -1,6 +1,7 @@
-package cn.don9cn.blog.dao.system.rbac;
+package cn.don9cn.blog.dao.system.rbac.impl;
 
 import cn.don9cn.blog.dao.BaseDao;
+import cn.don9cn.blog.dao.system.rbac.interf.SysRoleDao;
 import cn.don9cn.blog.model.system.rbac.SysRole;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,6 @@ import org.springframework.stereotype.Repository;
  *@Modify:
  **/
 @Repository
-public class SysRoleDaoImpl implements BaseDao<SysRole> {
+public class SysRoleDaoImpl implements SysRoleDao {
 
 }

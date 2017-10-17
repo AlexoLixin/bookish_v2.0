@@ -1,10 +1,10 @@
 package cn.don9cn.blog.service.bussiness.articleclassify.impl;
 
-import cn.don9cn.blog.dao.bussiness.articleclassify.ArticleClassifyDaoImpl;
+import cn.don9cn.blog.dao.bussiness.articleclassify.interf.ArticleClassifyDao;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
-import cn.don9cn.blog.plugins.operation.core.OperaResult;
-import cn.don9cn.blog.plugins.operation.util.OperaResultUtil;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
+import cn.don9cn.blog.plugins.operaresult.util.OperaResultUtil;
 import cn.don9cn.blog.service.bussiness.articleclassify.interf.ArticleClassifyService;
 import cn.don9cn.blog.support.vue.VueSelectOption;
 import cn.don9cn.blog.util.MyStringUtil;
@@ -29,35 +29,35 @@ import java.util.stream.Collectors;
 public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 
 	@Autowired
-	private ArticleClassifyDaoImpl articleClassifyDaoImpl;
+	private ArticleClassifyDao articleClassifyDao;
 
 
 	@Override
 	public OperaResult baseInsert(ArticleClassify entity) {
 		entity.setLeaf("Y");
-		return OperaResultUtil.baseInsert(articleClassifyDaoImpl.baseInsert(entity));
+		return OperaResultUtil.baseInsert(articleClassifyDao.baseInsert(entity));
 	}
 
 	@Override
 	public OperaResult baseInsertBatch(List<ArticleClassify> list) {
-		return OperaResultUtil.baseInsertBatch(articleClassifyDaoImpl.baseInsertBatch(list));
+		return OperaResultUtil.baseInsertBatch(articleClassifyDao.baseInsertBatch(list));
 	}
 
 	@Override
 	public OperaResult baseUpdate(ArticleClassify entity) {
-		return OperaResultUtil.baseUpdate(articleClassifyDaoImpl.baseUpdate(entity));
+		return OperaResultUtil.baseUpdate(articleClassifyDao.baseUpdate(entity));
 	}
 
 	@Override
 	public OperaResult baseDeleteById(String id) {
-		return OperaResultUtil.baseRemove(articleClassifyDaoImpl.baseDeleteById(id));
+		return OperaResultUtil.baseRemove(articleClassifyDao.baseDeleteById(id));
 	}
 
 	@Override
 	public OperaResult baseDeleteBatch(String codes) {
 		if(StringUtils.isNotBlank(codes)){
 			List<String> codesList = MyStringUtil.codesStr2List(codes);
-			return OperaResultUtil.baseRemoveBatch(articleClassifyDaoImpl.baseDeleteBatch(codesList));
+			return OperaResultUtil.baseRemoveBatch(articleClassifyDao.baseDeleteBatch(codesList));
 		}else{
 			return new OperaResult(false,"删除失败,传入codes为空!");
 		}
@@ -65,22 +65,22 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 
 	@Override
 	public OperaResult baseFindById(String id) {
-		return OperaResultUtil.baseFindOne(articleClassifyDaoImpl.baseFindById(id));
+		return OperaResultUtil.baseFindOne(articleClassifyDao.baseFindById(id));
 	}
 
 	@Override
 	public OperaResult baseFindAll() {
-		return OperaResultUtil.baseFindAll(articleClassifyDaoImpl.baseFindAll());
+		return OperaResultUtil.baseFindAll(articleClassifyDao.baseFindAll());
 	}
 
 	@Override
 	public OperaResult baseFindListByParams(ArticleClassify entity) {
-		return OperaResultUtil.baseFindListByParams(articleClassifyDaoImpl.baseFindListByParams(entity));
+		return OperaResultUtil.baseFindListByParams(articleClassifyDao.baseFindListByParams(entity));
 	}
 
 	@Override
 	public OperaResult baseFindByPage(PageResult<ArticleClassify> pageResult) {
-		return OperaResultUtil.baseFindByPage(articleClassifyDaoImpl.baseFindByPage(pageResult));
+		return OperaResultUtil.baseFindByPage(articleClassifyDao.baseFindByPage(pageResult));
 	}
 
 	/**
@@ -93,10 +93,10 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 		//将当前节点设置为叶子节点
 		articleClassify.setLeaf("Y");
 		//保存当前节点
-		OptionalInt optional = articleClassifyDaoImpl.baseInsert(articleClassify);
+		OptionalInt optional = articleClassifyDao.baseInsert(articleClassify);
 		//更新父节点为非叶子节点
 		if(!articleClassify.getParent().equals("ROOT")){
-			articleClassifyDaoImpl.baseUpdate(new ArticleClassify(articleClassify.getParent(),"N"));
+			articleClassifyDao.baseUpdate(new ArticleClassify(articleClassify.getParent(),"N"));
 		}
 		return OperaResultUtil.baseInsert(optional);
 	}
@@ -108,7 +108,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	@Override
 	public OperaResult getTree() {
 
-		Optional<List<ArticleClassify>> listOptional = articleClassifyDaoImpl.baseFindAll();
+		Optional<List<ArticleClassify>> listOptional = articleClassifyDao.baseFindAll();
 		Optional<List<ArticleClassify>> resultOptional;
 		if(listOptional.isPresent()){
 			List<ArticleClassify> all = listOptional.get();
@@ -145,7 +145,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	 */
 	@Override
 	public OperaResult doGetSelectOptions() {
-		List<ArticleClassify> allClassifies = articleClassifyDaoImpl.baseFindAll().get();
+		List<ArticleClassify> allClassifies = articleClassifyDao.baseFindAll().get();
 		Map<String, List<ArticleClassify>> map = allClassifies.stream().collect(Collectors.groupingBy(ArticleClassify::getCode));
 		List<VueSelectOption> result = allClassifies.stream().filter(t -> t.getLeaf().equals("Y")&&!t.getParent().equals("ROOT"))
 				.map(t -> new VueSelectOption("[" + map.get(t.getParent()).get(0).getName() + "] - " + t.getName(), t.getCode(), t.getLevel()))
@@ -166,7 +166,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 			List<String> codesList = MyStringUtil.codesStr2List(codes);
 			List<String> levelsList = MyStringUtil.codesStr2List(levels);
 			//删除当前分类
-			OptionalInt optional_1 = articleClassifyDaoImpl.baseDeleteBatch(codesList);
+			OptionalInt optional_1 = articleClassifyDao.baseDeleteBatch(codesList);
 			//级联删除分类
 			OptionalInt optional_2 = deleteCascade(levelsList);
 			//更新节点状态
@@ -184,7 +184,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	private OptionalInt deleteCascade(List<String> levelsList) {
 		int x = 0;
 		for(String level:levelsList){
-			int y = articleClassifyDaoImpl.deleteCascade(level).getAsInt();
+			int y = articleClassifyDao.deleteCascade(level).getAsInt();
 			x += y;
 		}
 		return OptionalInt.of(x);
@@ -195,7 +195,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	 * @return
 	 */
 	private OptionalInt updateLeaf() {
-		List<ArticleClassify> allClassifies = articleClassifyDaoImpl.baseFindAll().get();
+		List<ArticleClassify> allClassifies = articleClassifyDao.baseFindAll().get();
 		List<String> allCodes = allClassifies.stream().map(ArticleClassify::getCode).collect(Collectors.toList());
 		allCodes.add("ROOT");
 		List<String> temp = new ArrayList<>();
@@ -204,6 +204,6 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 				temp.add(classify.getParent());
 			}
 		});
-		return articleClassifyDaoImpl.updateLeaf(temp);
+		return articleClassifyDao.updateLeaf(temp);
 	}
 }

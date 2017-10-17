@@ -2,12 +2,8 @@ package cn.don9cn.blog.action.system.file;
 
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.system.file.UploadFile;
-import cn.don9cn.blog.plugins.operation.core.OperaResult;
-import cn.don9cn.blog.plugins.operation.util.OperaResultUtil;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.service.system.file.interf.UploadFileService;
-import cn.don9cn.blog.util.MyStringUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +18,7 @@ import java.util.List;
  * @Modify:
  */
 @RestController
-@RequestMapping(value = "/system/file")
+@RequestMapping(value = "/system/file/uploadFile")
 public class UploadFileAction extends BaseAction<UploadFile> {
 
     private static Logger logger = Logger.getLogger(UploadFileAction.class);
@@ -32,7 +28,7 @@ public class UploadFileAction extends BaseAction<UploadFile> {
 
 
     @Override
-    @PostMapping("/uploadFile")
+    @PostMapping
     protected Object baseInsert(UploadFile uploadFile) {
         return uploadFileService.insertWithCode(uploadFile);
     }
@@ -44,43 +40,43 @@ public class UploadFileAction extends BaseAction<UploadFile> {
 
 
     @Override
-    @PutMapping("/uploadFile")
+    @PutMapping
     protected Object baseUpdate(UploadFile uploadFile) {
         return uploadFileService.baseUpdate(uploadFile);
     }
 
     @Override
-    @DeleteMapping("/uploadFile")
+    @DeleteMapping
     protected Object baseRemove(String code) {
         return uploadFileService.baseDeleteById(code);
     }
 
     @Override
-    @DeleteMapping("/uploadFile/batch")
+    @DeleteMapping("/batch")
     protected Object baseRemoveBatch(String codes) {
         return uploadFileService.baseDeleteBatch(codes);
     }
 
     @Override
-    @GetMapping("/uploadFile/{code}")
-    protected Object baseFindById(@PathVariable String code) {
+    @GetMapping
+    protected Object baseFindById(String code) {
         return uploadFileService.baseFindById(code);
     }
 
     @Override
-    @GetMapping("/uploadFile/all")
+    @GetMapping("/all")
     protected Object baseFindAll() {
         return uploadFileService.baseFindAll();
     }
 
     @Override
-    @GetMapping("/uploadFile/list")
+    @GetMapping("/list")
     protected Object baseFindListByParams(UploadFile uploadFile) {
         return uploadFileService.baseFindListByParams(uploadFile);
     }
 
     @Override
-    @GetMapping("/uploadFile/page")
+    @GetMapping("/page")
     protected Object baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,UploadFile uploadFile) {
         return uploadFileService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,uploadFile));
     }

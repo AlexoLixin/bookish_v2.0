@@ -1,6 +1,7 @@
-package cn.don9cn.blog.dao.bussiness.article;
+package cn.don9cn.blog.dao.bussiness.article.impl;
 
 import cn.don9cn.blog.dao.BaseDao;
+import cn.don9cn.blog.dao.bussiness.article.interf.ArticleDao;
 import cn.don9cn.blog.model.bussiness.article.Article;
 import org.springframework.stereotype.Repository;
 
@@ -15,13 +16,14 @@ import java.util.Optional;
  * @Modify:
  */
 @Repository
-public class ArticleDaoImpl implements BaseDao<Article> {
+public class ArticleDaoImpl implements ArticleDao {
 
     /**
      * 开放给普通用户的删除文章功能,使其只能删除自己发布的文章
      * @param map
      * @return
      */
+    @Override
     public Optional<Integer> doRemoveByUser(Map<String, String> map) {
         return Optional.empty();
     }
@@ -31,6 +33,7 @@ public class ArticleDaoImpl implements BaseDao<Article> {
      * @param entity
      * @return
      */
+    @Override
     public Optional<Integer> doUpdateByUser(Article entity) {
         return Optional.empty();
     }

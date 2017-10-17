@@ -7,6 +7,7 @@ import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -32,7 +33,7 @@ public interface BaseDao<T extends BaseModel> {
      * @return
      */
     default Class<T> getTypeClass(){
-        Type type = this.getClass().getGenericInterfaces()[0];
+        Type type = this.getClass().getInterfaces()[0].getGenericInterfaces()[0];
         ParameterizedType type2 = (ParameterizedType) type;
         Type[] actualTypeArguments = type2.getActualTypeArguments();
         Type actualTypeArgument = actualTypeArguments[0];
