@@ -52,11 +52,6 @@ public class SysLoginlog extends BaseModel {
     @DbColumn(content = "登录状态")
     private String state;
 
-    //开始时间(用于按时间段筛选功能,不存入数据库)
-    private String startDate;
-    //结束时间(用于按时间段筛选功能,不存入数据库)
-    private String endDate;
-
     public String getIp() {
         return ip;
     }
@@ -113,19 +108,4 @@ public class SysLoginlog extends BaseModel {
         this.browser = browser;
     }
 
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
 }

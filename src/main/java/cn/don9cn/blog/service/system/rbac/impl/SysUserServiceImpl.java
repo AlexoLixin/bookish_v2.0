@@ -4,6 +4,7 @@ import cn.don9cn.blog.dao.system.rbac.impl.SysRoleDaoImpl;
 import cn.don9cn.blog.dao.system.rbac.impl.SysUserDaoImpl;
 import cn.don9cn.blog.dao.system.rbac.interf.SysRoleDao;
 import cn.don9cn.blog.dao.system.rbac.interf.SysUserDao;
+import cn.don9cn.blog.model.system.rbac.SysRole;
 import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -82,7 +84,20 @@ public class SysUserServiceImpl implements SysUserService {
 
 	@Override
 	public OperaResult baseFindByPage(PageResult<SysUser> pageResult) {
-		return OperaResultUtil.baseFindByPage(sysUserDao.baseFindByPage(pageResult));
+		Optional<PageResult<SysUser>> resultOptional = sysUserDao.baseFindByPage(pageResult);
+		resultOptional.ifPresent(page ->
+			page.getRows().forEach(sysUser -> {
+				List<String> roleCodes = sysUser.getRoleCodes();
+				if(roleCodes!=null) {
+					Optional<List<SysRole>> roleListOptional = sysRoleDao.baseFindListInIds(roleCodes);
+					roleListOptional.ifPresent(roleList -> {
+						sysUser.setRoleList(roleList);
+						sysUser.setRoleNames(roleList.stream().map(SysRole::getName).reduce("",(s1,s2)-> s1+" "+s2));
+					});
+				}
+			})
+		);
+		return OperaResultUtil.baseFindByPage(resultOptional);
 	}
 
 	@Override

@@ -102,7 +102,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 * 获取分类树
 	 * @return
 	 */
-	@GetMapping("/tree")
+	@GetMapping(path = {"/tree","/tree/public"})
 	public Object getTree() {
 		return articleClassifyService.getTree();
 	}

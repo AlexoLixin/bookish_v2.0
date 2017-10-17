@@ -128,7 +128,7 @@ public class UploadAction {
      * @param code
      * @param response
      */
-    @GetMapping("fileDownLoad")
+    @GetMapping("/fileDownLoad")
     public void doDownload(String code, HttpServletResponse response) {
         OperaResult operaResult = uploadFileService.baseFindById(code);
         if(operaResult.isSuccess()){

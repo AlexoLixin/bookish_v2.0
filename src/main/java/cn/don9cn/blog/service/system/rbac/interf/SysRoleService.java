@@ -20,4 +20,11 @@ public interface SysRoleService extends BaseService<SysRole> {
      * @return
      */
     OperaResult authorizeRole(String roleCode, String permissionCodes);
+
+    /**
+     * 根据主键查询角色,同时填充角色的权限集合
+     * @param code
+     * @return
+     */
+    OperaResult findRoleWithPermissions(String code);
 }

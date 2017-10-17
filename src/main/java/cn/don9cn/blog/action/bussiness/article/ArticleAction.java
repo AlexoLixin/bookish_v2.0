@@ -53,7 +53,7 @@ public class ArticleAction extends BaseAction<Article> {
     }
 
     @Override
-    @GetMapping
+    @GetMapping(path = {"","/public"})
     protected Object baseFindById(String code) {
         return articleService.baseFindById(code);
     }
@@ -65,7 +65,7 @@ public class ArticleAction extends BaseAction<Article> {
     }
 
     @Override
-    @GetMapping("/list")
+    @GetMapping(path = {"/list","/list/public"})
     protected Object baseFindListByParams(Article article) {
         return articleService.baseFindListByParams(article);
     }

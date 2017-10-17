@@ -35,5 +35,6 @@ public interface SysUserService extends BaseService<SysUser> {
      */
     OperaResult authorizeUser(String userCode,String roleCodes);
 
+
 }
 

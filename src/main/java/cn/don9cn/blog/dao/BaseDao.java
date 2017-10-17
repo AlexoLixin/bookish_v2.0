@@ -120,4 +120,13 @@ public interface BaseDao<T extends BaseModel> {
         return getMyMongoOperator().baseFindByPage(pageResult);
     }
 
+    /**
+     * 根据主键集合查询实体
+     * @param ids
+     * @return
+     */
+    default Optional<List<T>> baseFindListInIds(List<String> ids){
+        return getMyMongoOperator().baseFindInIds(ids,getTypeClass());
+    }
+
 }

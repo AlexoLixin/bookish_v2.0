@@ -1,6 +1,8 @@
 package cn.don9cn.blog.service.system.rbac.impl;
 
+import cn.don9cn.blog.dao.system.rbac.interf.SysPermissionDao;
 import cn.don9cn.blog.dao.system.rbac.interf.SysRoleDao;
+import cn.don9cn.blog.model.system.rbac.SysPermission;
 import cn.don9cn.blog.model.system.rbac.SysRole;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -27,6 +30,9 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 	@Autowired
 	private SysRoleDao sysRoleDao;
+
+	@Autowired
+	private SysPermissionDao sysPermissionDao;
 
 
 	@Override
@@ -88,5 +94,17 @@ public class SysRoleServiceImpl implements SysRoleService {
 			role = new SysRole(roleCode,"");
 		}
 		return OperaResultUtil.baseUpdate(sysRoleDao.baseUpdate(role));
+	}
+
+	@Override
+	public OperaResult findRoleWithPermissions(String code) {
+		Optional<SysRole> sysRoleOptional = sysRoleDao.baseFindById(code);
+		sysRoleOptional.ifPresent(sysRole -> {
+			if(sysRole.getMenuCodesList()!=null){
+				Optional<List<SysPermission>> optional = sysPermissionDao.baseFindListInIds(sysRole.getMenuCodesList());
+				optional.ifPresent(sysRole::setMenuList);
+			}
+		});
+		return OperaResultUtil.baseFindOne(sysRoleOptional);
 	}
 }
