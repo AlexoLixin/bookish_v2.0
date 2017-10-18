@@ -12,6 +12,7 @@ CompletableFuture 利用多核处理IO及网络并发请求<br>
 * 重构项目目录结构,更加简洁明了
 * 数据库改为MongoDB
 * 实现REST API
+* 日志管理
 
 ### 新的项目架构
 SpringBoot          基础架构<br>
