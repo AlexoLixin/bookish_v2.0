@@ -102,7 +102,13 @@ public class SysUserServiceImpl implements SysUserService {
 
 	@Override
 	public OperaResult findByUserName(String username) {
-		return OperaResultUtil.baseFindOne(sysUserDao.findByUserName(username));
+		Optional<SysUser> userOptional = sysUserDao.findByUserName(username);
+		userOptional.ifPresent(sysUser -> {
+			if(sysUser.getRoleCodes()!=null){
+				sysRoleDao.baseFindListInIds(sysUser.getRoleCodes()).ifPresent(sysUser::setRoleList);
+			}
+		});
+		return OperaResultUtil.baseFindOne(userOptional);
 	}
 
 	@Override

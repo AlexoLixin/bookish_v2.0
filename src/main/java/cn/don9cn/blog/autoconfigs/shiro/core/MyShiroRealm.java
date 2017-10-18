@@ -96,9 +96,12 @@ public class MyShiroRealm extends AuthorizingRealm {
                     userInfo = new SimpleAuthenticationInfo(username,password,this.getName());
                     setUserToSession(user);
                     setAuthenticationInfoToSession(userInfo);
+                }else{
+                    throw new UnknownAccountException("用户名或密码验证失败");
                 }
+            }else{
+                throw new UnknownAccountException("用户名或密码验证失败");
             }
-            throw new UnknownAccountException("用户名或密码验证失败");
         }
 
         return userInfo;

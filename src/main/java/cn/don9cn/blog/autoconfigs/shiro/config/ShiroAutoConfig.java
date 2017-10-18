@@ -1,18 +1,14 @@
 package cn.don9cn.blog.autoconfigs.shiro.config;
 
-import cn.don9cn.blog.autoconfigs.shiro.core.MyShiroFilter;
+import cn.don9cn.blog.autoconfigs.shiro.core.MyShiroAuthcFilter;
 import cn.don9cn.blog.autoconfigs.shiro.core.MyShiroRealm;
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.filter.authc.AnonymousFilter;
-import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -37,13 +33,13 @@ public class ShiroAutoConfig {
         // 设置拦截路径链,按照添加顺序进行拦截
         Map<String, String> filterChainMap = new LinkedHashMap<>();
         // 设置不拦截的路径
-        filterChainMap.put("/login/*","anon");                          //登录相关
-        filterChainMap.put("/system/rbac/user/register","anon");        //用户注册
-        filterChainMap.put("/bussiness/article/public","anon");         //加载文章
-        filterChainMap.put("/bussiness/article/list/public","anon");    //加载文章列表
-        filterChainMap.put("/bussiness/articleClassify/tree/public","anon");    //加载文章分类树
-        filterChainMap.put("/system/upload/image","anon");              //图片上传
-        filterChainMap.put("/system/upload/fileDownLoad","anon");       //文件下载
+        filterChainMap.put("/login/*","anon");                                  // 登录相关
+        filterChainMap.put("/system/rbac/user/register","anon");                // 用户注册
+        filterChainMap.put("/bussiness/article/public","anon");                 // 加载文章
+        filterChainMap.put("/bussiness/article/list/public","anon");            // 加载文章列表
+        filterChainMap.put("/bussiness/articleClassify/tree/public","anon");    // 加载文章分类树
+        filterChainMap.put("/system/upload/image","anon");                      // 图片上传
+        filterChainMap.put("/system/upload/fileDownLoad","anon");               // 文件下载
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainMap.put("/logout", "logout");
 
@@ -52,9 +48,9 @@ public class ShiroAutoConfig {
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainMap);
 
-        // 将权限验证拦截器替换成自定义的MyShiroFilter
+        // 将权限验证拦截器替换成自定义的MyShiroAuthcFilter
         Map<String, Filter> filterMap = new LinkedHashMap<>();
-        filterMap.put("authc",new MyShiroFilter());
+        filterMap.put("authc",new MyShiroAuthcFilter());
         shiroFilterFactoryBean.setFilters(filterMap);
 
         return shiroFilterFactoryBean;

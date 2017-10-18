@@ -33,7 +33,7 @@ public class LoginAction {
      */
     @RequestMapping("/needLogin")
     public Object needLogin(){
-        return new OperaResult(false,"用户身份过期,请注销后重新登录!");
+        return new OperaResult(false,"请先登录!");
     }
 
     /**
@@ -79,9 +79,10 @@ public class LoginAction {
         if(role.equals("admin")){
             return checkAdmin();
         }
-        return new LoginResult(true,"登陆成功!").setAdmin(false)
-                .setToken(SessionUtil.getTokenFromSession())
-                .setUser(SessionUtil.getUserFromSession());
+        return new LoginResult(true,"登陆成功!")
+                                .setAdmin(false)
+                                .setToken(SessionUtil.getTokenFromSession())
+                                .setUser(SessionUtil.getUserFromSession());
 
     }
 
@@ -95,11 +96,14 @@ public class LoginAction {
         if(roleList!=null && roleList.size()>0){
             for(SysRole role:roleList){
                 if(role.getEncoding().contains("ADMIN")){
-                    return new LoginResult(true,"登陆成功!").setAdmin(true).setToken(SessionUtil.getTokenFromSession()).setUser(user);
+                    return new LoginResult(true,"登陆成功!")
+                                        .setAdmin(true)
+                                        .setToken(SessionUtil.getTokenFromSession())
+                                        .setUser(user);
                 }
             }
         }
-        return new LoginResult(false,"对不起,您不是系统管理员!");
+        return new LoginResult(false,"对不起,您不是系统管理员");
     }
 
 

@@ -16,7 +16,7 @@ import java.io.IOException;
  * @Create: 2017/10/17 14:15
  * @Modify:
  */
-public class MyShiroFilter implements Filter {
+public class MyShiroAuthcFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
