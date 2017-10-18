@@ -10,7 +10,7 @@ import org.apache.shiro.subject.Subject;
  * @Create: 2017/10/17 15:38
  * @Modify:
  */
-public class SessionUtil {
+public class MyShiroSessionUtil {
 
     /**
      * 从session获取用户数据

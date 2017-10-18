@@ -6,9 +6,11 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * @author Don9
- * @create 2017-10-18-10:47
- **/
+ * @Author: liuxindong
+ * @Description: 请求解析工具,根据request获取其ip等信息
+ * @Create: 2017/10/18 14:14
+ * @Modify:
+ */
 public class RequestUtil {
 
     /**

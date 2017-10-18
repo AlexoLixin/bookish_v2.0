@@ -1,7 +1,7 @@
 package cn.don9cn.blog.autoconfigs.shiro.core;
 
 
-import cn.don9cn.blog.autoconfigs.shiro.util.SessionUtil;
+import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
@@ -47,7 +47,7 @@ public class MyShiroAuthcFilter implements Filter {
             //已登录,检查用户token与当前用户是否一致
             String token = request.getHeader("authorization");
             // token不一致,提示重新登录
-            if(!SessionUtil.getTokenFromSession().equals(token)){
+            if(!MyShiroSessionUtil.getTokenFromSession().equals(token)){
                 response.sendRedirect("/login/reLogin");
                 return;
             }

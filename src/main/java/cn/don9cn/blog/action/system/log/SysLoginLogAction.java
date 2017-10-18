@@ -23,21 +23,18 @@ public class SysLoginLogAction extends BaseAction<SysLoginLog> {
     private SysLoginLogService sysLoginLogService;
 
     @Override
-    @PostMapping
     protected Object baseInsert(SysLoginLog sysLoginLog) {
-        return sysLoginLogService.baseInsert(sysLoginLog);
+        return null;
     }
 
     @Override
-    @PostMapping("/batch")
     protected Object baseInsertBatch(List<SysLoginLog> list) {
-        return sysLoginLogService.baseInsertBatch(list);
+        return null;
     }
 
     @Override
-    @PutMapping
     protected Object baseUpdate(SysLoginLog sysLoginLog) {
-        return sysLoginLogService.baseUpdate(sysLoginLog);
+        return null;
     }
 
     @Override
@@ -59,15 +56,13 @@ public class SysLoginLogAction extends BaseAction<SysLoginLog> {
     }
 
     @Override
-    @GetMapping("/all")
     protected Object baseFindAll() {
-        return sysLoginLogService.baseFindAll();
+        return null;
     }
 
     @Override
-    @GetMapping("/list")
     protected Object baseFindListByParams(SysLoginLog sysLoginLog) {
-        return sysLoginLogService.baseFindListByParams(sysLoginLog);
+        return null;
     }
 
     @Override

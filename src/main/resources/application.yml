@@ -14,7 +14,9 @@ spring:
   data:
     mongodb:
       uri: mongodb://liuxindong:123456@127.0.0.1:27017/don9blog
-
+  # 开启aop
+  aop:
+    auto: true
 
 
 ######### 文件保存路径

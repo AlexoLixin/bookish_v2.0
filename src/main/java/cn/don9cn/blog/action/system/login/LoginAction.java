@@ -1,6 +1,7 @@
 package cn.don9cn.blog.action.system.login;
 
-import cn.don9cn.blog.autoconfigs.shiro.util.SessionUtil;
+import cn.don9cn.blog.annotation.SkipOperaLog;
+import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.model.system.LoginResult;
 import cn.don9cn.blog.model.system.log.SysLoginLog;
 import cn.don9cn.blog.model.system.rbac.SysRole;
@@ -26,6 +27,7 @@ import java.util.List;
  * @Create: 2017/10/17 16:44
  * @Modify:
  */
+@SkipOperaLog
 @RestController
 @RequestMapping("/login")
 public class LoginAction {
@@ -92,8 +94,8 @@ public class LoginAction {
         }
         return new LoginResult(true,"登陆成功!")
                                 .setAdmin(false)
-                                .setToken(SessionUtil.getTokenFromSession())
-                                .setUser(SessionUtil.getUserFromSession());
+                                .setToken(MyShiroSessionUtil.getTokenFromSession())
+                                .setUser(MyShiroSessionUtil.getUserFromSession());
 
     }
 
@@ -102,14 +104,14 @@ public class LoginAction {
      * @return
      */
     private LoginResult checkAdmin(){
-        SysUser user = (SysUser) SessionUtil.getUserFromSession();
+        SysUser user = (SysUser) MyShiroSessionUtil.getUserFromSession();
         List<SysRole> roleList = user.getRoleList();
         if(roleList!=null && roleList.size()>0){
             for(SysRole role:roleList){
                 if(role.getEncoding().contains("ADMIN")){
                     return new LoginResult(true,"登陆成功!")
                                         .setAdmin(true)
-                                        .setToken(SessionUtil.getTokenFromSession())
+                                        .setToken(MyShiroSessionUtil.getTokenFromSession())
                                         .setUser(user);
                 }
             }

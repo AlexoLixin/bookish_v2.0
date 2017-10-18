@@ -1,6 +1,6 @@
 package cn.don9cn.blog.autoconfigs.shiro.core;
 
-import cn.don9cn.blog.autoconfigs.shiro.util.SessionUtil;
+import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.model.system.rbac.SysPermission;
 import cn.don9cn.blog.model.system.rbac.SysRole;
 import cn.don9cn.blog.model.system.rbac.SysUser;
@@ -46,11 +46,11 @@ public class MyShiroRealm extends AuthorizingRealm {
         String username = (String) super.getAvailablePrincipal(principalCollection);
 
         // 1.从session中获取用户的权限信息
-        SimpleAuthorizationInfo info = (SimpleAuthorizationInfo) SessionUtil.getAuthorizationInfo();
+        SimpleAuthorizationInfo info = (SimpleAuthorizationInfo) MyShiroSessionUtil.getAuthorizationInfo();
         if(info == null){
             // 2.session中未缓存用户权限信息，从数据库查询，然后将结果放入session中作为缓存
             info = new SimpleAuthorizationInfo();
-            SysUser user = (SysUser) SessionUtil.getUserFromSession();  //权限验证发生在登陆之后,所以此时session中是一定会有登录用户信息的
+            SysUser user = (SysUser) MyShiroSessionUtil.getUserFromSession();  //权限验证发生在登陆之后,所以此时session中是一定会有登录用户信息的
             List<String> userRoleCodes = user.getRoleCodes();
             if(userRoleCodes !=null){
                 for(String roleCode:userRoleCodes){
@@ -86,7 +86,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         String password = new String(token.getPassword());
 
         // 1.从session中获取用户认证信息
-        SimpleAuthenticationInfo userInfo = (SimpleAuthenticationInfo) SessionUtil.getAuthenticationInfo();
+        SimpleAuthenticationInfo userInfo = (SimpleAuthenticationInfo) MyShiroSessionUtil.getAuthenticationInfo();
         if(userInfo == null){
             // 2.session中没有用户认证信息，查询数据库，重新验证用户
             OperaResult operaResult = sysUserService.findByUserName(username);
