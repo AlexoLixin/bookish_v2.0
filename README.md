@@ -1,6 +1,6 @@
 # don9cn_v2.0
 version 2.0 of my blog application which based on SpringBoot<br>
-基于SpringBoot的原don9cn重构版本
+基于SpringBoot的原don9cn_v1.0重构版本
 
 ### 重构内容
 * 基础架构改为Spring Boot
