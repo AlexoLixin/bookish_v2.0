@@ -37,29 +37,29 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 	@Override
 	public OperaResult baseInsert(SysRole entity) {
-		return OperaResultUtil.baseInsert(sysRoleDao.baseInsert(entity));
+		return OperaResultUtil.insert(sysRoleDao.baseInsert(entity));
 	}
 
 	@Override
 	public OperaResult baseInsertBatch(List<SysRole> list) {
-		return OperaResultUtil.baseInsertBatch(sysRoleDao.baseInsertBatch(list));
+		return OperaResultUtil.insertBatch(sysRoleDao.baseInsertBatch(list));
 	}
 
 	@Override
 	public OperaResult baseUpdate(SysRole entity) {
-		return OperaResultUtil.baseUpdate(sysRoleDao.baseUpdate(entity));
+		return OperaResultUtil.update(sysRoleDao.baseUpdate(entity));
 	}
 
 	@Override
 	public OperaResult baseDeleteById(String id) {
-		return OperaResultUtil.baseRemove(sysRoleDao.baseDeleteById(id));
+		return OperaResultUtil.deleteOne(sysRoleDao.baseDeleteById(id));
 	}
 
 	@Override
 	public OperaResult baseDeleteBatch(String codes) {
 		if(StringUtils.isNotBlank(codes)){
 			List<String> codesList = MyStringUtil.codesStr2List(codes);
-			return OperaResultUtil.baseRemoveBatch(sysRoleDao.baseDeleteBatch(codesList));
+			return OperaResultUtil.deleteBatch(sysRoleDao.baseDeleteBatch(codesList));
 		}else{
 			return new OperaResult(false,"删除失败,传入codes为空!");
 		}
@@ -67,22 +67,22 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 	@Override
 	public OperaResult baseFindById(String id) {
-		return OperaResultUtil.baseFindOne(sysRoleDao.baseFindById(id));
+		return OperaResultUtil.findOne(sysRoleDao.baseFindById(id));
 	}
 
 	@Override
 	public OperaResult baseFindAll() {
-		return OperaResultUtil.baseFindAll(sysRoleDao.baseFindAll());
+		return OperaResultUtil.findAll(sysRoleDao.baseFindAll());
 	}
 
 	@Override
 	public OperaResult baseFindListByParams(SysRole entity) {
-		return OperaResultUtil.baseFindListByParams(sysRoleDao.baseFindListByParams(entity));
+		return OperaResultUtil.findListByParams(sysRoleDao.baseFindListByParams(entity));
 	}
 
 	@Override
 	public OperaResult baseFindByPage(PageResult<SysRole> pageResult) {
-		return OperaResultUtil.baseFindByPage(sysRoleDao.baseFindByPage(pageResult));
+		return OperaResultUtil.findPage(sysRoleDao.baseFindByPage(pageResult));
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		}else{
 			role = new SysRole(roleCode,"");
 		}
-		return OperaResultUtil.baseUpdate(sysRoleDao.baseUpdate(role));
+		return OperaResultUtil.update(sysRoleDao.baseUpdate(role));
 	}
 
 	@Override
@@ -105,6 +105,6 @@ public class SysRoleServiceImpl implements SysRoleService {
 				optional.ifPresent(sysRole::setMenuList);
 			}
 		});
-		return OperaResultUtil.baseFindOne(sysRoleOptional);
+		return OperaResultUtil.findOne(sysRoleOptional);
 	}
 }

@@ -1,7 +1,5 @@
 package cn.don9cn.blog.service.system.rbac.impl;
 
-import cn.don9cn.blog.dao.system.rbac.impl.SysRoleDaoImpl;
-import cn.don9cn.blog.dao.system.rbac.impl.SysUserDaoImpl;
 import cn.don9cn.blog.dao.system.rbac.interf.SysRoleDao;
 import cn.don9cn.blog.dao.system.rbac.interf.SysUserDao;
 import cn.don9cn.blog.model.system.rbac.SysRole;
@@ -39,29 +37,29 @@ public class SysUserServiceImpl implements SysUserService {
 
 	@Override
 	public OperaResult baseInsert(SysUser entity) {
-		return OperaResultUtil.baseInsert(sysUserDao.baseInsert(entity));
+		return OperaResultUtil.insert(sysUserDao.baseInsert(entity));
 	}
 
 	@Override
 	public OperaResult baseInsertBatch(List<SysUser> list) {
-		return OperaResultUtil.baseInsertBatch(sysUserDao.baseInsertBatch(list));
+		return OperaResultUtil.insertBatch(sysUserDao.baseInsertBatch(list));
 	}
 
 	@Override
 	public OperaResult baseUpdate(SysUser entity) {
-		return OperaResultUtil.baseUpdate(sysUserDao.baseUpdate(entity));
+		return OperaResultUtil.update(sysUserDao.baseUpdate(entity));
 	}
 
 	@Override
 	public OperaResult baseDeleteById(String id) {
-		return OperaResultUtil.baseRemove(sysUserDao.baseDeleteById(id));
+		return OperaResultUtil.deleteOne(sysUserDao.baseDeleteById(id));
 	}
 
 	@Override
 	public OperaResult baseDeleteBatch(String codes) {
 		if(StringUtils.isNotBlank(codes)){
 			List<String> codesList = MyStringUtil.codesStr2List(codes);
-			return OperaResultUtil.baseRemoveBatch(sysUserDao.baseDeleteBatch(codesList));
+			return OperaResultUtil.deleteBatch(sysUserDao.baseDeleteBatch(codesList));
 		}else{
 			return new OperaResult(false,"删除失败,传入codes为空!");
 		}
@@ -69,17 +67,17 @@ public class SysUserServiceImpl implements SysUserService {
 
 	@Override
 	public OperaResult baseFindById(String id) {
-		return OperaResultUtil.baseFindOne(sysUserDao.baseFindById(id));
+		return OperaResultUtil.findOne(sysUserDao.baseFindById(id));
 	}
 
 	@Override
 	public OperaResult baseFindAll() {
-		return OperaResultUtil.baseFindAll(sysUserDao.baseFindAll());
+		return OperaResultUtil.findAll(sysUserDao.baseFindAll());
 	}
 
 	@Override
 	public OperaResult baseFindListByParams(SysUser entity) {
-		return OperaResultUtil.baseFindListByParams(sysUserDao.baseFindListByParams(entity));
+		return OperaResultUtil.findListByParams(sysUserDao.baseFindListByParams(entity));
 	}
 
 	@Override
@@ -97,7 +95,7 @@ public class SysUserServiceImpl implements SysUserService {
 				}
 			})
 		);
-		return OperaResultUtil.baseFindByPage(resultOptional);
+		return OperaResultUtil.findPage(resultOptional);
 	}
 
 	@Override
@@ -105,10 +103,13 @@ public class SysUserServiceImpl implements SysUserService {
 		Optional<SysUser> userOptional = sysUserDao.findByUserName(username);
 		userOptional.ifPresent(sysUser -> {
 			if(sysUser.getRoleCodes()!=null){
-				sysRoleDao.baseFindListInIds(sysUser.getRoleCodes()).ifPresent(sysUser::setRoleList);
+				sysRoleDao.baseFindListInIds(sysUser.getRoleCodes()).ifPresent(roleList -> {
+					sysUser.setRoleList(roleList);
+					sysUser.setRoleNames(roleList.stream().map(SysRole::getName).reduce("",(s1,s2)-> s1+" "+s2));
+				});
 			}
 		});
-		return OperaResultUtil.baseFindOne(userOptional);
+		return OperaResultUtil.findOne(userOptional);
 	}
 
 	@Override
@@ -127,6 +128,6 @@ public class SysUserServiceImpl implements SysUserService {
 		}else{
 			user = new SysUser(userCode,"");
 		}
-		return OperaResultUtil.baseUpdate(sysUserDao.baseUpdate(user));
+		return OperaResultUtil.update(sysUserDao.baseUpdate(user));
 	}
 }

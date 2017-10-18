@@ -35,29 +35,29 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	@Override
 	public OperaResult baseInsert(ArticleClassify entity) {
 		entity.setLeaf("Y");
-		return OperaResultUtil.baseInsert(articleClassifyDao.baseInsert(entity));
+		return OperaResultUtil.insert(articleClassifyDao.baseInsert(entity));
 	}
 
 	@Override
 	public OperaResult baseInsertBatch(List<ArticleClassify> list) {
-		return OperaResultUtil.baseInsertBatch(articleClassifyDao.baseInsertBatch(list));
+		return OperaResultUtil.insertBatch(articleClassifyDao.baseInsertBatch(list));
 	}
 
 	@Override
 	public OperaResult baseUpdate(ArticleClassify entity) {
-		return OperaResultUtil.baseUpdate(articleClassifyDao.baseUpdate(entity));
+		return OperaResultUtil.update(articleClassifyDao.baseUpdate(entity));
 	}
 
 	@Override
 	public OperaResult baseDeleteById(String id) {
-		return OperaResultUtil.baseRemove(articleClassifyDao.baseDeleteById(id));
+		return OperaResultUtil.deleteOne(articleClassifyDao.baseDeleteById(id));
 	}
 
 	@Override
 	public OperaResult baseDeleteBatch(String codes) {
 		if(StringUtils.isNotBlank(codes)){
 			List<String> codesList = MyStringUtil.codesStr2List(codes);
-			return OperaResultUtil.baseRemoveBatch(articleClassifyDao.baseDeleteBatch(codesList));
+			return OperaResultUtil.deleteBatch(articleClassifyDao.baseDeleteBatch(codesList));
 		}else{
 			return new OperaResult(false,"删除失败,传入codes为空!");
 		}
@@ -65,22 +65,22 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 
 	@Override
 	public OperaResult baseFindById(String id) {
-		return OperaResultUtil.baseFindOne(articleClassifyDao.baseFindById(id));
+		return OperaResultUtil.findOne(articleClassifyDao.baseFindById(id));
 	}
 
 	@Override
 	public OperaResult baseFindAll() {
-		return OperaResultUtil.baseFindAll(articleClassifyDao.baseFindAll());
+		return OperaResultUtil.findAll(articleClassifyDao.baseFindAll());
 	}
 
 	@Override
 	public OperaResult baseFindListByParams(ArticleClassify entity) {
-		return OperaResultUtil.baseFindListByParams(articleClassifyDao.baseFindListByParams(entity));
+		return OperaResultUtil.findListByParams(articleClassifyDao.baseFindListByParams(entity));
 	}
 
 	@Override
 	public OperaResult baseFindByPage(PageResult<ArticleClassify> pageResult) {
-		return OperaResultUtil.baseFindByPage(articleClassifyDao.baseFindByPage(pageResult));
+		return OperaResultUtil.findPage(articleClassifyDao.baseFindByPage(pageResult));
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 		if(!articleClassify.getParent().equals("ROOT")){
 			articleClassifyDao.baseUpdate(new ArticleClassify(articleClassify.getParent(),"N"));
 		}
-		return OperaResultUtil.baseInsert(optional);
+		return OperaResultUtil.insert(optional);
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 		}else{
 			resultOptional =  Optional.of(new ArrayList<>());
 		}
-		return OperaResultUtil.baseFindAll(resultOptional);
+		return OperaResultUtil.findAll(resultOptional);
 
 	}
 
@@ -151,7 +151,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 				.map(t -> new VueSelectOption("[" + map.get(t.getParent()).get(0).getName() + "] - " + t.getName(), t.getCode(), t.getLevel()))
 				.sorted(Comparator.comparing(t -> Integer.parseInt(t.getLevel())))
 				.collect(Collectors.toList());
-		return OperaResultUtil.baseFindAll(Optional.ofNullable(result));
+		return OperaResultUtil.findAll(Optional.ofNullable(result));
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 			OptionalInt optional_2 = deleteCascade(levelsList);
 			//更新节点状态
 			updateLeaf();
-			return OperaResultUtil.baseRemove(OptionalInt.of(optional_1.orElse(0)+optional_2.orElse(0)));
+			return OperaResultUtil.deleteOne(OptionalInt.of(optional_1.orElse(0)+optional_2.orElse(0)));
 		}else{
 			return new OperaResult(false,"传入codes或者levels为空!");
 		}

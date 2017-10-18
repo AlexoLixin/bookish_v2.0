@@ -13,7 +13,7 @@ import cn.don9cn.blog.model.BaseModel;
  * @Modify:
  */
 @DbCollection
-public class SysLoginlog extends BaseModel {
+public class SysLoginLog extends BaseModel {
 
 
     /**
@@ -106,6 +106,11 @@ public class SysLoginlog extends BaseModel {
 
     public void setBrowser(String browser) {
         this.browser = browser;
+    }
+
+    public SysLoginLog withState(String state) {
+        this.state = state;
+        return this;
     }
 
 }

@@ -31,29 +31,29 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Override
     public OperaResult baseInsert(SysPermission entity) {
         entity.setLeaf("Y");
-        return OperaResultUtil.baseInsert(sysPermissionDao.baseInsert(entity));
+        return OperaResultUtil.insert(sysPermissionDao.baseInsert(entity));
     }
 
     @Override
     public OperaResult baseInsertBatch(List<SysPermission> list) {
-        return OperaResultUtil.baseInsertBatch(sysPermissionDao.baseInsertBatch(list));
+        return OperaResultUtil.insertBatch(sysPermissionDao.baseInsertBatch(list));
     }
 
     @Override
     public OperaResult baseUpdate(SysPermission entity) {
-        return OperaResultUtil.baseUpdate(sysPermissionDao.baseUpdate(entity));
+        return OperaResultUtil.update(sysPermissionDao.baseUpdate(entity));
     }
 
     @Override
     public OperaResult baseDeleteById(String id) {
-        return OperaResultUtil.baseRemove(sysPermissionDao.baseDeleteById(id));
+        return OperaResultUtil.deleteOne(sysPermissionDao.baseDeleteById(id));
     }
 
     @Override
     public OperaResult baseDeleteBatch(String codes) {
         if(StringUtils.isNotBlank(codes)){
             List<String> codesList = MyStringUtil.codesStr2List(codes);
-            return OperaResultUtil.baseRemoveBatch(sysPermissionDao.baseDeleteBatch(codesList));
+            return OperaResultUtil.deleteBatch(sysPermissionDao.baseDeleteBatch(codesList));
         }else{
             return new OperaResult(false,"删除失败,传入codes为空!");
         }
@@ -61,22 +61,22 @@ public class SysPermissionServiceImpl implements SysPermissionService {
 
     @Override
     public OperaResult baseFindById(String id) {
-        return OperaResultUtil.baseFindOne(sysPermissionDao.baseFindById(id));
+        return OperaResultUtil.findOne(sysPermissionDao.baseFindById(id));
     }
 
     @Override
     public OperaResult baseFindAll() {
-        return OperaResultUtil.baseFindAll(sysPermissionDao.baseFindAll());
+        return OperaResultUtil.findAll(sysPermissionDao.baseFindAll());
     }
 
     @Override
     public OperaResult baseFindListByParams(SysPermission entity) {
-        return OperaResultUtil.baseFindListByParams(sysPermissionDao.baseFindListByParams(entity));
+        return OperaResultUtil.findListByParams(sysPermissionDao.baseFindListByParams(entity));
     }
 
     @Override
     public OperaResult baseFindByPage(PageResult<SysPermission> pageResult) {
-        return OperaResultUtil.baseFindByPage(sysPermissionDao.baseFindByPage(pageResult));
+        return OperaResultUtil.findPage(sysPermissionDao.baseFindByPage(pageResult));
     }
 
 
@@ -90,7 +90,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         if(!sysPermission.getParent().equals("ROOT")){
             sysPermissionDao.baseUpdate(new SysPermission(sysPermission.getParent(),"N"));
         }
-        return OperaResultUtil.baseInsert(optional);
+        return OperaResultUtil.insert(optional);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         }else{
             resultOptional =  Optional.of(new ArrayList<>());
         }
-        return OperaResultUtil.baseFindAll(resultOptional);
+        return OperaResultUtil.findAll(resultOptional);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
             OptionalInt optional_2 = deleteCascade(levelsList);
             //更新节点状态
             updateLeaf();
-            return OperaResultUtil.baseRemove(OptionalInt.of(optional_1.orElse(0)+optional_2.orElse(0)));
+            return OperaResultUtil.deleteOne(OptionalInt.of(optional_1.orElse(0)+optional_2.orElse(0)));
         }else{
             return new OperaResult(false,"传入codes或者levels为空!");
         }

@@ -22,7 +22,7 @@ public class OperaResultUtil {
      * @param optional
      * @return
      */
-    public static OperaResult baseInsert(OptionalInt optional){
+    public static OperaResult insert(OptionalInt optional){
         if(optional.isPresent() && optional.getAsInt()>0){
             return new OperaResult(true,"添加成功");
         }
@@ -34,7 +34,7 @@ public class OperaResultUtil {
      * @param optional
      * @return
      */
-    public static OperaResult baseInsertBatch(OptionalInt optional){
+    public static OperaResult insertBatch(OptionalInt optional){
         if(optional.isPresent() && optional.getAsInt()>0){
             return new OperaResult(true,"添加成功");
         }
@@ -46,7 +46,7 @@ public class OperaResultUtil {
      * @param optional
      * @return
      */
-    public static OperaResult baseUpdate(OptionalInt optional){
+    public static OperaResult update(OptionalInt optional){
         if(optional.isPresent() && optional.getAsInt()>0){
             return new OperaResult(true,"更新成功");
         }
@@ -58,7 +58,7 @@ public class OperaResultUtil {
      * @param optional
      * @return
      */
-    public static OperaResult baseRemove(OptionalInt optional){
+    public static OperaResult deleteOne(OptionalInt optional){
         if(optional.isPresent()){
             return new OperaResult(true,"删除成功,"+optional.getAsInt()+"条数据被删除");
         }
@@ -70,7 +70,7 @@ public class OperaResultUtil {
      * @param optional
      * @return
      */
-    public static OperaResult baseRemoveBatch(OptionalInt optional){
+    public static OperaResult deleteBatch(OptionalInt optional){
         if(optional.isPresent()){
             return new OperaResult(true,"删除成功,"+optional.getAsInt()+"条数据被删除");
         }
@@ -82,7 +82,7 @@ public class OperaResultUtil {
      * @param optional
      * @return
      */
-    public static <T extends BaseModel> OperaResult baseFindOne(Optional<T> optional){
+    public static <T extends BaseModel> OperaResult findOne(Optional<T> optional){
         return optional.map(t -> new OperaResult(true, "查询成功").setObj(t))
                         .orElseGet(() -> new OperaResult(false, "查询失败"));
     }
@@ -92,7 +92,7 @@ public class OperaResultUtil {
      * @param optional
      * @return
      */
-    public static <T extends BaseModel> OperaResult baseFindAll(Optional<List<T>> optional){
+    public static <T extends BaseModel> OperaResult findAll(Optional<List<T>> optional){
         return optional.map(ts -> new OperaResult(true, "查询成功").setObj(ts))
                         .orElseGet(() -> new OperaResult(false, "查询失败"));
     }
@@ -102,7 +102,7 @@ public class OperaResultUtil {
      * @param optional
      * @return
      */
-    public static <T extends BaseModel> OperaResult baseFindListByParams(Optional<List<T>> optional){
+    public static <T extends BaseModel> OperaResult findListByParams(Optional<List<T>> optional){
         return optional.map(ts -> new OperaResult(true, "查询成功").setObj(ts))
                         .orElseGet(() -> new OperaResult(false, "查询失败"));
     }
@@ -112,7 +112,7 @@ public class OperaResultUtil {
      * @param optional
      * @return
      */
-    public static <T extends BaseModel> OperaResult baseFindByPage(Optional<PageResult<T>> optional){
+    public static <T extends BaseModel> OperaResult findPage(Optional<PageResult<T>> optional){
         return optional.map(tPageResult -> new OperaResult(true, "分页数据查询成功").setObj(tPageResult))
                         .orElseGet(() -> new OperaResult(false, "分页数据查询失败"));
     }

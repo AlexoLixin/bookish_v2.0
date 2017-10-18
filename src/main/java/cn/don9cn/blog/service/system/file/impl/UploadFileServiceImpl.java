@@ -38,29 +38,29 @@ public class UploadFileServiceImpl implements UploadFileService {
 
 	@Override
 	public OperaResult baseInsert(UploadFile entity) {
-		return OperaResultUtil.baseInsert(uploadFileDao.baseInsert(entity));
+		return OperaResultUtil.insert(uploadFileDao.baseInsert(entity));
 	}
 
 	@Override
 	public OperaResult baseInsertBatch(List<UploadFile> list) {
-		return OperaResultUtil.baseInsertBatch(uploadFileDao.baseInsertBatch(list));
+		return OperaResultUtil.insertBatch(uploadFileDao.baseInsertBatch(list));
 	}
 
 	@Override
 	public OperaResult baseUpdate(UploadFile entity) {
-		return OperaResultUtil.baseUpdate(uploadFileDao.baseUpdate(entity));
+		return OperaResultUtil.update(uploadFileDao.baseUpdate(entity));
 	}
 
 	@Override
 	public OperaResult baseDeleteById(String id) {
-		return OperaResultUtil.baseRemove(uploadFileDao.baseDeleteById(id));
+		return OperaResultUtil.deleteOne(uploadFileDao.baseDeleteById(id));
 	}
 
 	@Override
 	public OperaResult baseDeleteBatch(String codes) {
 		if(StringUtils.isNotBlank(codes)){
 			List<String> codesList = MyStringUtil.codesStr2List(codes);
-			return OperaResultUtil.baseRemoveBatch(uploadFileDao.baseDeleteBatch(codesList));
+			return OperaResultUtil.deleteBatch(uploadFileDao.baseDeleteBatch(codesList));
 		}else{
 			return new OperaResult(false,"删除失败,传入codes为空!");
 		}
@@ -68,17 +68,17 @@ public class UploadFileServiceImpl implements UploadFileService {
 
 	@Override
 	public OperaResult baseFindById(String id) {
-		return OperaResultUtil.baseFindOne(uploadFileDao.baseFindById(id));
+		return OperaResultUtil.findOne(uploadFileDao.baseFindById(id));
 	}
 
 	@Override
 	public OperaResult baseFindAll() {
-		return OperaResultUtil.baseFindAll(uploadFileDao.baseFindAll());
+		return OperaResultUtil.findAll(uploadFileDao.baseFindAll());
 	}
 
 	@Override
 	public OperaResult baseFindListByParams(UploadFile entity) {
-		return OperaResultUtil.baseFindListByParams(uploadFileDao.baseFindListByParams(entity));
+		return OperaResultUtil.findListByParams(uploadFileDao.baseFindListByParams(entity));
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class UploadFileServiceImpl implements UploadFileService {
 		page.ifPresent(pageResult1 ->
 			pageResult1.getRows().forEach(uploadFile -> articleAndFileDao.fillLink(uploadFile))
 		);
-		return OperaResultUtil.baseFindByPage(page);
+		return OperaResultUtil.findPage(page);
 	}
 
 	/**

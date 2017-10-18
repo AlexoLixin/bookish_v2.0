@@ -158,7 +158,7 @@ public class MyMongoOperator {
             entity.setCreateTime(DateUtil.getCreateDateString());
             mongoTemplate.insert(entity,getCollectionName(entity));
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.baseInsert 插入失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.insert 插入失败");
         }
         int x = 1;
         return OptionalInt.of(x);
@@ -179,7 +179,7 @@ public class MyMongoOperator {
         try{
             mongoTemplate.insert(list,collectionName);
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.baseInsertBatch 批量插入失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.insertBatch 批量插入失败");
         }
         return OptionalInt.of(list.size());
     }
@@ -197,7 +197,7 @@ public class MyMongoOperator {
             x = mongoTemplate.updateFirst(createDefaultQuery(entity),
                     createDefaultUpdate(entity),entity.getClass(),getCollectionName(entity)).getN();
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.baseUpdate 更新失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.update 更新失败");
         }
         return OptionalInt.of(x);
     }
@@ -321,7 +321,7 @@ public class MyMongoOperator {
         try{
             return Optional.ofNullable(mongoTemplate.find(query, (Class<T>) entity.getClass(),getCollectionName(entity)));
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.baseFindListByParams 查询失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.findListByParams 查询失败");
         }
     }
 
@@ -335,7 +335,7 @@ public class MyMongoOperator {
         try{
             return Optional.ofNullable(mongoTemplate.findAll(typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.baseFindAll 查询失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.findAll 查询失败");
         }
     }
 
@@ -378,7 +378,7 @@ public class MyMongoOperator {
             pageResult.setRows(list);
             return Optional.of(pageResult);
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.baseFindByPage 查询失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.findPage 查询失败");
         }
 
     }

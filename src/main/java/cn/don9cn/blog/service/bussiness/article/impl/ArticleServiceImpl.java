@@ -1,12 +1,8 @@
 package cn.don9cn.blog.service.bussiness.article.impl;
 
-import cn.don9cn.blog.dao.bussiness.article.impl.ArticleAndFileDaoImpl;
-import cn.don9cn.blog.dao.bussiness.article.impl.ArticleDaoImpl;
 import cn.don9cn.blog.dao.bussiness.article.interf.ArticleAndFileDao;
 import cn.don9cn.blog.dao.bussiness.article.interf.ArticleDao;
-import cn.don9cn.blog.dao.bussiness.articleclassify.impl.ArticleClassifyDaoImpl;
 import cn.don9cn.blog.dao.bussiness.articleclassify.interf.ArticleClassifyDao;
-import cn.don9cn.blog.dao.system.file.impl.UploadFileDaoImpl;
 import cn.don9cn.blog.dao.system.file.interf.UploadFileDao;
 import cn.don9cn.blog.model.bussiness.article.Article;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
@@ -54,12 +50,12 @@ public class ArticleServiceImpl implements ArticleService {
 		if(StringUtils.isNotBlank(entity.getFiles())){
 			articleAndFileDao.insertBatch(entity);
 		}
-		return OperaResultUtil.baseInsert(articleDao.baseInsert(entity));
+		return OperaResultUtil.insert(articleDao.baseInsert(entity));
 	}
 
 	@Override
 	public OperaResult baseInsertBatch(List<Article> list) {
-		return OperaResultUtil.baseInsertBatch(articleDao.baseInsertBatch(list));
+		return OperaResultUtil.insertBatch(articleDao.baseInsertBatch(list));
 	}
 
 	@Override
@@ -68,13 +64,13 @@ public class ArticleServiceImpl implements ArticleService {
 		if(StringUtils.isNotBlank(entity.getFiles())){
 			articleAndFileDao.insertBatch(entity);
 		}
-		return OperaResultUtil.baseUpdate(articleDao.baseUpdate(entity));
+		return OperaResultUtil.update(articleDao.baseUpdate(entity));
 	}
 
 	@Override
 	public OperaResult baseDeleteById(String id) {
 		articleAndFileDao.deleteByArticleCode(id);
-		return OperaResultUtil.baseRemove(articleDao.baseDeleteById(id));
+		return OperaResultUtil.deleteOne(articleDao.baseDeleteById(id));
 	}
 
 	@Override
@@ -82,7 +78,7 @@ public class ArticleServiceImpl implements ArticleService {
 		if(StringUtils.isNotBlank(codes)){
 			List<String> codesList = MyStringUtil.codesStr2List(codes);
 			articleAndFileDao.deleteByArticleCodes(codesList);
-			return OperaResultUtil.baseRemoveBatch(articleDao.baseDeleteBatch(codesList));
+			return OperaResultUtil.deleteBatch(articleDao.baseDeleteBatch(codesList));
 		}else{
 			return new OperaResult(false,"删除失败,传入codes为空!");
 		}
@@ -96,17 +92,17 @@ public class ArticleServiceImpl implements ArticleService {
 				uploadFileDao.findListInCodes(MyStringUtil.codesStr2List(a.getFiles())).ifPresent(a::setFilesList);
 			}
 		});
-		return OperaResultUtil.baseFindOne(article);
+		return OperaResultUtil.findOne(article);
 	}
 
 	@Override
 	public OperaResult baseFindAll() {
-		return OperaResultUtil.baseFindAll(articleDao.baseFindAll());
+		return OperaResultUtil.findAll(articleDao.baseFindAll());
 	}
 
 	@Override
 	public OperaResult baseFindListByParams(Article entity) {
-		return OperaResultUtil.baseFindListByParams(articleDao.baseFindListByParams(entity));
+		return OperaResultUtil.findListByParams(articleDao.baseFindListByParams(entity));
 	}
 
 	@Override
@@ -116,7 +112,7 @@ public class ArticleServiceImpl implements ArticleService {
             Optional<ArticleClassify> articleClassify = articleClassifyDao.baseFindById(article.getClassify());
             articleClassify.ifPresent(articleClassify1 -> article.setClassifyName(articleClassify1.getName()));
         }));
-		return OperaResultUtil.baseFindByPage(resultOptional);
+		return OperaResultUtil.findPage(resultOptional);
 	}
 
 	/**

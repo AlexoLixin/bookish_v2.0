@@ -2,12 +2,16 @@ package cn.don9cn.blog.action.system.login;
 
 import cn.don9cn.blog.autoconfigs.shiro.util.SessionUtil;
 import cn.don9cn.blog.model.system.LoginResult;
+import cn.don9cn.blog.model.system.log.SysLoginLog;
 import cn.don9cn.blog.model.system.rbac.SysRole;
 import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
+import cn.don9cn.blog.service.system.log.interf.SysLoginLogService;
+import cn.don9cn.blog.util.RequestUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +30,8 @@ import java.util.List;
 @RequestMapping("/login")
 public class LoginAction {
 
+    @Autowired
+    private SysLoginLogService sysLoginLogService;
 
     /**
      * 提示登录
@@ -62,6 +68,9 @@ public class LoginAction {
     @RequestMapping("/doLogin")
     public Object doLogin(String username, String password, String role, HttpServletRequest request) throws IOException, ServletException {
 
+        // 生成登录日志,无论登陆是否成功,都会保存该日志信息
+        SysLoginLog loginLog = RequestUtil.getLoginLog(request, username, password);
+
         Subject subject = SecurityUtils.getSubject();
 
         if(!subject.isAuthenticated()){
@@ -69,10 +78,12 @@ public class LoginAction {
             try{
                 subject.login(token);
             }catch(Exception e){
+                sysLoginLogService.baseInsert(loginLog.withState("失败"));
                 return new LoginResult(false,"用户名或者密码错误");
             }
         }
 
+        sysLoginLogService.baseInsert(loginLog.withState("成功"));
         //登陆成功,设置用户名到session,消息推送中用得到
         request.getSession(false).setAttribute("CURRENT_USER",username);
         //登陆成功,检查是否是管理员登录
