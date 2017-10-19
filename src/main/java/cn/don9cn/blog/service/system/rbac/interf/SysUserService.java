@@ -35,6 +35,17 @@ public interface SysUserService extends BaseService<SysUser> {
      */
     OperaResult authorizeUser(String userCode,String roleCodes);
 
+    /**
+     * 获取用户个人信息(开放给普通用户)
+     * @return
+     */
+    OperaResult getUserInfo();
 
+    /**
+     * 更新用户个人信息(开放给普通用户)
+     * @param sysUser
+     * @return
+     */
+    OperaResult updateUserInfo(SysUser sysUser);
 }
 

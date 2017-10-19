@@ -2,10 +2,12 @@ package cn.don9cn.blog.service.system.log.impl;
 
 import cn.don9cn.blog.dao.system.log.interf.SysOperaLogDao;
 import cn.don9cn.blog.model.system.log.SysOperaLog;
+import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.plugins.operaresult.util.OperaResultUtil;
 import cn.don9cn.blog.service.system.log.interf.SysOperaLogService;
+import cn.don9cn.blog.service.system.rbac.interf.SysUserService;
 import cn.don9cn.blog.util.DateUtil;
 import cn.don9cn.blog.util.MyStringUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author: liuxindong
@@ -21,12 +24,16 @@ import java.util.List;
  * @Create: 2017/10/18 13:44
  * @Modify:
  */
+@SuppressWarnings("Duplicates")
 @Service
 @Transactional
 public class SysOperaLogServiceImpl implements SysOperaLogService {
 
     @Autowired
     private SysOperaLogDao sysOperaLogDao;
+
+    @Autowired
+    private SysUserService sysUserService;
 
     @Override
     public OperaResult baseInsert(SysOperaLog entity) {
@@ -60,7 +67,19 @@ public class SysOperaLogServiceImpl implements SysOperaLogService {
 
     @Override
     public OperaResult baseFindById(String id) {
-        return OperaResultUtil.findOne(sysOperaLogDao.baseFindById(id));
+        Optional<SysOperaLog> sysOperaLogOptional = sysOperaLogDao.baseFindById(id);
+        sysOperaLogOptional.ifPresent(sysOperaLog -> {
+            String userCode = sysOperaLog.getUserCode();
+            if(StringUtils.isNotBlank(userCode)){
+                OperaResult operaResult = sysUserService.baseFindById(userCode);
+                if(operaResult.isSuccess()){
+                    SysUser user = (SysUser) operaResult.getObj();
+                    sysOperaLog.setUserName(user.getUsername());
+                    sysOperaLog.setUserRole(user.getRoleNames());
+                }
+            }
+        });
+        return OperaResultUtil.findOne(sysOperaLogOptional);
     }
 
     @Override

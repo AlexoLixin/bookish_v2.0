@@ -3,6 +3,7 @@ package cn.don9cn.blog.action.system.rbac;
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.system.rbac.SysRole;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.rbac.interf.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,60 +27,59 @@ public class SysRoleAction extends BaseAction<SysRole> {
 
     @Override
     @PostMapping
-    protected Object baseInsert(SysRole sysRole) {
+    protected OperaResult baseInsert(SysRole sysRole) {
         return sysRoleService.baseInsert(sysRole);
     }
 
     @Override
-    @PostMapping("/batch")
-    protected Object baseInsertBatch(List<SysRole> list) {
-        return sysRoleService.baseInsertBatch(list);
+    protected OperaResult baseInsertBatch(List<SysRole> list) {
+        return null;
     }
 
     @Override
     @PutMapping
-    protected Object baseUpdate(SysRole sysRole) {
+    protected OperaResult baseUpdate(SysRole sysRole) {
         return sysRoleService.baseUpdate(sysRole);
     }
 
     @Override
     @DeleteMapping
-    protected Object baseRemove(String code) {
+    protected OperaResult baseRemove(String code) {
         return sysRoleService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/batch")
-    protected Object baseRemoveBatch(String codes) {
+    protected OperaResult baseRemoveBatch(String codes) {
         return sysRoleService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping
-    protected Object baseFindById(String code) {
+    protected OperaResult baseFindById(String code) {
         return sysRoleService.baseFindById(code);
     }
 
     @Override
     @GetMapping("/all")
-    protected Object baseFindAll() {
+    protected OperaResult baseFindAll() {
         return sysRoleService.baseFindAll();
     }
 
     @Override
     @GetMapping("/list")
-    protected Object baseFindListByParams(SysRole sysRole) {
+    protected OperaResult baseFindListByParams(SysRole sysRole) {
         return sysRoleService.baseFindListByParams(sysRole);
     }
 
     @Override
     @GetMapping("/page")
-    protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysRole sysRole) {
+    protected OperaResult baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysRole sysRole) {
         return sysRoleService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysRole));
     }
 
     @PutMapping("/authorize")
-    protected Object authorizeRole(String roleCode,String permissionCodes) {
+    protected OperaResult authorizeRole(String roleCode,String permissionCodes) {
         return sysRoleService.authorizeRole(roleCode,permissionCodes);
     }
 }

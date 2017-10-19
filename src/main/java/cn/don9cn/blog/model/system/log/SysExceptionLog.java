@@ -18,16 +18,19 @@ public class SysExceptionLog extends BaseModel {
     @DbColumn(content = "请求url")
     private String requestUrl;
 
+    @DbColumn(content = "请求方法")
+    private String requestMethod;
+
     @DbColumn(content = "操作类型")
     private String type;
 
     @DbColumn(content = "操作模块")
     private String module;
 
-    @DbColumn(content = "请求action")
+    @DbColumn(content = "操作action")
     private String actionName;
 
-    @DbColumn(content = "请求方法")
+    @DbColumn(content = "操作方法")
     private String methodName;
 
     @DbColumn(content = "请求参数")
@@ -49,7 +52,7 @@ public class SysExceptionLog extends BaseModel {
     private String userRole;
 
     @DbColumn(content = "是否保存到数据库")
-    private boolean skip;
+    private String ignoreSave;
 
     @DbColumn(content = "异常类型")
     private String exceptionType;
@@ -64,6 +67,7 @@ public class SysExceptionLog extends BaseModel {
 
     public SysExceptionLog(SysOperaLog sysOperaLog) {
         if(sysOperaLog.getRequestUrl()!=null) this.requestUrl = sysOperaLog.getRequestUrl();
+        if(sysOperaLog.getRequestMethod()!=null) this.requestMethod = sysOperaLog.getRequestMethod();
         if(sysOperaLog.getType()!=null) this.type = sysOperaLog.getType();
         if(sysOperaLog.getModule()!=null) this.module = sysOperaLog.getModule();
         if(sysOperaLog.getActionName()!=null) this.actionName = sysOperaLog.getActionName();
@@ -74,7 +78,7 @@ public class SysExceptionLog extends BaseModel {
         if(sysOperaLog.getState()!=null) this.state = sysOperaLog.getState();
         if(sysOperaLog.getUserName()!=null) this.userName = sysOperaLog.getUserName();
         if(sysOperaLog.getUserRole()!=null) this.userRole = sysOperaLog.getUserRole();
-        this.skip = sysOperaLog.isSkip();
+        this.ignoreSave = sysOperaLog.getIgnoreSave();
     }
 
     public String getExceptionType() {
@@ -189,11 +193,20 @@ public class SysExceptionLog extends BaseModel {
         this.userRole = userRole;
     }
 
-    public boolean isSkip() {
-        return skip;
+
+    public String getRequestMethod() {
+        return requestMethod;
     }
 
-    public void setSkip(boolean skip) {
-        this.skip = skip;
+    public void setRequestMethod(String requestMethod) {
+        this.requestMethod = requestMethod;
+    }
+
+    public String getIgnoreSave() {
+        return ignoreSave;
+    }
+
+    public void setIgnoreSave(String ignoreSave) {
+        this.ignoreSave = ignoreSave;
     }
 }

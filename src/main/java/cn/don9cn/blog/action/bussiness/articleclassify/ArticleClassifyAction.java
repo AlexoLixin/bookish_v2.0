@@ -3,6 +3,7 @@ package cn.don9cn.blog.action.bussiness.articleclassify;
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.bussiness.articleclassify.interf.ArticleClassifyService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,52 +30,52 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 
 	@Override
 	@PostMapping
-	protected Object baseInsert(ArticleClassify articleClassify) {
+	protected OperaResult baseInsert(ArticleClassify articleClassify) {
 		return articleClassifyService.doSave(articleClassify);
 	}
 
 	@Override
-	protected Object baseInsertBatch(List<ArticleClassify> list) {
+	protected OperaResult baseInsertBatch(List<ArticleClassify> list) {
 		return null;
 	}
 
 	@Override
 	@PutMapping
-	protected Object baseUpdate(ArticleClassify articleClassify) {
+	protected OperaResult baseUpdate(ArticleClassify articleClassify) {
 		return articleClassifyService.baseUpdate(articleClassify);
 	}
 
 	@Override
-	protected Object baseRemove(String codes) {
+	protected OperaResult baseRemove(String codes) {
 		return null;
 	}
 
 	@Override
-	protected Object baseRemoveBatch(String codes) {
+	protected OperaResult baseRemoveBatch(String codes) {
 		return null;
 	}
 
 	@Override
 	@GetMapping
-	protected Object baseFindById(String code) {
+	protected OperaResult baseFindById(String code) {
 		return articleClassifyService.baseFindById(code);
 	}
 
 	@Override
 	@GetMapping("/all")
-	protected Object baseFindAll() {
+	protected OperaResult baseFindAll() {
 		return articleClassifyService.baseFindAll();
 	}
 
 	@Override
 	@GetMapping("/list")
-	protected Object baseFindListByParams(ArticleClassify articleClassify) {
+	protected OperaResult baseFindListByParams(ArticleClassify articleClassify) {
 		return articleClassifyService.baseFindListByParams(articleClassify);
 	}
 
 	@Override
 	@GetMapping("/page")
-	protected Object baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,ArticleClassify articleClassify) {
+	protected OperaResult baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,ArticleClassify articleClassify) {
 		return articleClassifyService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,articleClassify));
 	}
 
@@ -85,7 +86,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 * @return
 	 */
 	@DeleteMapping
-	protected Object doRemove(String codes,String levels) {
+	protected OperaResult doRemove(String codes,String levels) {
 		return articleClassifyService.doRemove(codes,levels);
 	}
 
@@ -94,7 +95,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 * @return
 	 */
 	@GetMapping("/selectOptions")
-	public Object doGetSelectOptions() {
+	public OperaResult doGetSelectOptions() {
 		return articleClassifyService.doGetSelectOptions();
 	}
 
@@ -103,7 +104,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 * @return
 	 */
 	@GetMapping(path = {"/tree","/tree/public"})
-	public Object getTree() {
+	public OperaResult getTree() {
 		return articleClassifyService.getTree();
 	}
 }

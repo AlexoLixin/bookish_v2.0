@@ -34,9 +34,9 @@ public class AopUtil {
         // 执行action类名
         Class<?> exceClass = joinPoint.getTarget().getClass();
         if(exceClass.getAnnotation(SkipOperaLog.class)!=null){
-            sysOperaLog.setSkip(true);
+            sysOperaLog.setIgnoreSave("Y");
         }else{
-            sysOperaLog.setSkip(false);
+            sysOperaLog.setIgnoreSave("N");
         }
         sysOperaLog.setActionName(exceClass.getTypeName());
         sysOperaLog.setModule(exceClass.getSimpleName().replace("Action",""));
@@ -46,8 +46,8 @@ public class AopUtil {
         sysOperaLog.setMethodName(exceMethodName);
 
         // 执行用户
-        Object userFromSession = MyShiroSessionUtil.getUserFromSession();
-        if(userFromSession!=null) sysOperaLog.setUserCode(((SysUser) userFromSession).getCode());
+        SysUser userFromSession = MyShiroSessionUtil.getUserFromSession();
+        if(userFromSession!=null) sysOperaLog.setUserCode(userFromSession.getCode());
 
         // 解析请求request
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
@@ -55,7 +55,7 @@ public class AopUtil {
         HttpServletRequest request = sra.getRequest();
         sysOperaLog.setRequestUrl(request.getRequestURI());     //请求url
         String method = request.getMethod();                    //请求method
-        sysOperaLog.setMethodName(method);
+        sysOperaLog.setRequestMethod(method);
         switch (method){
             case "POST":
                 sysOperaLog.setType("添加");
@@ -68,7 +68,7 @@ public class AopUtil {
                 break;
             case "GET":{
                 sysOperaLog.setType("查询");
-                sysOperaLog.setSkip(true);
+                sysOperaLog.setIgnoreSave("Y");
                 break;
             }
         }

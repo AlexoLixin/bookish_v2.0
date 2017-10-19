@@ -1,8 +1,10 @@
 package cn.don9cn.blog.plugins.daohelper.core;
 
 import cn.don9cn.blog.action.bussiness.articleclassify.ArticleClassifyAction;
+import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.exception.MyMongoOperatorException;
 import cn.don9cn.blog.model.BaseModel;
+import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.util.DateUtil;
 import cn.don9cn.blog.util.EntityParserUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -113,18 +115,14 @@ public class MyMongoOperator {
     }
 
     /**
-     * 创建默认更新条目(不重复更新id主键)
+     * 创建默认更新条目
      * @param entity
      * @return
      */
     public <T extends BaseModel> Update createDefaultUpdate(T entity){
         Map<Field,Object> fieldMap = parseEntity(entity);
         Update update = new Update();
-        fieldMap.keySet().forEach(field -> {
-            if(field.getAnnotation(Id.class)==null){
-                update.set(field.getName(),fieldMap.get(field));
-            }
-        });
+        fieldMap.keySet().forEach(field -> update.set(field.getName(),fieldMap.get(field)));
         return update;
     }
 
@@ -142,7 +140,7 @@ public class MyMongoOperator {
      * @param update
      * @return
      */
-    public <T extends BaseModel> Update createFreeUpdate(Update update, Function<Update,Update> function){
+    public Update createFreeUpdate(Update update, Function<Update,Update> function){
         return function.apply(update);
     }
 
@@ -154,6 +152,7 @@ public class MyMongoOperator {
      */
     public <T extends BaseModel> OptionalInt baseInsert(T entity) {
         try{
+            entity.setCreateBy(MyShiroSessionUtil.getUserCodeFromSession());
             if(entity.getCode()!=null && entity.getCode().trim().equals("")) entity.setCode(null);
             entity.setCreateTime(DateUtil.getCreateDateString());
             mongoTemplate.insert(entity,getCollectionName(entity));
@@ -173,6 +172,7 @@ public class MyMongoOperator {
     public <T extends BaseModel> OptionalInt baseInsertBatch(List<T> list) {
         list.forEach(entity -> {
             if(entity.getCode()!=null && entity.getCode().trim().equals("")) entity.setCode(null);
+            entity.setCreateBy(MyShiroSessionUtil.getUserCodeFromSession());
             entity.setCreateTime(DateUtil.getCreateDateString());
         });
         String collectionName = list.get(0).getClass().getSimpleName();
@@ -193,6 +193,7 @@ public class MyMongoOperator {
     public <T extends BaseModel> OptionalInt baseUpdate(T entity) {
         int x;
         try{
+            entity.setModifyBy(MyShiroSessionUtil.getUserCodeFromSession());
             entity.setModifyTime(DateUtil.getModifyDateString());
             x = mongoTemplate.updateFirst(createDefaultQuery(entity),
                     createDefaultUpdate(entity),entity.getClass(),getCollectionName(entity)).getN();

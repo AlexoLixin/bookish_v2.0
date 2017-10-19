@@ -3,6 +3,7 @@ package cn.don9cn.blog.action.bussiness.article;
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.bussiness.article.Article;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.bussiness.article.interf.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,54 +26,54 @@ public class ArticleAction extends BaseAction<Article> {
 
     @Override
     @PostMapping
-    protected Object baseInsert(Article article) {
+    protected OperaResult baseInsert(Article article) {
         return articleService.baseInsert(article);
     }
 
     @Override
-    protected Object baseInsertBatch(List<Article> list) {
+    protected OperaResult baseInsertBatch(List<Article> list) {
         return null;
     }
 
     @Override
     @PutMapping
-    protected Object baseUpdate(Article article) {
+    protected OperaResult baseUpdate(Article article) {
         return articleService.baseUpdate(article);
     }
 
     @Override
     @DeleteMapping
-    protected Object baseRemove(String code) {
+    protected OperaResult baseRemove(String code) {
         return articleService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/batch")
-    protected Object baseRemoveBatch(String codes) {
+    protected OperaResult baseRemoveBatch(String codes) {
         return articleService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping(path = {"","/public"})
-    protected Object baseFindById(String code) {
+    protected OperaResult baseFindById(String code) {
         return articleService.baseFindById(code);
     }
 
     @Override
     @GetMapping("/all")
-    protected Object baseFindAll() {
+    protected OperaResult baseFindAll() {
         return articleService.baseFindAll();
     }
 
     @Override
     @GetMapping(path = {"/list","/list/public"})
-    protected Object baseFindListByParams(Article article) {
+    protected OperaResult baseFindListByParams(Article article) {
         return articleService.baseFindListByParams(article);
     }
 
     @Override
     @GetMapping("/page")
-    protected Object baseFindByPage(int page, int limit,String startTime,String endTime, String orderBy, Article article) {
+    protected OperaResult baseFindByPage(int page, int limit,String startTime,String endTime, String orderBy, Article article) {
         return articleService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,article));
     }
 
@@ -82,7 +83,7 @@ public class ArticleAction extends BaseAction<Article> {
      * @return
      */
     @PutMapping("/byUser")
-    public Object doUpdateByUser(Article article){
+    public OperaResult doUpdateByUser(Article article){
         return articleService.doUpdateByUser(article);
     }
 
@@ -92,17 +93,16 @@ public class ArticleAction extends BaseAction<Article> {
      * @return
      */
     @DeleteMapping("/byUser")
-    public Object doRemoveByUser(String code) {
+    public OperaResult doRemoveByUser(String code) {
         return articleService.doRemoveByUser(code);
     }
 
     /**
      * 个人中心-普通获取文章列表(只能获取自己发布的文章列表,防止其他用户数据被恶意篡改)
-     * @param pageResult
      * @return
      */
     @GetMapping("/page/byUser")
-    public Object doFindByPageByUser(PageResult<Article> pageResult) {
-        return articleService.doFindByPageByUser(pageResult);
+    public OperaResult doFindByPageByUser(int page, int limit,String startTime,String endTime, String orderBy, Article article) {
+        return articleService.doFindByPageByUser(new PageResult<>(page,limit,startTime,endTime,orderBy,article));
     }
 }

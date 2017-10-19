@@ -1,5 +1,6 @@
 package cn.don9cn.blog.service.system.rbac.impl;
 
+import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.dao.system.rbac.interf.SysRoleDao;
 import cn.don9cn.blog.dao.system.rbac.interf.SysUserDao;
 import cn.don9cn.blog.model.system.rbac.SysRole;
@@ -67,7 +68,17 @@ public class SysUserServiceImpl implements SysUserService {
 
 	@Override
 	public OperaResult baseFindById(String id) {
-		return OperaResultUtil.findOne(sysUserDao.baseFindById(id));
+		Optional<SysUser> sysUserOptional = sysUserDao.baseFindById(id);
+		sysUserOptional.ifPresent(sysUser -> {
+			if(sysUser.getRoleCodes()!=null && sysUser.getRoleCodes().size()>0){
+				Optional<List<SysRole>> roleListOptional = sysRoleDao.baseFindListInIds(sysUser.getRoleCodes());
+				roleListOptional.ifPresent(roleList -> {
+					sysUser.setRoleList(roleList);
+					sysUser.setRoleNames(roleList.stream().map(SysRole::getName).reduce("",(s1,s2)-> s1+" "+s2));
+				});
+			}
+		});
+		return OperaResultUtil.findOne(sysUserOptional);
 	}
 
 	@Override
@@ -129,5 +140,18 @@ public class SysUserServiceImpl implements SysUserService {
 			user = new SysUser(userCode,"");
 		}
 		return OperaResultUtil.update(sysUserDao.baseUpdate(user));
+	}
+
+	@Override
+	public OperaResult getUserInfo() {
+		return OperaResultUtil.findOne(sysUserDao.baseFindById(MyShiroSessionUtil.getUserCodeFromSession()));
+	}
+
+	@Override
+	public OperaResult updateUserInfo(SysUser sysUser) {
+		if(sysUser.getCode().equals(MyShiroSessionUtil.getUserCodeFromSession())){
+			return OperaResultUtil.update(sysUserDao.baseUpdate(sysUser));
+		}
+		return new OperaResult(false,"更新失败");
 	}
 }

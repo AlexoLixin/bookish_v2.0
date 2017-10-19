@@ -3,6 +3,7 @@ package cn.don9cn.blog.action.system.log;
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.system.log.SysOperaLog;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.log.interf.SysOperaLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,56 +24,56 @@ public class SysOperaLogAction extends BaseAction<SysOperaLog> {
     private SysOperaLogService sysOperaLogService;
 
     @Override
-    protected Object baseInsert(SysOperaLog sysOperaLog) {
+    protected OperaResult baseInsert(SysOperaLog sysOperaLog) {
         return null;
     }
 
     @Override
-    protected Object baseInsertBatch(List<SysOperaLog> list) {
+    protected OperaResult baseInsertBatch(List<SysOperaLog> list) {
         return null;
     }
 
     @Override
-    protected Object baseUpdate(SysOperaLog sysOperaLog) {
+    protected OperaResult baseUpdate(SysOperaLog sysOperaLog) {
         return null;
     }
 
     @Override
     @DeleteMapping
-    protected Object baseRemove(String code) {
+    protected OperaResult baseRemove(String code) {
         return sysOperaLogService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/batch")
-    protected Object baseRemoveBatch(String codes) {
+    protected OperaResult baseRemoveBatch(String codes) {
         return sysOperaLogService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping
-    protected Object baseFindById(String code) {
+    protected OperaResult baseFindById(String code) {
         return sysOperaLogService.baseFindById(code);
     }
 
     @Override
-    protected Object baseFindAll() {
+    protected OperaResult baseFindAll() {
         return null;
     }
 
     @Override
-    protected Object baseFindListByParams(SysOperaLog sysOperaLog) {
+    protected OperaResult baseFindListByParams(SysOperaLog sysOperaLog) {
         return null;
     }
 
     @Override
     @GetMapping("/page")
-    protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysOperaLog sysOperaLog) {
+    protected OperaResult baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysOperaLog sysOperaLog) {
         return sysOperaLogService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysOperaLog));
     }
 
     @DeleteMapping("/batch/pre30days")
-    public Object remove30Early(){
+    public OperaResult remove30Early(){
         return sysOperaLogService.doRemoveEarly30();
     }
 }

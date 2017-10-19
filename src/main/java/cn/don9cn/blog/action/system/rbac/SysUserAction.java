@@ -3,10 +3,12 @@ package cn.don9cn.blog.action.system.rbac;
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.rbac.interf.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.processing.SupportedSourceVersion;
 import java.util.List;
 
 
@@ -25,65 +27,74 @@ public class SysUserAction extends BaseAction<SysUser> {
 
     @Override
     @PostMapping
-    protected Object baseInsert(SysUser sysUser) {
+    protected OperaResult baseInsert(SysUser sysUser) {
         return sysUserService.baseInsert(sysUser);
     }
 
     @Override
-    @PostMapping("/batch")
-    protected Object baseInsertBatch(List<SysUser> list) {
-        return sysUserService.baseInsertBatch(list);
+    protected OperaResult baseInsertBatch(List<SysUser> list) {
+        return null;
     }
 
     @Override
     @PutMapping
-    protected Object baseUpdate(SysUser sysUser) {
+    protected OperaResult baseUpdate(SysUser sysUser) {
         return sysUserService.baseUpdate(sysUser);
     }
 
     @Override
     @DeleteMapping
-    protected Object baseRemove(String code) {
+    protected OperaResult baseRemove(String code) {
         return sysUserService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/batch")
-    protected Object baseRemoveBatch(String codes) {
+    protected OperaResult baseRemoveBatch(String codes) {
         return sysUserService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping
-    protected Object baseFindById(String code) {
+    protected OperaResult baseFindById(String code) {
         return sysUserService.baseFindById(code);
     }
 
     @Override
     @GetMapping("/all")
-    protected Object baseFindAll() {
+    protected OperaResult baseFindAll() {
         return sysUserService.baseFindAll();
     }
 
     @Override
     @GetMapping("/list")
-    protected Object baseFindListByParams(SysUser sysUser) {
+    protected OperaResult baseFindListByParams(SysUser sysUser) {
         return sysUserService.baseFindListByParams(sysUser);
     }
 
     @Override
     @GetMapping("/page")
-    protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysUser sysUser) {
+    protected OperaResult baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysUser sysUser) {
         return sysUserService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysUser));
     }
 
     @GetMapping("/checkName")
-    protected Object checkUserName(String username) {
+    public OperaResult checkUserName(String username) {
         return sysUserService.checkUserName(username);
     }
 
     @PutMapping("/authorize")
-    protected Object authorizeUser(String userCode,String roleCodes) {
+    public OperaResult authorizeUser(String userCode,String roleCodes) {
         return sysUserService.authorizeUser(userCode,roleCodes);
+    }
+
+    @GetMapping("/byUser")
+    public OperaResult getUserInfo() {
+        return sysUserService.getUserInfo();
+    }
+
+    @PutMapping("/byUser")
+    public OperaResult updateUserInfo(SysUser sysUser) {
+        return sysUserService.updateUserInfo(sysUser);
     }
 }

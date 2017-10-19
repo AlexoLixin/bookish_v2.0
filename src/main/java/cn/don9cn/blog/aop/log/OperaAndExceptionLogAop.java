@@ -2,8 +2,10 @@ package cn.don9cn.blog.aop.log;
 
 import cn.don9cn.blog.model.system.log.SysExceptionLog;
 import cn.don9cn.blog.model.system.log.SysOperaLog;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.log.interf.SysExceptionLogService;
 import cn.don9cn.blog.service.system.log.interf.SysOperaLogService;
+import cn.don9cn.blog.support.vue.VueImageUploadMsg;
 import cn.don9cn.blog.util.AopUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -49,20 +51,17 @@ public class OperaAndExceptionLogAop {
 
     /*@After("logPoint()")
     public void afterExce(JoinPoint joinPoint){
-        // @After注解: 切入点执行后调用自定义的动作,注意并不是在切入点返回值之后调用
+        // @After注解: 切入点执行后调用自定义的动作,注意并不是在切入点返回值之后调用,而是在pjp.proceed()执行完毕后,return之前调用
     }*/
 
     @AfterThrowing(value = "logPoint()",throwing = "e")
     public void throwException(JoinPoint joinPoint,Throwable e){
-        // 先将操作失败的记录日志保存至数据库
         SysOperaLog sysOperaLog = sysOperaLogThreadLocal.get();
         Long startTime = costTimeThreadLocal.get();
         if(sysOperaLog!=null){
             sysOperaLog.setState("失败");
             sysOperaLog.setCostTime(System.currentTimeMillis()-startTime + "");
-            sysOperaLogService.baseInsert(sysOperaLog);
-
-            // 再保存异常日志记录
+            // 保存异常日志记录
             SysExceptionLog sysExceptionLog =  new SysExceptionLog(sysOperaLog);
             sysExceptionLogService.baseInsert(AopUtil.fillSysExceptionLog(sysExceptionLog,e));
         }
@@ -74,8 +73,7 @@ public class OperaAndExceptionLogAop {
         // 为了不影响方法的执行,日志保存到数据库的动作在方法成功返回后执行
         SysOperaLog sysOperaLog = sysOperaLogThreadLocal.get();
         Long startTime = costTimeThreadLocal.get();
-        if(sysOperaLog!=null && !sysOperaLog.isSkip()){
-            sysOperaLog.setState("成功");
+        if(sysOperaLog!=null && sysOperaLog.getIgnoreSave().equals("N")){
             sysOperaLog.setCostTime(System.currentTimeMillis()-startTime + "");
             sysOperaLogService.baseInsert(sysOperaLog);
         }
@@ -83,12 +81,44 @@ public class OperaAndExceptionLogAop {
 
     @Around("logPoint()")
     public Object aroundExec(ProceedingJoinPoint pjp) throws Throwable{
-        // @Around注解: 环绕通知,pip.proceed()为真正的切入点调用执行,可以在这之前和之后自定义动作
+
         Object obj = pjp.proceed();
-        // pjp.proceed()执行完毕,此时会调用 @After 注解定义的动作
+
+        // 根据操作的结果判断是否操作成功
+        checkProceedResult(obj);
+
         return obj;
-        // return之后调用 @AfterReturning 注解定义的动作
     }
+
+    /**
+     * 根据操作的结果判断是否操作成功
+     * @param obj
+     */
+    private void checkProceedResult(Object obj){
+        SysOperaLog sysOperaLog = sysOperaLogThreadLocal.get();
+        if(sysOperaLog!=null){
+            if(sysOperaLog.getIgnoreSave().equals("N")){
+                if(obj instanceof OperaResult){
+                    OperaResult operaResult = (OperaResult) obj;
+                    if(operaResult.isSuccess()){
+                        sysOperaLog.setState("成功");
+                    }else{
+                        sysOperaLog.setState("失败");
+                    }
+                }else if(obj instanceof VueImageUploadMsg){
+                    VueImageUploadMsg uploadMsg = (VueImageUploadMsg) obj;
+                    if(uploadMsg.getErrno()==0){
+                        sysOperaLog.setState("成功");
+                    }else{
+                        sysOperaLog.setState("失败");
+                    }
+                }else{
+                    sysOperaLog.setState("成功");
+                }
+            }
+        }
+    }
+
 
 
 }

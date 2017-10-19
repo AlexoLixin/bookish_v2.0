@@ -3,6 +3,7 @@ package cn.don9cn.blog.action.system.rbac;
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.system.rbac.SysPermission;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.rbac.interf.SysPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,52 +25,52 @@ public class SysPermissionAction extends BaseAction<SysPermission> {
 
     @Override
     @PostMapping
-    protected Object baseInsert(SysPermission sysPermission) {
+    protected OperaResult baseInsert(SysPermission sysPermission) {
         return sysPermissionService.doSave(sysPermission);
     }
 
     @Override
-    protected Object baseInsertBatch(List<SysPermission> list) {
+    protected OperaResult baseInsertBatch(List<SysPermission> list) {
         return null;
     }
 
     @Override
     @PutMapping
-    protected Object baseUpdate(SysPermission sysPermission) {
+    protected OperaResult baseUpdate(SysPermission sysPermission) {
         return sysPermissionService.baseUpdate(sysPermission);
     }
 
     @Override
-    protected Object baseRemove(String code) {
+    protected OperaResult baseRemove(String code) {
         return null;
     }
 
     @Override
-    protected Object baseRemoveBatch(String codes) {
+    protected OperaResult baseRemoveBatch(String codes) {
         return null;
     }
 
     @Override
     @GetMapping
-    protected Object baseFindById(String code) {
+    protected OperaResult baseFindById(String code) {
         return sysPermissionService.baseFindById(code);
     }
 
     @Override
     @GetMapping("/all")
-    protected Object baseFindAll() {
+    protected OperaResult baseFindAll() {
         return sysPermissionService.baseFindAll();
     }
 
     @Override
     @GetMapping("/list")
-    protected Object baseFindListByParams(SysPermission sysPermission) {
+    protected OperaResult baseFindListByParams(SysPermission sysPermission) {
         return sysPermissionService.baseFindListByParams(sysPermission);
     }
 
     @Override
     @GetMapping("/page")
-    protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysPermission sysPermission) {
+    protected OperaResult baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysPermission sysPermission) {
         return sysPermissionService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysPermission));
     }
 
@@ -80,7 +81,7 @@ public class SysPermissionAction extends BaseAction<SysPermission> {
      * @return
      */
     @DeleteMapping
-    protected Object doRemove(String codes,String levels) {
+    protected OperaResult doRemove(String codes,String levels) {
         return sysPermissionService.doRemove(codes,levels);
     }
 
@@ -89,7 +90,7 @@ public class SysPermissionAction extends BaseAction<SysPermission> {
      * @return
      */
     @GetMapping("/tree")
-    public Object getTree() {
+    public OperaResult getTree() {
         return sysPermissionService.getTree();
     }
 }

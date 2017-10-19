@@ -3,6 +3,7 @@ package cn.don9cn.blog.action.system.file;
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.system.file.UploadFile;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.file.interf.UploadFileService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,55 +30,54 @@ public class UploadFileAction extends BaseAction<UploadFile> {
 
     @Override
     @PostMapping
-    protected Object baseInsert(UploadFile uploadFile) {
+    protected OperaResult baseInsert(UploadFile uploadFile) {
         return uploadFileService.insertWithCode(uploadFile);
     }
 
     @Override
-    protected Object baseInsertBatch(List<UploadFile> list) {
+    protected OperaResult baseInsertBatch(List<UploadFile> list) {
         return null;
     }
 
-
     @Override
     @PutMapping
-    protected Object baseUpdate(UploadFile uploadFile) {
+    protected OperaResult baseUpdate(UploadFile uploadFile) {
         return uploadFileService.baseUpdate(uploadFile);
     }
 
     @Override
     @DeleteMapping
-    protected Object baseRemove(String code) {
+    protected OperaResult baseRemove(String code) {
         return uploadFileService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/batch")
-    protected Object baseRemoveBatch(String codes) {
+    protected OperaResult baseRemoveBatch(String codes) {
         return uploadFileService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping
-    protected Object baseFindById(String code) {
+    protected OperaResult baseFindById(String code) {
         return uploadFileService.baseFindById(code);
     }
 
     @Override
     @GetMapping("/all")
-    protected Object baseFindAll() {
+    protected OperaResult baseFindAll() {
         return uploadFileService.baseFindAll();
     }
 
     @Override
     @GetMapping("/list")
-    protected Object baseFindListByParams(UploadFile uploadFile) {
+    protected OperaResult baseFindListByParams(UploadFile uploadFile) {
         return uploadFileService.baseFindListByParams(uploadFile);
     }
 
     @Override
     @GetMapping("/page")
-    protected Object baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,UploadFile uploadFile) {
+    protected OperaResult baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,UploadFile uploadFile) {
         return uploadFileService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,uploadFile));
     }
 

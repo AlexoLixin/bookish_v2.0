@@ -20,16 +20,19 @@ public class SysOperaLog extends BaseModel {
     @DbColumn(content = "请求url")
     private String requestUrl;
 
+    @DbColumn(content = "请求方法")
+    private String requestMethod;
+
     @DbColumn(content = "操作类型")
     private String type;
 
     @DbColumn(content = "操作模块")
     private String module;
 
-    @DbColumn(content = "请求action")
+    @DbColumn(content = "操作action")
     private String actionName;
 
-    @DbColumn(content = "请求方法")
+    @DbColumn(content = "操作方法")
     private String methodName;
 
     @DbColumn(content = "请求参数")
@@ -51,7 +54,7 @@ public class SysOperaLog extends BaseModel {
     private String userRole;
 
     @DbColumn(content = "是否保存到数据库")
-    private boolean skip;
+    private String ignoreSave;
 
     public String getRequestUrl() {
         return requestUrl;
@@ -141,12 +144,20 @@ public class SysOperaLog extends BaseModel {
         this.userRole = userRole;
     }
 
-    public boolean isSkip() {
-        return skip;
+
+    public String getRequestMethod() {
+        return requestMethod;
     }
 
-    public void setSkip(boolean skip) {
-        this.skip = skip;
+    public void setRequestMethod(String requestMethod) {
+        this.requestMethod = requestMethod;
     }
 
+    public String getIgnoreSave() {
+        return ignoreSave;
+    }
+
+    public void setIgnoreSave(String ignoreSave) {
+        this.ignoreSave = ignoreSave;
+    }
 }

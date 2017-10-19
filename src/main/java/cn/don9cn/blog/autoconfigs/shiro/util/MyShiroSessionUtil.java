@@ -1,5 +1,6 @@
 package cn.don9cn.blog.autoconfigs.shiro.util;
 
+import cn.don9cn.blog.model.system.rbac.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -16,15 +17,41 @@ public class MyShiroSessionUtil {
      * 从session获取用户数据
      * @return
      */
-    public static Object getUserFromSession(){
+    public static SysUser getUserFromSession(){
         Subject subject = SecurityUtils.getSubject();
         if(subject!=null){
             Session session = subject.getSession();
             if(session!=null){
-                return session.getAttribute("currentUser");
+                return (SysUser) session.getAttribute("currentUser");
             }
         }
         return null;
+    }
+
+    /**
+     * 从session获取用户主键
+     * @return
+     */
+    public static String getUserCodeFromSession(){
+        SysUser sysUser = getUserFromSession();
+        if(sysUser!=null){
+            return sysUser.getCode();
+        }else{
+            return "";
+        }
+    }
+
+    /**
+     * 从session获取用户名称
+     * @return
+     */
+    public static String getUserNameFromSession(){
+        SysUser sysUser = getUserFromSession();
+        if(sysUser!=null){
+            return sysUser.getUsername();
+        }else{
+            return "";
+        }
     }
 
     /**

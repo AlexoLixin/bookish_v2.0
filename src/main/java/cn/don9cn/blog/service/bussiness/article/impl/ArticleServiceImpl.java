@@ -1,11 +1,13 @@
 package cn.don9cn.blog.service.bussiness.article.impl;
 
+import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.dao.bussiness.article.interf.ArticleAndFileDao;
 import cn.don9cn.blog.dao.bussiness.article.interf.ArticleDao;
 import cn.don9cn.blog.dao.bussiness.articleclassify.interf.ArticleClassifyDao;
 import cn.don9cn.blog.dao.system.file.interf.UploadFileDao;
 import cn.don9cn.blog.model.bussiness.article.Article;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
+import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.plugins.operaresult.util.OperaResultUtil;
@@ -46,7 +48,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public OperaResult baseInsert(Article entity) {
 		entity.setCode(UuidUtil.getUuid());
-		entity.setAuthor("test");
+		entity.setAuthor(MyShiroSessionUtil.getUserNameFromSession());
 		if(StringUtils.isNotBlank(entity.getFiles())){
 			articleAndFileDao.insertBatch(entity);
 		}
@@ -55,6 +57,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public OperaResult baseInsertBatch(List<Article> list) {
+		list.forEach(article -> article.setAuthor(MyShiroSessionUtil.getUserNameFromSession()));
 		return OperaResultUtil.insertBatch(articleDao.baseInsertBatch(list));
 	}
 
@@ -122,7 +125,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public OperaResult doRemoveByUser(String code) {
-		return null;
+		return OperaResultUtil.deleteOne(articleDao.removeByUser(code,MyShiroSessionUtil.getUserCodeFromSession()));
 	}
 
 	/**
@@ -132,7 +135,9 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public OperaResult doUpdateByUser(Article article) {
-		return null;
+		article.setCreateBy(MyShiroSessionUtil.getUserCodeFromSession());
+		article.setModifyBy(MyShiroSessionUtil.getUserCodeFromSession());
+		return OperaResultUtil.update(articleDao.updateByUser(article));
 	}
 
 	/**
@@ -142,6 +147,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public OperaResult doFindByPageByUser(PageResult<Article> pageResult) {
-		return null;
+		pageResult.getEntity().setCreateBy(MyShiroSessionUtil.getUserCodeFromSession());
+		return OperaResultUtil.findPage(articleDao.baseFindByPage(pageResult));
 	}
 }

@@ -1,12 +1,12 @@
 package cn.don9cn.blog.dao.bussiness.article.impl;
 
-import cn.don9cn.blog.dao.BaseDao;
 import cn.don9cn.blog.dao.bussiness.article.interf.ArticleDao;
 import cn.don9cn.blog.model.bussiness.article.Article;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.OptionalInt;
 
 
 /**
@@ -20,12 +20,13 @@ public class ArticleDaoImpl implements ArticleDao {
 
     /**
      * 开放给普通用户的删除文章功能,使其只能删除自己发布的文章
-     * @param map
+     * @param code
      * @return
      */
     @Override
-    public Optional<Integer> doRemoveByUser(Map<String, String> map) {
-        return Optional.empty();
+    public OptionalInt removeByUser(String code,String userCode) {
+        Query query = Query.query(Criteria.where("_id").is(code).and("createBy").is(userCode));
+        return getMyMongoOperator().freeDelete(query,Article.class);
     }
 
     /**
@@ -34,7 +35,8 @@ public class ArticleDaoImpl implements ArticleDao {
      * @return
      */
     @Override
-    public Optional<Integer> doUpdateByUser(Article entity) {
-        return Optional.empty();
+    public OptionalInt updateByUser(Article entity) {
+        Query query = Query.query(Criteria.where("_id").is(entity.getCode()).and("createBy").is(entity.getCreateBy()));
+        return getMyMongoOperator().freeUpdateOne(query,getMyMongoOperator().createDefaultUpdate(entity),Article.class);
     }
 }

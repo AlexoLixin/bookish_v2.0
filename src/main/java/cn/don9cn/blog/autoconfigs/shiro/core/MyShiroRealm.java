@@ -50,7 +50,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         if(info == null){
             // 2.session中未缓存用户权限信息，从数据库查询，然后将结果放入session中作为缓存
             info = new SimpleAuthorizationInfo();
-            SysUser user = (SysUser) MyShiroSessionUtil.getUserFromSession();  //权限验证发生在登陆之后,所以此时session中是一定会有登录用户信息的
+            SysUser user = MyShiroSessionUtil.getUserFromSession();  //权限验证发生在登陆之后,所以此时session中是一定会有登录用户信息的
             List<String> userRoleCodes = user.getRoleCodes();
             if(userRoleCodes !=null){
                 for(String roleCode:userRoleCodes){

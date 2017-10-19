@@ -1,5 +1,7 @@
 package cn.don9cn.blog.action;
 
+import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
+
 import java.util.List;
 
 /**
@@ -10,22 +12,22 @@ import java.util.List;
  */
 public abstract class BaseAction<T> {
 
-    protected abstract Object baseInsert(T t);
+    protected abstract OperaResult baseInsert(T t);
 
-    protected abstract Object baseInsertBatch(List<T> list);
+    protected abstract OperaResult baseInsertBatch(List<T> list);
 
-    protected abstract Object baseUpdate(T t);
+    protected abstract OperaResult baseUpdate(T t);
 
-    protected abstract Object baseRemove(String code);
+    protected abstract OperaResult baseRemove(String code);
 
-    protected abstract Object baseRemoveBatch(String codes);
+    protected abstract OperaResult baseRemoveBatch(String codes);
 
-    protected abstract Object baseFindById(String code);
+    protected abstract OperaResult baseFindById(String code);
 
-    protected abstract Object baseFindAll();
+    protected abstract OperaResult baseFindAll();
 
-    protected abstract Object baseFindListByParams(T t);
+    protected abstract OperaResult baseFindListByParams(T t);
 
-    protected abstract Object baseFindByPage(int page, int limit,String startTime,String endTime, String orderBy, T t);
+    protected abstract OperaResult baseFindByPage(int page, int limit,String startTime,String endTime, String orderBy, T t);
 
 }

@@ -40,7 +40,7 @@ public class LoginAction {
      * @return
      */
     @RequestMapping("/needLogin")
-    public Object needLogin(){
+    public OperaResult needLogin(){
         return new OperaResult(false,"请先登录!");
     }
 
@@ -49,7 +49,7 @@ public class LoginAction {
      * @return
      */
     @RequestMapping("/reLogin")
-    public Object reLogin(){
+    public OperaResult reLogin(){
         Subject subject = SecurityUtils.getSubject();
         if(subject!=null){
             // 有一种情况是用户已经登陆了,但是前端传过来的token不一致,那就注销当前用户,提示重新登录
@@ -63,12 +63,12 @@ public class LoginAction {
      * @return
      */
     @RequestMapping("/noPermission")
-    public Object noPermission(){
+    public OperaResult noPermission(){
         return new OperaResult(false,"对不起,您没有相应的操作权限!");
     }
     
     @RequestMapping("/doLogin")
-    public Object doLogin(String username, String password, String role, HttpServletRequest request) throws IOException, ServletException {
+    public LoginResult doLogin(String username, String password, String role, HttpServletRequest request) throws IOException, ServletException {
 
         // 生成登录日志,无论登陆是否成功,都会保存该日志信息
         SysLoginLog loginLog = RequestUtil.getLoginLog(request, username, password);
@@ -104,7 +104,7 @@ public class LoginAction {
      * @return
      */
     private LoginResult checkAdmin(){
-        SysUser user = (SysUser) MyShiroSessionUtil.getUserFromSession();
+        SysUser user = MyShiroSessionUtil.getUserFromSession();
         List<SysRole> roleList = user.getRoleList();
         if(roleList!=null && roleList.size()>0){
             for(SysRole role:roleList){

@@ -1,5 +1,6 @@
 package cn.don9cn.blog.action.system.upload;
 
+import cn.don9cn.blog.annotation.SkipOperaLog;
 import cn.don9cn.blog.autoconfigs.filepath.FileSavePathConfig;
 import cn.don9cn.blog.exception.ExceptionWrapper;
 import cn.don9cn.blog.model.system.file.UploadFile;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -95,6 +97,7 @@ public class UploadAction {
      * @param request
      * @return
      */
+    @SkipOperaLog
     @PostMapping("/fileBatch")
     public Object doFileUploadBatch(HttpServletRequest request) {
 
@@ -139,7 +142,8 @@ public class UploadAction {
             ){
                 //设置响应头和客户端保存文件名
                 response.setContentType("application/octet-stream");
-                response.setHeader("Content-Disposition", "attachment;fileName=" + file.getRealName());
+                String fileRealName = URLEncoder.encode(file.getRealName(),"UTF-8");
+                response.setHeader("Content-Disposition", "attachment;fileName=" + fileRealName);
                 byte[] arr = new byte[2048];
                 int length;
                 while ((length = in.read(arr)) > 0) {
