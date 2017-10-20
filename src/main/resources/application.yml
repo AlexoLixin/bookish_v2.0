@@ -17,6 +17,10 @@ spring:
   # 开启aop
   aop:
     auto: true
+  # redis
+  redis:
+    cluster:
+      nodes: 45.77.6.109:7001
 
 
 ######### 文件保存路径

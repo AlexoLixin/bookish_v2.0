@@ -14,11 +14,14 @@ public class OperaResult implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    private final boolean success;
+    private boolean success = false;
 
-    private final String message;
+    private String message;
 
     private Object obj;
+
+    public OperaResult(){
+    }
 
     public OperaResult(boolean success, String message){
         this.success = success;
@@ -30,17 +33,23 @@ public class OperaResult implements Serializable {
         return this;
     }
 
+    public Object getObj() {
+        return obj;
+    }
+
     public boolean isSuccess() {
         return success;
     }
 
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 
     public String getMessage() {
         return message;
     }
 
-
-    public Object getObj() {
-        return obj;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

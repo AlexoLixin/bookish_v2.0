@@ -16,6 +16,8 @@ import cn.don9cn.blog.util.MyStringUtil;
 import cn.don9cn.blog.util.UuidUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +48,7 @@ public class ArticleServiceImpl implements ArticleService {
 	private ArticleAndFileDao articleAndFileDao;
 
 	@Override
+	@CacheEvict(value = "Article",allEntries = true)
 	public OperaResult baseInsert(Article entity) {
 		entity.setCode(UuidUtil.getUuid());
 		entity.setAuthor(MyShiroSessionUtil.getUserNameFromSession());
@@ -88,6 +91,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	@Cacheable(value = "Article")
 	public OperaResult baseFindById(String id) {
 		Optional<Article> article = articleDao.baseFindById(id);
 		article.ifPresent(a -> {
