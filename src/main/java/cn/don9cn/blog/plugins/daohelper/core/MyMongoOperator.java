@@ -208,7 +208,7 @@ public class MyMongoOperator {
      */
     public <T extends BaseModel> OptionalInt freeUpdateOne(Query query,Update update,Class<T> clazz) {
         try{
-            int   x = mongoTemplate.updateFirst(query,update,clazz,clazz.getSimpleName()).getN();
+            int x = mongoTemplate.updateFirst(query,update,clazz,clazz.getSimpleName()).getN();
             return OptionalInt.of(x);
         }catch (Exception e){
             throw new MyMongoOperatorException(e,"MyMongoOperator.freeUpdateOne 更新失败");
@@ -221,7 +221,7 @@ public class MyMongoOperator {
      */
     public <T extends BaseModel> OptionalInt freeUpdateMulti(Query query,Update update,Class<T> clazz) {
         try{
-            int  x = mongoTemplate.updateMulti(query,update,clazz,clazz.getSimpleName()).getN();
+            int x = mongoTemplate.updateMulti(query,update,clazz,clazz.getSimpleName()).getN();
             return OptionalInt.of(x);
         }catch (Exception e){
             throw new MyMongoOperatorException(e,"MyMongoOperator.freeUpdateMulti 更新失败");

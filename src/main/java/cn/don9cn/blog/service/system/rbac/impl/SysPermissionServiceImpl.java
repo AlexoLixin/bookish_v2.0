@@ -53,7 +53,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
 
     @Override
     public OperaResult baseUpdate(SysPermission entity) {
-        return OperaResultUtil.update(sysPermissionDao.baseUpdate(entity));
+        return OperaResultUtil.update(sysPermissionDao.update(entity));
     }
 
     @Override

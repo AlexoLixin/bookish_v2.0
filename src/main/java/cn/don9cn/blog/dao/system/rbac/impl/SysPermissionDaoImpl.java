@@ -1,8 +1,10 @@
 package cn.don9cn.blog.dao.system.rbac.impl;
 
+import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.dao.system.rbac.interf.SysPermissionDao;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
 import cn.don9cn.blog.model.system.rbac.SysPermission;
+import cn.don9cn.blog.util.DateUtil;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -56,5 +58,19 @@ public class SysPermissionDaoImpl implements SysPermissionDao {
         Query query = Query.query(Criteria.where("_id").is(code));
         Update update = new Update().pull("childrenCodes",child);
         return getMyMongoOperator().freeUpdateMulti(query,update,SysPermission.class);
+    }
+
+    /**
+     * 更新节点(跳过childrenCodes字段)
+     * @param entity
+     * @return
+     */
+    @Override
+    public OptionalInt update(SysPermission entity) {
+        entity.setModifyBy(MyShiroSessionUtil.getUserCodeFromSession());
+        entity.setModifyTime(DateUtil.getModifyDateString());
+        Query query = getMyMongoOperator().createDefaultQuery(entity);
+        Update update = getMyMongoOperator().createDefaultUpdate(entity).unset("childrenCodes");
+        return getMyMongoOperator().freeUpdateOne(query,update,SysPermission.class);
     }
 }

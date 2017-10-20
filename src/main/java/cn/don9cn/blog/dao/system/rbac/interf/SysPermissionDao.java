@@ -39,4 +39,11 @@ public interface SysPermissionDao extends BaseDao<SysPermission> {
      * @param child
      */
     OptionalInt updateParentForPull(String code, String child);
+
+    /**
+     * 更新节点(跳过childrenCodes字段)
+     * @param entity
+     * @return
+     */
+    OptionalInt update(SysPermission entity);
 }
