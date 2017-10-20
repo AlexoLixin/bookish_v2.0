@@ -1,18 +1,14 @@
 package cn.don9cn.blog.dao.bussiness.articleclassify.impl;
 
-import cn.don9cn.blog.action.bussiness.articleclassify.ArticleClassifyAction;
-import cn.don9cn.blog.dao.BaseDao;
 import cn.don9cn.blog.dao.bussiness.articleclassify.interf.ArticleClassifyDao;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 
@@ -25,26 +21,41 @@ import java.util.OptionalInt;
 @Repository
 public class ArticleClassifyDaoImpl implements ArticleClassifyDao {
 
+
     /**
-     * 级联删除节点
-     * @param level
+     * 删除节点
+     * @param ids
      * @return
      */
     @Override
-    public OptionalInt deleteCascade(String level) {
-        Query query = Query.query(Criteria.where("level").regex("^" + level + "\\d*"));
-        return getMyMongoOperator().freeDelete(query,ArticleClassify.class);
+    public Optional<List<ArticleClassify>> removeNodes(List<String> ids) {
+        Query query = Query.query(Criteria.where("_id").in(ids));
+        return getMyMongoOperator().freeFindAllAndRemove(query,ArticleClassify.class);
     }
 
     /**
-     * 级联删除后更新叶子节点
-     * @param allCodes
+     * 更新父节点
+     * @param code
+     * @param child
      * @return
      */
     @Override
-    public OptionalInt updateLeaf(List<String> allCodes) {
-        Query query = Query.query(Criteria.where("_id").in(allCodes).and("leaf").is("N"));
-        Update update = new Update().set("leaf","Y");
+    public OptionalInt updateParentForPush(String code, String child) {
+        Query query = Query.query(Criteria.where("_id").is(code));
+        Update update = new Update().push("childrenCodes",child);
+        return getMyMongoOperator().freeUpdateMulti(query,update,ArticleClassify.class);
+    }
+
+    /**
+     * 更新父节点
+     * @param code
+     * @param child
+     * @return
+     */
+    @Override
+    public OptionalInt updateParentForPull(String code, String child) {
+        Query query = Query.query(Criteria.where("_id").is(code));
+        Update update = new Update().pull("childrenCodes",child);
         return getMyMongoOperator().freeUpdateMulti(query,update,ArticleClassify.class);
     }
 }

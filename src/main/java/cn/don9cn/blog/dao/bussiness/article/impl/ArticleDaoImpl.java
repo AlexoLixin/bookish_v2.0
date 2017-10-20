@@ -26,7 +26,7 @@ public class ArticleDaoImpl implements ArticleDao {
     @Override
     public OptionalInt removeByUser(String code,String userCode) {
         Query query = Query.query(Criteria.where("_id").is(code).and("createBy").is(userCode));
-        return getMyMongoOperator().freeDelete(query,Article.class);
+        return getMyMongoOperator().freeRemove(query,Article.class);
     }
 
     /**

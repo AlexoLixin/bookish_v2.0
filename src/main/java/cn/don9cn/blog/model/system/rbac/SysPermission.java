@@ -5,6 +5,7 @@ import cn.don9cn.blog.annotation.DbColumn;
 import cn.don9cn.blog.annotation.DbCollection;
 import cn.don9cn.blog.model.BaseModel;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,16 +31,15 @@ public class SysPermission extends BaseModel {
     @DbColumn(content = "父节点")
     private String parent;
 
-    @DbColumn(content = "节点等级")
-    private String level;
-
-    @DbColumn(content = "是否是叶子节点")
+    @DbColumn(content = "是否叶子节点")
     private String leaf;
+
+    private List<String> childrenCodes = new ArrayList<>();
 
     /**
      * 子菜单集合
      */
-    private List<SysPermission> children;
+    private List<SysPermission> children = new ArrayList<>();
 
     /**
      * 角色进行菜单授权时,回显是否勾选当前菜单
@@ -47,11 +47,6 @@ public class SysPermission extends BaseModel {
     private boolean checked;
 
     public SysPermission() {
-    }
-
-    public SysPermission(String code, String leaf) {
-        this.setCode(code);
-        this.leaf = leaf;
     }
 
     public String getName() {
@@ -78,22 +73,6 @@ public class SysPermission extends BaseModel {
         this.parent = parent;
     }
 
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public String getLeaf() {
-        return leaf;
-    }
-
-    public void setLeaf(String leaf) {
-        this.leaf = leaf;
-    }
-
     public boolean isChecked() {
         return checked;
     }
@@ -118,5 +97,24 @@ public class SysPermission extends BaseModel {
         this.children = children;
     }
 
+    public List<String> getChildrenCodes() {
+        return childrenCodes;
+    }
+
+    public void setChildrenCodes(List<String> childrenCodes) {
+        this.childrenCodes = childrenCodes;
+    }
+
+    public String getLeaf() {
+        return leaf;
+    }
+
+    public void setLeaf(String leaf) {
+        this.leaf = leaf;
+    }
+
+    public void addChild(SysPermission sysPermission) {
+        this.children.add(sysPermission);
+    }
 }
 

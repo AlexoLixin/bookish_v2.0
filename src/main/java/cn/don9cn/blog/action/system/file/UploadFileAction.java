@@ -29,9 +29,8 @@ public class UploadFileAction extends BaseAction<UploadFile> {
 
 
     @Override
-    @PostMapping
     protected OperaResult baseInsert(UploadFile uploadFile) {
-        return uploadFileService.insertWithCode(uploadFile);
+        return null;
     }
 
     @Override
@@ -40,9 +39,8 @@ public class UploadFileAction extends BaseAction<UploadFile> {
     }
 
     @Override
-    @PutMapping
     protected OperaResult baseUpdate(UploadFile uploadFile) {
-        return uploadFileService.baseUpdate(uploadFile);
+        return null;
     }
 
     @Override

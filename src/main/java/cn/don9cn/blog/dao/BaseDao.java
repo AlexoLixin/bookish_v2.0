@@ -7,7 +7,6 @@ import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -48,7 +47,7 @@ public interface BaseDao<T extends BaseModel> {
      * @return
      */
     default OptionalInt baseInsert(T entity){
-        return getMyMongoOperator().baseInsert(entity);
+        return getMyMongoOperator().insert(entity);
     }
 
     /**
@@ -56,7 +55,7 @@ public interface BaseDao<T extends BaseModel> {
      * @return
      */
     default OptionalInt baseInsertBatch(final List<T> list){
-        return getMyMongoOperator().baseInsertBatch(list);
+        return getMyMongoOperator().insertBatch(list);
     }
 
     /**
@@ -65,7 +64,7 @@ public interface BaseDao<T extends BaseModel> {
      * @return
      */
     default OptionalInt baseUpdate(T entity){
-        return getMyMongoOperator().baseUpdate(entity);
+        return getMyMongoOperator().update(entity);
     }
 
     /**
@@ -74,7 +73,7 @@ public interface BaseDao<T extends BaseModel> {
      * @return
      */
     default OptionalInt baseDeleteById(String id){
-        return getMyMongoOperator().baseDeleteById(id,getTypeClass());
+        return getMyMongoOperator().removeById(id,getTypeClass());
     }
 
     /**
@@ -82,7 +81,7 @@ public interface BaseDao<T extends BaseModel> {
      * @return
      */
     default OptionalInt baseDeleteBatch(List<String> list){
-        return getMyMongoOperator().baseDeleteBatch(list,getTypeClass());
+        return getMyMongoOperator().removeBatch(list,getTypeClass());
     }
 
     /**
@@ -91,7 +90,7 @@ public interface BaseDao<T extends BaseModel> {
      * @return
      */
     default Optional<T> baseFindById(String id){
-        return getMyMongoOperator().baseFindById(id,getTypeClass());
+        return getMyMongoOperator().findById(id,getTypeClass());
     }
 
     /**
@@ -99,7 +98,7 @@ public interface BaseDao<T extends BaseModel> {
      * @return
      */
     default Optional<List<T>> baseFindAll(){
-        return getMyMongoOperator().baseFindAll(getTypeClass());
+        return getMyMongoOperator().findAll(getTypeClass());
     }
 
     /**
@@ -108,7 +107,7 @@ public interface BaseDao<T extends BaseModel> {
      * @return
      */
     default Optional<List<T>> baseFindListByParams(T entity){
-        return getMyMongoOperator().baseFindListByParams(entity);
+        return getMyMongoOperator().findListByParams(entity);
     }
 
     /**
@@ -117,7 +116,7 @@ public interface BaseDao<T extends BaseModel> {
      * @return
      */
     default Optional<PageResult<T>> baseFindByPage(PageResult<T> pageResult){
-        return getMyMongoOperator().baseFindByPage(pageResult);
+        return getMyMongoOperator().findPage(pageResult);
     }
 
     /**
@@ -126,7 +125,7 @@ public interface BaseDao<T extends BaseModel> {
      * @return
      */
     default Optional<List<T>> baseFindListInIds(List<String> ids){
-        return getMyMongoOperator().baseFindInIds(ids,getTypeClass());
+        return getMyMongoOperator().findInIds(ids,getTypeClass());
     }
 
 }

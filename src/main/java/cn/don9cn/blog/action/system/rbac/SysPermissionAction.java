@@ -26,7 +26,7 @@ public class SysPermissionAction extends BaseAction<SysPermission> {
     @Override
     @PostMapping
     protected OperaResult baseInsert(SysPermission sysPermission) {
-        return sysPermissionService.doSave(sysPermission);
+        return sysPermissionService.baseInsert(sysPermission);
     }
 
     @Override
@@ -46,8 +46,9 @@ public class SysPermissionAction extends BaseAction<SysPermission> {
     }
 
     @Override
+    @DeleteMapping
     protected OperaResult baseRemoveBatch(String codes) {
-        return null;
+        return sysPermissionService.baseDeleteBatch(codes);
     }
 
     @Override
@@ -72,17 +73,6 @@ public class SysPermissionAction extends BaseAction<SysPermission> {
     @GetMapping("/page")
     protected OperaResult baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysPermission sysPermission) {
         return sysPermissionService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysPermission));
-    }
-
-    /**
-     * 删除节点
-     * @param codes
-     * @param levels
-     * @return
-     */
-    @DeleteMapping
-    protected OperaResult doRemove(String codes,String levels) {
-        return sysPermissionService.doRemove(codes,levels);
     }
 
     /**

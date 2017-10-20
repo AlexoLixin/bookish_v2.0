@@ -1,9 +1,7 @@
 package cn.don9cn.blog.dao.system.log.impl;
 
 import cn.don9cn.blog.dao.system.log.interf.SysExceptionLogDao;
-import cn.don9cn.blog.dao.system.log.interf.SysOperaLogDao;
 import cn.don9cn.blog.model.system.log.SysExceptionLog;
-import cn.don9cn.blog.model.system.log.SysOperaLog;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,7 +23,7 @@ public class SysExceptionDaoImpl implements SysExceptionLogDao {
      */
     @Override
     public OptionalInt doRemoveEarly30(String early30Date) {
-        return getMyMongoOperator().freeDelete(Query.query(Criteria.where("createTime").lt(early30Date)), SysExceptionLog.class);
+        return getMyMongoOperator().freeRemove(Query.query(Criteria.where("createTime").lt(early30Date)), SysExceptionLog.class);
     }
 
 }

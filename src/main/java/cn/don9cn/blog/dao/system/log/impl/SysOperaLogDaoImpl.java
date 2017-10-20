@@ -23,7 +23,7 @@ public class SysOperaLogDaoImpl implements SysOperaLogDao {
      */
     @Override
     public OptionalInt doRemoveEarly30(String early30Date) {
-        return getMyMongoOperator().freeDelete(Query.query(Criteria.where("createTime").lt(early30Date)), SysOperaLog.class);
+        return getMyMongoOperator().freeRemove(Query.query(Criteria.where("createTime").lt(early30Date)), SysOperaLog.class);
     }
 
 }

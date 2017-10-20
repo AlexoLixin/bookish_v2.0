@@ -1,20 +1,16 @@
 package cn.don9cn.blog.dao.bussiness.article.impl;
 
-import cn.don9cn.blog.dao.BaseDao;
 import cn.don9cn.blog.dao.bussiness.article.interf.ArticleAndFileDao;
 import cn.don9cn.blog.model.bussiness.article.Article;
 import cn.don9cn.blog.model.bussiness.article.ArticleAndFile;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
 import cn.don9cn.blog.model.system.file.UploadFile;
 import cn.don9cn.blog.util.MyStringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Collectors;
@@ -35,7 +31,7 @@ public class ArticleAndFileDaoImpl implements ArticleAndFileDao {
      * @return
      */
     public OptionalInt deleteByArticleCode(String articleCode){
-        return getMyMongoOperator().freeDelete(Query.query(Criteria.where("articleCode").is(articleCode)),ArticleAndFile.class);
+        return getMyMongoOperator().freeRemove(Query.query(Criteria.where("articleCode").is(articleCode)),ArticleAndFile.class);
     }
 
     /**
@@ -44,7 +40,7 @@ public class ArticleAndFileDaoImpl implements ArticleAndFileDao {
      * @return
      */
     public OptionalInt deleteByArticleCodes(List<String> list) {
-        return getMyMongoOperator().freeDelete(Query.query(Criteria.where("articleCode").in(list)),ArticleAndFile.class);
+        return getMyMongoOperator().freeRemove(Query.query(Criteria.where("articleCode").in(list)),ArticleAndFile.class);
     }
 
     /**
@@ -57,7 +53,7 @@ public class ArticleAndFileDaoImpl implements ArticleAndFileDao {
                 .stream()
                 .map(fileCode -> new ArticleAndFile(article.getCode(), fileCode))
                 .collect(Collectors.toList());
-        return getMyMongoOperator().baseInsertBatch(articleAndFiles);
+        return getMyMongoOperator().insertBatch(articleAndFiles);
     }
 
     /**
@@ -68,9 +64,9 @@ public class ArticleAndFileDaoImpl implements ArticleAndFileDao {
         Optional<ArticleAndFile> articleAndFile = getMyMongoOperator().freeFindOne(
                 Query.query(Criteria.where("fileCode").is(uploadFile.getCode())), ArticleAndFile.class);
         articleAndFile.ifPresent(articleAndFile1 -> {
-            Optional<Article> article = getMyMongoOperator().baseFindById(articleAndFile1.getArticleCode(), Article.class);
+            Optional<Article> article = getMyMongoOperator().findById(articleAndFile1.getArticleCode(), Article.class);
             article.ifPresent(article1 -> {
-                Optional<ArticleClassify> articleClassify = getMyMongoOperator().baseFindById(article1.getClassify(), ArticleClassify.class);
+                Optional<ArticleClassify> articleClassify = getMyMongoOperator().findById(article1.getClassify(), ArticleClassify.class);
                 articleClassify.ifPresent(articleClassify1 ->
                         uploadFile.setLink(articleClassify1.getName() + " - " + article1.getTitle()));
             });

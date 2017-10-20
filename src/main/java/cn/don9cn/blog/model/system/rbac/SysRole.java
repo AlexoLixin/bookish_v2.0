@@ -31,7 +31,7 @@ public class SysRole extends BaseModel {
     /**
      * 权限菜单主键集合
      */
-    private List<String> menuCodesList;
+    private List<String> menuCodesList ;
 
     /**
      * 权限菜单集合

@@ -16,25 +16,10 @@ public interface ArticleClassifyService extends BaseService<ArticleClassify> {
 
 
     /**
-     * 添加分类
-     * @param articleClassify
-     * @return
-     */
-    OperaResult doSave(ArticleClassify articleClassify);
-
-    /**
      * 获取分类树
      * @return
      */
     OperaResult getTree();
-
-    /**
-     * 删除分类
-     * @param codes
-     * @param levels
-     * @return
-     */
-    OperaResult doRemove(String codes,String levels);
 
     /**
      * 获取分类下拉列表

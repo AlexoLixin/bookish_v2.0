@@ -97,7 +97,6 @@ public class UploadAction {
      * @param request
      * @return
      */
-    @SkipOperaLog
     @PostMapping("/fileBatch")
     public Object doFileUploadBatch(HttpServletRequest request) {
 
@@ -131,6 +130,7 @@ public class UploadAction {
      * @param code
      * @param response
      */
+    @SkipOperaLog
     @GetMapping("/fileDownLoad")
     public void doDownload(String code, HttpServletResponse response) {
         OperaResult operaResult = uploadFileService.baseFindById(code);

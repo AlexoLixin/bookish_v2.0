@@ -32,30 +32,16 @@ public class ArticleClassify extends BaseModel {
     private String leaf;
 
     /**
+     * 子节点主键集合
+     */
+    private List<String> childrenCodes = new ArrayList<>();
+
+    /**
      * 子节点结合
      */
     private List<ArticleClassify> children = new ArrayList<>();
 
     public ArticleClassify() {}
-
-    public ArticleClassify(String code, String leaf) {
-        this.setCode(code);
-        this.leaf = leaf;
-    }
-
-    /**
-     * 构造根节点
-     * @return
-     */
-    public ArticleClassify root(){
-        ArticleClassify articleClassify = new ArticleClassify();
-        articleClassify.setCode("ROOT");
-        articleClassify.setName("ROOT");
-        articleClassify.setParent("NONE");
-        articleClassify.setLeaf("N");
-        articleClassify.setLevel("0");
-        return articleClassify;
-    }
 
     public String getName() {
         return name;
@@ -95,5 +81,17 @@ public class ArticleClassify extends BaseModel {
 
     public void setChildren(List<ArticleClassify> children) {
         this.children = children;
+    }
+
+    public List<String> getChildrenCodes() {
+        return childrenCodes;
+    }
+
+    public void setChildrenCodes(List<String> childrenCodes) {
+        this.childrenCodes = childrenCodes;
+    }
+
+    public void addChild(ArticleClassify articleClassify){
+        this.children.add(articleClassify);
     }
 }

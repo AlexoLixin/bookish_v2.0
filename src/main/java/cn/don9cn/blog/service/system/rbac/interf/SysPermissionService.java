@@ -12,25 +12,11 @@ import cn.don9cn.blog.service.BaseService;
  */
 public interface SysPermissionService extends BaseService<SysPermission> {
 
-    /**
-     * 添加分类
-     * @param sysPermission
-     * @return
-     */
-    OperaResult doSave(SysPermission sysPermission);
 
     /**
      * 获取分类树
      * @return
      */
     OperaResult getTree();
-
-    /**
-     * 删除分类
-     * @param codes
-     * @param levels
-     * @return
-     */
-    OperaResult doRemove(String codes,String levels);
 
 }

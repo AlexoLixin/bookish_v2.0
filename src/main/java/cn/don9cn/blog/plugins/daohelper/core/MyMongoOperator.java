@@ -150,7 +150,7 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends BaseModel> OptionalInt baseInsert(T entity) {
+    public <T extends BaseModel> OptionalInt insert(T entity) {
         try{
             entity.setCreateBy(MyShiroSessionUtil.getUserCodeFromSession());
             if(entity.getCode()!=null && entity.getCode().trim().equals("")) entity.setCode(null);
@@ -169,7 +169,7 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends BaseModel> OptionalInt baseInsertBatch(List<T> list) {
+    public <T extends BaseModel> OptionalInt insertBatch(List<T> list) {
         list.forEach(entity -> {
             if(entity.getCode()!=null && entity.getCode().trim().equals("")) entity.setCode(null);
             entity.setCreateBy(MyShiroSessionUtil.getUserCodeFromSession());
@@ -190,17 +190,16 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends BaseModel> OptionalInt baseUpdate(T entity) {
-        int x;
+    public <T extends BaseModel> OptionalInt update(T entity) {
         try{
             entity.setModifyBy(MyShiroSessionUtil.getUserCodeFromSession());
             entity.setModifyTime(DateUtil.getModifyDateString());
-            x = mongoTemplate.updateFirst(createDefaultQuery(entity),
+            int x = mongoTemplate.updateFirst(createDefaultQuery(entity),
                     createDefaultUpdate(entity),entity.getClass(),getCollectionName(entity)).getN();
+            return OptionalInt.of(x);
         }catch (Exception e){
             throw new MyMongoOperatorException(e,"MyMongoOperator.update 更新失败");
         }
-        return OptionalInt.of(x);
     }
 
     /**
@@ -208,13 +207,12 @@ public class MyMongoOperator {
      * @return
      */
     public <T extends BaseModel> OptionalInt freeUpdateOne(Query query,Update update,Class<T> clazz) {
-        int x;
         try{
-            x = mongoTemplate.updateFirst(query,update,clazz,clazz.getSimpleName()).getN();
+            int   x = mongoTemplate.updateFirst(query,update,clazz,clazz.getSimpleName()).getN();
+            return OptionalInt.of(x);
         }catch (Exception e){
             throw new MyMongoOperatorException(e,"MyMongoOperator.freeUpdateOne 更新失败");
         }
-        return OptionalInt.of(x);
     }
 
     /**
@@ -222,13 +220,12 @@ public class MyMongoOperator {
      * @return
      */
     public <T extends BaseModel> OptionalInt freeUpdateMulti(Query query,Update update,Class<T> clazz) {
-        int x;
         try{
-            x = mongoTemplate.updateMulti(query,update,clazz,clazz.getSimpleName()).getN();
+            int  x = mongoTemplate.updateMulti(query,update,clazz,clazz.getSimpleName()).getN();
+            return OptionalInt.of(x);
         }catch (Exception e){
             throw new MyMongoOperatorException(e,"MyMongoOperator.freeUpdateMulti 更新失败");
         }
-        return OptionalInt.of(x);
     }
 
     /**
@@ -237,14 +234,13 @@ public class MyMongoOperator {
      * @param typeClass
      * @return
      */
-    public <T extends BaseModel> OptionalInt baseDeleteById(String id, Class<T> typeClass) {
-        int x;
+    public <T extends BaseModel> OptionalInt removeById(String id, Class<T> typeClass) {
         try{
-            x = mongoTemplate.remove(Query.query(Criteria.where("_id").is(id)),typeClass,typeClass.getSimpleName()).getN();
+            int   x = mongoTemplate.remove(Query.query(Criteria.where("_id").is(id)),typeClass,typeClass.getSimpleName()).getN();
+            return OptionalInt.of(x);
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.baseDeleteById 删除失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.removeById 删除失败");
         }
-        return OptionalInt.of(x);
     }
 
     /**
@@ -254,14 +250,13 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends BaseModel> OptionalInt baseDeleteBatch(List<String> list, Class<T> typeClass) {
-        int x;
+    public <T extends BaseModel> OptionalInt removeBatch(List<String> list, Class<T> typeClass) {
         try{
-            x = mongoTemplate.findAllAndRemove(Query.query(Criteria.where("_id").in(list)),typeClass,typeClass.getSimpleName()).size();
+            int x = mongoTemplate.findAllAndRemove(Query.query(Criteria.where("_id").in(list)),typeClass,typeClass.getSimpleName()).size();
+            return OptionalInt.of(x);
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.baseDeleteBatch 批量删除失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.removeBatch 批量删除失败");
         }
-        return OptionalInt.of(x);
     }
 
     /**
@@ -270,14 +265,13 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends BaseModel> OptionalInt baseDeleteAll(Class<T> typeClass) {
-        int x;
+    public <T extends BaseModel> OptionalInt removeAll(Class<T> typeClass) {
         try{
-            x = mongoTemplate.remove(Query.query(Criteria.where("_class").is(typeClass.getTypeName())),typeClass.getSimpleName()).getN();
+            int x = mongoTemplate.remove(Query.query(Criteria.where("_class").is(typeClass.getTypeName())),typeClass.getSimpleName()).getN();
+            return OptionalInt.of(x);
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.baseDeleteAll 删除所有失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.removeAll 删除所有失败");
         }
-        return OptionalInt.of(x);
     }
 
     /**
@@ -286,15 +280,31 @@ public class MyMongoOperator {
      * @param clazz
      * @return
      */
-    public <T extends BaseModel> OptionalInt freeDelete(Query query,Class<T> clazz) {
-        int x;
+    public <T extends BaseModel> OptionalInt freeRemove(Query query, Class<T> clazz) {
         try{
-            x = mongoTemplate.remove(query,clazz,clazz.getSimpleName()).getN();
+            int x = mongoTemplate.remove(query,clazz,clazz.getSimpleName()).getN();
+            return OptionalInt.of(x);
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.freeDelete 自定义删除失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.freeRemove 自定义删除失败");
         }
-        return OptionalInt.of(x);
     }
+
+    /**
+     * 删除并返回删除项
+     * @param query
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public <T extends BaseModel> Optional<List<T>> freeFindAllAndRemove(Query query, Class<T> clazz) {
+        try{
+            List<T> tList = mongoTemplate.findAllAndRemove(query, clazz, clazz.getSimpleName());
+            return Optional.ofNullable(tList);
+        }catch (Exception e){
+            throw new MyMongoOperatorException(e,"MyMongoOperator.freeRemove 自定义删除失败");
+        }
+    }
+
 
     /**
      * 基础-根据id查找
@@ -303,11 +313,11 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends BaseModel> Optional<T> baseFindById(String id, Class<T> typeClass) {
+    public <T extends BaseModel> Optional<T> findById(String id, Class<T> typeClass) {
         try{
             return Optional.ofNullable(mongoTemplate.findById(id,typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.baseFindById 查询失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.findById 查询失败");
         }
     }
 
@@ -317,7 +327,7 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends BaseModel> Optional<List<T>> baseFindListByParams(T entity) {
+    public <T extends BaseModel> Optional<List<T>> findListByParams(T entity) {
         Query query = createQueryByAllFields(entity);
         try{
             return Optional.ofNullable(mongoTemplate.find(query, (Class<T>) entity.getClass(),getCollectionName(entity)));
@@ -332,7 +342,7 @@ public class MyMongoOperator {
      * @param typeClass
      * @return
      */
-    public <T extends BaseModel> Optional<List<T>> baseFindAll(Class<T> typeClass) {
+    public <T extends BaseModel> Optional<List<T>> findAll(Class<T> typeClass) {
         try{
             return Optional.ofNullable(mongoTemplate.findAll(typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
@@ -346,11 +356,11 @@ public class MyMongoOperator {
      * @param typeClass
      * @return
      */
-    public <T extends BaseModel> Optional<List<T>> baseFindInIds(List<String> ids,Class<T> typeClass) {
+    public <T extends BaseModel> Optional<List<T>> findInIds(List<String> ids, Class<T> typeClass) {
         try{
             return Optional.ofNullable(mongoTemplate.find(Query.query(Criteria.where("_id").in(ids)),typeClass,typeClass.getSimpleName()));
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.baseFindInIds 查询失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.findInIds 查询失败");
         }
     }
 
@@ -360,7 +370,7 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends BaseModel> Optional<PageResult<T>> baseFindByPage(PageResult<T> pageResult) {
+    public <T extends BaseModel> Optional<PageResult<T>> findPage(PageResult<T> pageResult) {
         Integer skip = pageResult.getSkip();
         T entity = pageResult.getEntity();
         Query query = createQueryByAllFields(entity);
@@ -391,7 +401,7 @@ public class MyMongoOperator {
      * @param <T>
      * @return
      */
-    public <T extends BaseModel> Optional<PageResult<T>> freeFindByPage(PageResult<T> pageResult,Query query) {
+    public <T extends BaseModel> Optional<PageResult<T>> freeFindPage(PageResult<T> pageResult, Query query) {
         Integer skip = pageResult.getSkip();
         T entity = pageResult.getEntity();
         try{
@@ -407,7 +417,7 @@ public class MyMongoOperator {
             pageResult.setRows(list);
             return Optional.of(pageResult);
         }catch (Exception e){
-            throw new MyMongoOperatorException(e,"MyMongoOperator.freeFindByPage 查询失败");
+            throw new MyMongoOperatorException(e,"MyMongoOperator.freeFindPage 查询失败");
         }
 
     }

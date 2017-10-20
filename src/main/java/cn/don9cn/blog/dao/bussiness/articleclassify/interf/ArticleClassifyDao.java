@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 /**
@@ -18,17 +19,23 @@ import java.util.OptionalInt;
 public interface ArticleClassifyDao extends BaseDao<ArticleClassify> {
 
     /**
-     * 级联删除节点
-     * @param level
+     * 删除节点
+     * @param ids
      * @return
      */
-    OptionalInt deleteCascade(String level);
+    Optional<List<ArticleClassify>> removeNodes(List<String> ids);
 
     /**
-     * 级联删除后更新叶子节点
-     * @param allCodes
-     * @return
+     * 更新父节点(为其添加子节点)
+     * @param code
+     * @param child
      */
-    OptionalInt updateLeaf(List<String> allCodes);
+    OptionalInt updateParentForPush(String code, String child);
 
+    /**
+     * 更新父节点(为其删除子节点)
+     * @param code
+     * @param child
+     */
+    OptionalInt updateParentForPull(String code, String child);
 }

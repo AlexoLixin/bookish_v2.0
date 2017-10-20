@@ -18,6 +18,6 @@ import java.util.Optional;
 public class UploadFileDaoImpl implements UploadFileDao {
 
     public Optional<List<UploadFile>> findListInCodes(List<String> codes){
-        return getMyMongoOperator().baseFindInIds(codes,UploadFile.class);
+        return getMyMongoOperator().findInIds(codes,UploadFile.class);
     }
 }

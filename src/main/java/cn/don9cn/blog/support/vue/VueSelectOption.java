@@ -16,13 +16,10 @@ public class VueSelectOption extends BaseModel {
 
     private final String value;
 
-    private final String level;
 
-
-    public VueSelectOption(String label, String value, String level) {
+    public VueSelectOption(String label, String value) {
         this.label = label;
         this.value = value;
-        this.level = level;
     }
 
     public String getLabel() {
@@ -32,11 +29,6 @@ public class VueSelectOption extends BaseModel {
 
     public String getValue() {
         return value;
-    }
-
-
-    public String getLevel() {
-        return level;
     }
 
 

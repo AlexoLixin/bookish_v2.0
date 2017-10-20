@@ -8,8 +8,11 @@ import cn.don9cn.blog.plugins.operaresult.util.OperaResultUtil;
 import cn.don9cn.blog.service.bussiness.articleclassify.interf.ArticleClassifyService;
 import cn.don9cn.blog.support.vue.VueSelectOption;
 import cn.don9cn.blog.util.MyStringUtil;
+import cn.don9cn.blog.util.UuidUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +26,7 @@ import java.util.stream.Collectors;
  * @Create: 2017/10/10 10:24
  * @Modify:
  */
-@SuppressWarnings("Since15")
+@SuppressWarnings({"Since15", "Duplicates"})
 @Service
 @Transactional
 public class ArticleClassifyServiceImpl implements ArticleClassifyService {
@@ -33,72 +36,85 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 
 
 	@Override
-	public OperaResult baseInsert(ArticleClassify entity) {
-		entity.setLeaf("Y");
-		return OperaResultUtil.insert(articleClassifyDao.baseInsert(entity));
+	@CacheEvict(value = "ArticleClassify",allEntries = true)
+	public OperaResult baseInsert(ArticleClassify articleClassify) {
+		String code = UuidUtil.getUuid();
+		articleClassify.setCode(code);
+		//保存当前节点
+		OptionalInt optional = articleClassifyDao.baseInsert(articleClassify);
+		optional.ifPresent(x -> {
+			//更新父节点
+			if(!articleClassify.getParent().equals("ROOT")){
+				articleClassifyDao.updateParentForPush(articleClassify.getParent(),code);
+			}
+		});
+		return OperaResultUtil.insert(optional);
 	}
 
 	@Override
+	@CacheEvict(value = "ArticleClassify",allEntries = true)
 	public OperaResult baseInsertBatch(List<ArticleClassify> list) {
 		return OperaResultUtil.insertBatch(articleClassifyDao.baseInsertBatch(list));
 	}
 
 	@Override
+	@CacheEvict(value = "ArticleClassify",allEntries = true)
 	public OperaResult baseUpdate(ArticleClassify entity) {
 		return OperaResultUtil.update(articleClassifyDao.baseUpdate(entity));
 	}
 
 	@Override
+	@CacheEvict(value = "ArticleClassify",allEntries = true)
 	public OperaResult baseDeleteById(String id) {
 		return OperaResultUtil.deleteOne(articleClassifyDao.baseDeleteById(id));
 	}
 
 	@Override
+	@CacheEvict(value = "ArticleClassify",allEntries = true)
 	public OperaResult baseDeleteBatch(String codes) {
 		if(StringUtils.isNotBlank(codes)){
 			List<String> codesList = MyStringUtil.codesStr2List(codes);
-			return OperaResultUtil.deleteBatch(articleClassifyDao.baseDeleteBatch(codesList));
+			// 先删除选中的节点
+			Optional<List<ArticleClassify>> removeNodes = articleClassifyDao.removeNodes(codesList);
+			if(removeNodes.isPresent()){
+				List<ArticleClassify> list = removeNodes.get();
+				list.forEach(articleClassify -> {
+					// 级联删除其子节点
+					articleClassify.getChildrenCodes().forEach(code -> articleClassifyDao.baseDeleteById(code));
+					// 更新父节点
+					articleClassifyDao.updateParentForPull(articleClassify.getParent(),articleClassify.getCode());
+				});
+				return OperaResultUtil.deleteBatch(OptionalInt.of(list.size()));
+			}else{
+				return OperaResultUtil.deleteBatch(OptionalInt.empty());
+			}
 		}else{
 			return new OperaResult(false,"删除失败,传入codes为空!");
 		}
 	}
 
 	@Override
+	@Cacheable(value = "ArticleClassify")
 	public OperaResult baseFindById(String id) {
 		return OperaResultUtil.findOne(articleClassifyDao.baseFindById(id));
 	}
 
 	@Override
+	@Cacheable(value = "ArticleClassify")
 	public OperaResult baseFindAll() {
 		return OperaResultUtil.findAll(articleClassifyDao.baseFindAll());
 	}
 
 	@Override
+	@Cacheable(value = "ArticleClassify")
 	public OperaResult baseFindListByParams(ArticleClassify entity) {
 		return OperaResultUtil.findListByParams(articleClassifyDao.baseFindListByParams(entity));
 	}
 
 	@Override
+	@Cacheable(value = "ArticleClassify")
 	public OperaResult baseFindByPage(PageResult<ArticleClassify> pageResult) {
 		return OperaResultUtil.findPage(articleClassifyDao.baseFindByPage(pageResult));
-	}
-
-	/**
-	 * 添加分类
-	 * @param articleClassify
-	 * @return
-	 */
-	@Override
-	public OperaResult doSave(ArticleClassify articleClassify) {
-		//将当前节点设置为叶子节点
-		articleClassify.setLeaf("Y");
-		//保存当前节点
-		OptionalInt optional = articleClassifyDao.baseInsert(articleClassify);
-		//更新父节点为非叶子节点
-		if(!articleClassify.getParent().equals("ROOT")){
-			articleClassifyDao.baseUpdate(new ArticleClassify(articleClassify.getParent(),"N"));
-		}
-		return OperaResultUtil.insert(optional);
 	}
 
 	/**
@@ -106,36 +122,23 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	 * @return
 	 */
 	@Override
+	@Cacheable(value = "ArticleClassify")
 	public OperaResult getTree() {
 
 		Optional<List<ArticleClassify>> listOptional = articleClassifyDao.baseFindAll();
-		Optional<List<ArticleClassify>> resultOptional;
 		if(listOptional.isPresent()){
-			List<ArticleClassify> all = listOptional.get();
-			List<ArticleClassify> temp = new ArrayList<>();
-			// 对所有节点按照父子关系进行重新组装
-			List<ArticleClassify> result = all.stream().filter(t -> t.getLeaf().equals("N")).map(t -> {
-				List<ArticleClassify> children = all.stream()
-						.filter(sub -> sub.getParent().equals(t.getCode()))
-						.sorted(Comparator.comparing(sub -> Integer.parseInt(sub.getLevel())))
-						.collect(Collectors.toList());
-				if(children!=null){
-					t.setChildren(children);
-					temp.addAll(children);
-				}
-				temp.add(t);
-				return t;
-			}).filter(t -> t.getParent().equals("ROOT"))
-					.sorted(Comparator.comparing(t -> Integer.parseInt(t.getLevel()))).collect(Collectors.toList());
-			all.removeAll(temp);
-			result.addAll(all);
-			resultOptional = Optional.ofNullable(result.stream()
-					.sorted(Comparator.comparing(t -> Integer.parseInt(t.getLevel())))
-					.collect(Collectors.toList()));
-		}else{
-			resultOptional =  Optional.of(new ArrayList<>());
+			List<ArticleClassify> classifies = listOptional.get();
+			Map<String,ArticleClassify> tempMap = new HashMap<>();
+			classifies.forEach(classify -> tempMap.put(classify.getCode(),classify));
+			classifies.forEach(classify -> classify.getChildrenCodes().forEach(childCode -> {
+                classify.addChild(tempMap.get(childCode));
+            }));
+			List<ArticleClassify> classifyList = classifies.stream()
+															.filter(articleClassify -> articleClassify.getParent().equals("ROOT"))
+															.collect(Collectors.toList());
+			return OperaResultUtil.findAll(Optional.ofNullable(classifyList));
 		}
-		return OperaResultUtil.findAll(resultOptional);
+		return OperaResultUtil.findAll(Optional.empty());
 
 	}
 
@@ -144,66 +147,25 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	 * @return
 	 */
 	@Override
+	@Cacheable(value = "ArticleClassify")
 	public OperaResult doGetSelectOptions() {
-		List<ArticleClassify> allClassifies = articleClassifyDao.baseFindAll().get();
-		Map<String, List<ArticleClassify>> map = allClassifies.stream().collect(Collectors.groupingBy(ArticleClassify::getCode));
-		List<VueSelectOption> result = allClassifies.stream().filter(t -> t.getLeaf().equals("Y")&&!t.getParent().equals("ROOT"))
-				.map(t -> new VueSelectOption("[" + map.get(t.getParent()).get(0).getName() + "] - " + t.getName(), t.getCode(), t.getLevel()))
-				.sorted(Comparator.comparing(t -> Integer.parseInt(t.getLevel())))
-				.collect(Collectors.toList());
-		return OperaResultUtil.findAll(Optional.ofNullable(result));
-	}
+		Optional<List<ArticleClassify>> allClassifies = articleClassifyDao.baseFindAll();
+		List<VueSelectOption> result = new ArrayList<>();
+		if(allClassifies.isPresent()){
+			List<ArticleClassify> all = allClassifies.get();
+			Map<String,ArticleClassify> tempMap = new HashMap<>();
+			all.forEach(articleClassify -> tempMap.put(articleClassify.getCode(),articleClassify));
+			all.stream().filter(articleClassify -> articleClassify.getChildrenCodes().size()>0)
+						.forEach(articleClassify -> {
+							articleClassify.getChildrenCodes().forEach(code -> {
+								ArticleClassify classify = tempMap.get(code);
+								result.add(new VueSelectOption("【 "+articleClassify.getName()+" 】 - "+classify.getName(),classify.getCode()));
+							});
+						});
 
-	/**
-	 * 删除分类
-	 * @param codes
-	 * @param levels
-	 * @return
-	 */
-	@Override
-	public OperaResult doRemove(String codes, String levels) {
-		if(StringUtils.isNotBlank(codes) && StringUtils.isNotBlank(levels)){
-			List<String> codesList = MyStringUtil.codesStr2List(codes);
-			List<String> levelsList = MyStringUtil.codesStr2List(levels);
-			//删除当前分类
-			OptionalInt optional_1 = articleClassifyDao.baseDeleteBatch(codesList);
-			//级联删除分类
-			OptionalInt optional_2 = deleteCascade(levelsList);
-			//更新节点状态
-			updateLeaf();
-			return OperaResultUtil.deleteOne(OptionalInt.of(optional_1.orElse(0)+optional_2.orElse(0)));
-		}else{
-			return new OperaResult(false,"传入codes或者levels为空!");
 		}
+		return new OperaResult(true,"查询成功").setObj(result);
 	}
 
-	/**
-	 * 级联删除分类
-	 * @param levelsList
-	 */
-	private OptionalInt deleteCascade(List<String> levelsList) {
-		int x = 0;
-		for(String level:levelsList){
-			int y = articleClassifyDao.deleteCascade(level).getAsInt();
-			x += y;
-		}
-		return OptionalInt.of(x);
-	}
 
-	/**
-	 * 更新节点状态
-	 * @return
-	 */
-	private OptionalInt updateLeaf() {
-		List<ArticleClassify> allClassifies = articleClassifyDao.baseFindAll().get();
-		List<String> allCodes = allClassifies.stream().map(ArticleClassify::getCode).collect(Collectors.toList());
-		allCodes.add("ROOT");
-		List<String> temp = new ArrayList<>();
-		allClassifies.forEach(classify -> {
-			if(!allCodes.contains(classify.getParent())){
-				temp.add(classify.getParent());
-			}
-		});
-		return articleClassifyDao.updateLeaf(temp);
-	}
 }

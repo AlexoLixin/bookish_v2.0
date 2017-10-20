@@ -31,7 +31,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	@Override
 	@PostMapping
 	protected OperaResult baseInsert(ArticleClassify articleClassify) {
-		return articleClassifyService.doSave(articleClassify);
+		return articleClassifyService.baseInsert(articleClassify);
 	}
 
 	@Override
@@ -46,13 +46,14 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	}
 
 	@Override
-	protected OperaResult baseRemove(String codes) {
+	protected OperaResult baseRemove(String code) {
 		return null;
 	}
 
 	@Override
+	@DeleteMapping
 	protected OperaResult baseRemoveBatch(String codes) {
-		return null;
+		return articleClassifyService.baseDeleteBatch(codes);
 	}
 
 	@Override
@@ -77,17 +78,6 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	@GetMapping("/page")
 	protected OperaResult baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,ArticleClassify articleClassify) {
 		return articleClassifyService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,articleClassify));
-	}
-
-	/**
-	 * 删除分类
-	 * @param codes
-	 * @param levels
-	 * @return
-	 */
-	@DeleteMapping
-	protected OperaResult doRemove(String codes,String levels) {
-		return articleClassifyService.doRemove(codes,levels);
 	}
 
 	/**
