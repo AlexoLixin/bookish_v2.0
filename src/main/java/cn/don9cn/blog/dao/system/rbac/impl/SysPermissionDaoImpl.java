@@ -4,13 +4,16 @@ import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.dao.system.rbac.interf.SysPermissionDao;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
 import cn.don9cn.blog.model.system.rbac.SysPermission;
+import cn.don9cn.blog.plugins.daohelper.core.MyMongoOperator;
 import cn.don9cn.blog.util.DateUtil;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -67,10 +70,18 @@ public class SysPermissionDaoImpl implements SysPermissionDao {
      */
     @Override
     public OptionalInt update(SysPermission entity) {
+        MyMongoOperator myMongoOperator = getMyMongoOperator();
         entity.setModifyBy(MyShiroSessionUtil.getUserCodeFromSession());
         entity.setModifyTime(DateUtil.getModifyDateString());
-        Query query = getMyMongoOperator().createDefaultQuery(entity);
-        Update update = getMyMongoOperator().createDefaultUpdate(entity).unset("childrenCodes");
-        return getMyMongoOperator().freeUpdateOne(query,update,SysPermission.class);
+        Query query = myMongoOperator.createDefaultQuery(entity);
+        Update update = myMongoOperator.createFreeUpdate(entity,fieldObjectMap -> {
+            Update updateResult = new Update();
+            fieldObjectMap.keySet().forEach(field -> {
+                if(!field.getName().equals("childrenCodes"))
+                    updateResult.set(field.getName(),fieldObjectMap.get(field));
+            });
+            return updateResult;
+        });
+        return myMongoOperator.freeUpdateOne(query,update,SysPermission.class);
     }
 }
