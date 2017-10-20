@@ -2,9 +2,6 @@ package cn.don9cn.blog.dao.bussiness.articleclassify.interf;
 
 import cn.don9cn.blog.dao.BaseDao;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,4 +35,11 @@ public interface ArticleClassifyDao extends BaseDao<ArticleClassify> {
      * @param child
      */
     OptionalInt updateParentForPull(String code, String child);
+
+    /**
+     * 更新节点(跳过childrenCodes字段)
+     * @param entity
+     * @return
+     */
+    OptionalInt update(ArticleClassify entity);
 }

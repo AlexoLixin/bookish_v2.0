@@ -23,6 +23,7 @@ import java.util.OptionalInt;
  * @Create: 2017/10/16 14:14
  * @Modify:
  */
+@SuppressWarnings("Duplicates")
 @Repository
 public class SysPermissionDaoImpl implements SysPermissionDao {
 

@@ -60,7 +60,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	@Override
 	@CacheEvict(value = "ArticleClassify",allEntries = true)
 	public OperaResult baseUpdate(ArticleClassify entity) {
-		return OperaResultUtil.update(articleClassifyDao.baseUpdate(entity));
+		return OperaResultUtil.update(articleClassifyDao.update(entity));
 	}
 
 	@Override
