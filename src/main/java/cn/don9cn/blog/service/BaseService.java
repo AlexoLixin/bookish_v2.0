@@ -8,9 +8,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author Don9
- * @create 2017-04-27-9:11
- **/
+ * @Author: liuxindong
+ * @Description: 基础service接口
+ * @Create: 2017/10/23 10:21
+ * @Modify:
+ */
 public interface BaseService<T extends Serializable> {
 
     /**

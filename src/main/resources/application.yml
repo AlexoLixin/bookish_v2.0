@@ -49,3 +49,20 @@ spring:
   redis:
     cluster:
       nodes: 45.77.6.109:7001
+  kafka:
+    bootstrap-servers: 45.77.6.109:9092
+    consumer:
+      group-id: testconsumer
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: true
+    template:
+      default-topic: testv2
+    producer:
+      bootstrap-servers: 45.77.6.109:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    system-msg:
+      topic: testsys
+      timeout: 3000

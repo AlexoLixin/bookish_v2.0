@@ -36,7 +36,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 
 
 	@Override
-	@CacheEvict(value = "ArticleClassify",allEntries = true)
+	//@CacheEvict(value = "ArticleClassify",allEntries = true)
 	public OperaResult baseInsert(ArticleClassify articleClassify) {
 		String code = UuidUtil.getUuid();
 		articleClassify.setCode(code);
@@ -52,25 +52,25 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	}
 
 	@Override
-	@CacheEvict(value = "ArticleClassify",allEntries = true)
+	//@CacheEvict(value = "ArticleClassify",allEntries = true)
 	public OperaResult baseInsertBatch(List<ArticleClassify> list) {
 		return OperaResultUtil.insertBatch(articleClassifyDao.baseInsertBatch(list));
 	}
 
 	@Override
-	@CacheEvict(value = "ArticleClassify",allEntries = true)
+	//@CacheEvict(value = "ArticleClassify",allEntries = true)
 	public OperaResult baseUpdate(ArticleClassify entity) {
 		return OperaResultUtil.update(articleClassifyDao.update(entity));
 	}
 
 	@Override
-	@CacheEvict(value = "ArticleClassify",allEntries = true)
+	//@CacheEvict(value = "ArticleClassify",allEntries = true)
 	public OperaResult baseDeleteById(String id) {
 		return OperaResultUtil.deleteOne(articleClassifyDao.baseDeleteById(id));
 	}
 
 	@Override
-	@CacheEvict(value = "ArticleClassify",allEntries = true)
+	//@CacheEvict(value = "ArticleClassify",allEntries = true)
 	public OperaResult baseDeleteBatch(String codes) {
 		if(StringUtils.isNotBlank(codes)){
 			List<String> codesList = MyStringUtil.codesStr2List(codes);
@@ -94,25 +94,25 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	}
 
 	@Override
-	@Cacheable(value = "ArticleClassify")
+	//@Cacheable(value = "ArticleClassify")
 	public OperaResult baseFindById(String id) {
 		return OperaResultUtil.findOne(articleClassifyDao.baseFindById(id));
 	}
 
 	@Override
-	@Cacheable(value = "ArticleClassify")
+	//@Cacheable(value = "ArticleClassify")
 	public OperaResult baseFindAll() {
 		return OperaResultUtil.findAll(articleClassifyDao.baseFindAll());
 	}
 
 	@Override
-	@Cacheable(value = "ArticleClassify")
+	//@Cacheable(value = "ArticleClassify")
 	public OperaResult baseFindListByParams(ArticleClassify entity) {
 		return OperaResultUtil.findListByParams(articleClassifyDao.baseFindListByParams(entity));
 	}
 
 	@Override
-	@Cacheable(value = "ArticleClassify")
+	//@Cacheable(value = "ArticleClassify")
 	public OperaResult baseFindByPage(PageResult<ArticleClassify> pageResult) {
 		return OperaResultUtil.findPage(articleClassifyDao.baseFindByPage(pageResult));
 	}
@@ -122,7 +122,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	 * @return
 	 */
 	@Override
-	@Cacheable(value = "ArticleClassify")
+	//@Cacheable(value = "ArticleClassify")
 	public OperaResult getTree() {
 
 		Optional<List<ArticleClassify>> listOptional = articleClassifyDao.baseFindAll();
@@ -147,7 +147,7 @@ public class ArticleClassifyServiceImpl implements ArticleClassifyService {
 	 * @return
 	 */
 	@Override
-	@Cacheable(value = "ArticleClassify")
+	//@Cacheable(value = "ArticleClassify")
 	public OperaResult doGetSelectOptions() {
 		Optional<List<ArticleClassify>> allClassifies = articleClassifyDao.baseFindAll();
 		List<VueSelectOption> result = new ArrayList<>();

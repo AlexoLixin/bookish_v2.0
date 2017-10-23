@@ -40,6 +40,11 @@ public class ShiroAutoConfig {
         filterChainMap.put("/bussiness/articleClassify/tree/public","anon");    // 加载文章分类树
         filterChainMap.put("/system/upload/image","anon");                      // 图片上传
         filterChainMap.put("/system/upload/fileDownLoad","anon");               // 文件下载
+        filterChainMap.put("/msgWebSocket","anon");                             // 消息推送 webSocket
+        filterChainMap.put("/sockjs/msgWebSocket","anon");
+        filterChainMap.put("/chatRoomWebSocket","anon");                        // 聊天室 webSocket
+        filterChainMap.put("/sockjs/chatRoomWebSocket","anon");
+
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainMap.put("/logout", "logout");
 

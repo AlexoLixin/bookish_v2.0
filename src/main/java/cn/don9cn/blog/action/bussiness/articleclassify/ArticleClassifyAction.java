@@ -1,12 +1,15 @@
 package cn.don9cn.blog.action.bussiness.articleclassify;
 
 import cn.don9cn.blog.action.BaseAction;
+import cn.don9cn.blog.autoconfigs.kafka.MessageProducer;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
+import cn.don9cn.blog.model.system.msg.SysMessage;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.bussiness.articleclassify.interf.ArticleClassifyService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,9 +27,12 @@ import java.util.List;
 public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	
     private static Logger logger = Logger.getLogger(ArticleClassifyAction.class);
-	
+
 	@Autowired
 	private ArticleClassifyService articleClassifyService;
+
+	@Autowired
+	private MessageProducer messageProducer;
 
 	@Override
 	@PostMapping
@@ -95,6 +101,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 */
 	@GetMapping(path = {"/tree","/tree/public"})
 	public OperaResult getTree() {
+		messageProducer.push("aaaa",new SysMessage("testsys","a title","some contents"));
 		return articleClassifyService.getTree();
 	}
 }

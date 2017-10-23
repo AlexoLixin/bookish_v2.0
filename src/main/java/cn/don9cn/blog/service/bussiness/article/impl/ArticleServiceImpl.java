@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +49,7 @@ public class ArticleServiceImpl implements ArticleService {
 	private ArticleAndFileDao articleAndFileDao;
 
 	@Override
-	@CacheEvict(value = "Article",allEntries = true)
+	//@CacheEvict(value = "Article",allEntries = true)
 	public OperaResult baseInsert(Article entity) {
 		entity.setCode(UuidUtil.getUuid());
 		entity.setAuthor(MyShiroSessionUtil.getUserNameFromSession());
@@ -59,14 +60,14 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	@CacheEvict(value = "Article",allEntries = true)
+	//@CacheEvict(value = "Article",allEntries = true)
 	public OperaResult baseInsertBatch(List<Article> list) {
 		list.forEach(article -> article.setAuthor(MyShiroSessionUtil.getUserNameFromSession()));
 		return OperaResultUtil.insertBatch(articleDao.baseInsertBatch(list));
 	}
 
 	@Override
-	@CacheEvict(value = "Article",allEntries = true)
+	//@CacheEvict(value = "Article",allEntries = true)
 	public OperaResult baseUpdate(Article entity) {
 		articleAndFileDao.deleteByArticleCode(entity.getCode());
 		if(StringUtils.isNotBlank(entity.getFiles())){
@@ -76,14 +77,14 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	@CacheEvict(value = "Article",allEntries = true)
+	//@CacheEvict(value = "Article",allEntries = true)
 	public OperaResult baseDeleteById(String id) {
 		articleAndFileDao.deleteByArticleCode(id);
 		return OperaResultUtil.deleteOne(articleDao.baseDeleteById(id));
 	}
 
 	@Override
-	@CacheEvict(value = "Article",allEntries = true)
+	//@CacheEvict(value = "Article",allEntries = true)
 	public OperaResult baseDeleteBatch(String codes) {
 		if(StringUtils.isNotBlank(codes)){
 			List<String> codesList = MyStringUtil.codesStr2List(codes);
@@ -95,7 +96,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	@Cacheable(value = "Article")
+	//@Cacheable(value = "Article")
 	public OperaResult baseFindById(String id) {
 		Optional<Article> article = articleDao.baseFindById(id);
 		article.ifPresent(a -> {
@@ -107,19 +108,19 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	@Cacheable(value = "Article")
+	//@Cacheable(value = "Article")
 	public OperaResult baseFindAll() {
 		return OperaResultUtil.findAll(articleDao.baseFindAll());
 	}
 
 	@Override
-	@Cacheable(value = "Article")
+	//@Cacheable(value = "Article")
 	public OperaResult baseFindListByParams(Article entity) {
 		return OperaResultUtil.findListByParams(articleDao.baseFindListByParams(entity));
 	}
 
 	@Override
-	@Cacheable(value = "Article")
+	//@Cacheable(value = "Article")
 	public OperaResult baseFindByPage(PageResult<Article> pageResult) {
 		Optional<PageResult<Article>> resultOptional = articleDao.baseFindByPage(pageResult);
 		resultOptional.ifPresent(pageResult1 -> pageResult1.getRows().forEach(article -> {
@@ -135,7 +136,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @return
 	 */
 	@Override
-	@CacheEvict(value = "Article",allEntries = true)
+	//@CacheEvict(value = "Article",allEntries = true)
 	public OperaResult doRemoveByUser(String code) {
 		return OperaResultUtil.deleteOne(articleDao.removeByUser(code,MyShiroSessionUtil.getUserCodeFromSession()));
 	}
@@ -146,7 +147,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @return
 	 */
 	@Override
-	@CacheEvict(value = "Article",allEntries = true)
+	//@CacheEvict(value = "Article",allEntries = true)
 	public OperaResult doUpdateByUser(Article article) {
 		article.setCreateBy(MyShiroSessionUtil.getUserCodeFromSession());
 		article.setModifyBy(MyShiroSessionUtil.getUserCodeFromSession());
@@ -159,7 +160,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @return
 	 */
 	@Override
-	@Cacheable(value = "Article")
+	//@Cacheable(value = "Article")
 	public OperaResult doFindByPageByUser(PageResult<Article> pageResult) {
 		pageResult.getEntity().setCreateBy(MyShiroSessionUtil.getUserCodeFromSession());
 		return OperaResultUtil.findPage(articleDao.baseFindByPage(pageResult));

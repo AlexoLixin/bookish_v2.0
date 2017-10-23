@@ -34,14 +34,7 @@ public class MongoDbTest {
     private static void test(MongoOperations mongoTemplate) {
 
 
-        List<SysPermission> permissionList =
-                mongoTemplate.findAll(SysPermission.class,"SysPermission");
-
-        List<String> list = permissionList.stream().map(SysPermission::getCode).collect(Collectors.toList());
-
-        mongoTemplate.updateFirst(Query.query(Criteria.where("encoding").is("ROLE_SUPERADMIN")), Update.update("menuCodesList",list),"SysRole");
-
-        //list.forEach(System.out::println);
+        mongoTemplate.remove(Query.query(Criteria.where("_id").is("0dcc7a6d67134ec29ba35ec604c223dc")),"SysPermission");
 
     }
 
