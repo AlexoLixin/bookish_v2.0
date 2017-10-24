@@ -13,7 +13,7 @@ spring:
   # mongodb
   data:
     mongodb:
-      uri: mongodb://liuxindong:123456@127.0.0.1:27017/don9blog
+      uri: mongodb://liuxindong:123456@47.94.206.26:27017/don9blog
   # 开启aop
   aop:
     auto: true
@@ -66,7 +66,7 @@ spring:
   profiles: development
   redis:
     cluster:
-      nodes: 45.77.6.109:7001
+      nodes: 47.94.206.26:7001
   kafka:
     bootstrap-servers: 45.77.6.109:9092
     template:
