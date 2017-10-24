@@ -1,8 +1,10 @@
 package cn.don9cn.blog.action.system.msg;
 
+import cn.don9cn.blog.model.system.msg.SysMessage;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.msg.interf.SysMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,9 +21,9 @@ public class SysMessageAction {
     @Autowired
     private SysMessageService sysMessageService;
 
-    public OperaResult push(){
-
-        return null;
+    @PostMapping("/push")
+    public OperaResult push(SysMessage sysMessage){
+        return sysMessageService.push(sysMessage);
     }
 
 }

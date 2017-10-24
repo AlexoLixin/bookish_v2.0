@@ -38,8 +38,6 @@ public class MessageProducer {
             }
             kafkaTemplate.flush();
         }catch (Exception e){
-            System.out.println("发布消息到Kafka失败...");
-            e.printStackTrace();
             throw new ExceptionWrapper(e,"MessageProducer.push 发布消息失败");
         }
     }
