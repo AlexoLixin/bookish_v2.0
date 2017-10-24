@@ -35,7 +35,7 @@ public class ChatRoomWebSocketHandler extends TextWebSocketHandler {
      */
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 
-        String username = (String) session.getAttributes().get("CHATROOM_USERNAME");
+        String username = (String) session.getAttributes().get("chatRoom_msg_webSocket_user");
         userMap.put(username,session);
         System.out.println("MsgWebSocket: ["+username+"] 加入了聊天室... 当前在线人数: " + userMap.values().size());
         // 将新用户加入的消息推送给聊天室在线用户
@@ -49,7 +49,7 @@ public class ChatRoomWebSocketHandler extends TextWebSocketHandler {
      */
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 
-        String username= (String) session.getAttributes().get("CHATROOM_USERNAME");
+        String username= (String) session.getAttributes().get("chatRoom_msg_webSocket_user");
         userMap.remove(username);
         System.out.println("MsgWebSocket: 用户 [" + username + "] 离开了聊天室... 当前在线人数: " + userMap.values().size());
         // 将新用户离开的消息推送给聊天室在线用户
@@ -63,14 +63,14 @@ public class ChatRoomWebSocketHandler extends TextWebSocketHandler {
      */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        String username= (String) session.getAttributes().get("CHATROOM_USERNAME");
+        String username= (String) session.getAttributes().get("chatRoom_msg_webSocket_user");
         // 用户发送消息后,将消息推送给聊天室所有成员
         sendMessageToOthers(username,message);
     }
 
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         if(session.isOpen()) session.close();
-        String username= (String) session.getAttributes().get("WEBSOCKET_USERNAME");
+        String username= (String) session.getAttributes().get("chatRoom_msg_webSocket_user");
         userMap.remove(username);
         System.out.println("MsgWebSocket: 发生异常,用户 [" + username + "] 停止连接聊天室... 当前在线人数: " + userMap.values().size());
     }
@@ -85,11 +85,11 @@ public class ChatRoomWebSocketHandler extends TextWebSocketHandler {
      * @param message
      */
     public void sendMessageToAll(TextMessage message) {
-        userMap.values().stream().forEach(session -> {
+        userMap.values().forEach(session -> {
             if(session.isOpen()) try {
                 session.sendMessage(message);
             } catch (IOException e) {
-                System.out.println("MsgWebSocket: 推送给用户 ["+session.getAttributes().get("CHATROOM_USERNAME")+"] 消息时发生异常...");
+                System.out.println("MsgWebSocket: 推送给用户 ["+session.getAttributes().get("chatRoom_msg_webSocket_user")+"] 消息时发生异常...");
                 e.printStackTrace();
             }
         });
@@ -99,7 +99,7 @@ public class ChatRoomWebSocketHandler extends TextWebSocketHandler {
      * 给聊天室所有其他在线用户发送消息
      */
     public void sendMessageToOthers(String username,TextMessage message) {
-        userMap.keySet().stream()
+        userMap.keySet()
                         .forEach(key -> {
                             WebSocketSession session = userMap.get(key);
                             if(session.isOpen()) try {

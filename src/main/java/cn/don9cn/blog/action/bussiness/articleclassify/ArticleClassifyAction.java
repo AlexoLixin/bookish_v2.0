@@ -31,8 +31,6 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	@Autowired
 	private ArticleClassifyService articleClassifyService;
 
-	@Autowired
-	private MessageProducer messageProducer;
 
 	@Override
 	@PostMapping
@@ -101,7 +99,6 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 */
 	@GetMapping(path = {"/tree","/tree/public"})
 	public OperaResult getTree() {
-		messageProducer.push("aaaa",new SysMessage("testsys","a title","some contents"));
 		return articleClassifyService.getTree();
 	}
 }
