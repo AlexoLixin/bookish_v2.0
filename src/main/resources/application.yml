@@ -10,10 +10,6 @@ spring:
   http:
     multipart:
       enabled: true
-  # mongodb
-  data:
-    mongodb:
-      uri: mongodb://liuxindong:123456@47.94.206.26:27017/don9blog
   # 开启aop
   aop:
     auto: true
@@ -32,45 +28,53 @@ spring:
     consumer:
       group-id: application
       auto-offset-reset: earliest
-      enable-auto-commit: false
-      fetch-max-wait: 5000
-      max-poll-records: 100
-      auto-commit-interval: 100
+      enable-auto-commit: true
+      fetch-max-wait: 3000
+      max-poll-records: 1000
+      auto-commit-interval: 1000
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      fetch-min-size: 0
 
 
-######### 文件保存路径
+
+
+---
+
+############### 生产环境配置
+
+spring:
+  profiles: production
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  data:
+    mongodb:
+      uri: mongodb://liuxindong:123456@127.0.0.1:27017/don9blog
+
+---
+
+############### 开发环境配置
+
+spring:
+  profiles: development
+  redis:
+    host: 47.94.206.26
+    port: 6379
+  kafka:
+    bootstrap-servers: 47.94.206.26:9092
+    template:
+      default-topic: test
+    system-msg:
+      topic: test
+      timeout: 2000
+  data:
+    mongodb:
+      uri: mongodb://liuxindong:123456@127.0.0.1:27017/don9blog
+
+# 文件保存路径
 fileSavePath:
   serverUrl: http://localhost:9999
   serverRoot: E:/Apache24/htdocs
   images: /don9cn/images
   uploadFiles: /don9cn/uploadFiles
-
----
-
-# 生产环境配置
-
-spring:
-  profiles: production
-  redis:
-    cluster:
-      nodes: 127.0.0.1:7001
-
-
----
-
-# 开发环境配置
-
-spring:
-  profiles: development
-  redis:
-    cluster:
-      nodes: 47.94.206.26:7001
-  kafka:
-    bootstrap-servers: 45.77.6.109:9092
-    template:
-      default-topic: test1
-    system-msg:
-      topic: test1
-      timeout: 3000

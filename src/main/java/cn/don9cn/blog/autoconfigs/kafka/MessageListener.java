@@ -18,8 +18,8 @@ public class MessageListener {
     @Autowired
     private MsgWebSocketHandler msgWebSocketHandler;
 
-    @KafkaListener(topics = {"test1"})
-    public void listen(ConsumerRecord<String,String> record){
+    @KafkaListener(topics = {"test"})
+    public void listen(ConsumerRecord<String,String> record) {
         System.out.println("监听到新消息:"+record.value());
         // 监听到新消息后,通过webSocket推送到前端
         msgWebSocketHandler.sendMessageToAll();

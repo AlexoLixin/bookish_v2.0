@@ -37,8 +37,7 @@ public class MessageConsumer {
     public KafkaConsumer<String,String> build(String groupId){
         Map<String, Object> properties = kafkaProperties.buildConsumerProperties();
         properties.put("group.id",groupId);
-        properties.put("auto.commit.interval.ms","1000");
-        properties.put("session.timeout.ms","30000");
+        properties.put("session.timeout.ms","10000");
         return new KafkaConsumer<>(properties);
     }
 
@@ -75,7 +74,7 @@ public class MessageConsumer {
         // 3.获取未消费的消息
         ConsumerRecords<String, String> records = consumer.poll(timeout);
         // 4.关闭连接
-        consumer.close();
+        consumer.commitAsync();
         for (ConsumerRecord<String, String> record : records){
             messageList.addFirst(JSON.parseObject(record.value(),SysMessage.class));
         }

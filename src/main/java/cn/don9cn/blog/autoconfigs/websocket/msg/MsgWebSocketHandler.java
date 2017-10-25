@@ -93,18 +93,36 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
      */
     public void sendMessageToAll() {
         int poolSize = userMap.keySet().size();
+        /*userMap.keySet().forEach(username ->{
+            Consumer<String, String> consumer = messageConsumer.build(username);
+            List<SysMessage> messageList = messageConsumer.consumeSystemMsg(consumer);
+            String msgStr = JSON.toJSONString(messageList);
+            WebSocketSession session = userMap.get(username);
+            try {
+                if (session != null && session.isOpen()) {
+                    session.sendMessage(new TextMessage(msgStr));
+                }
+            } catch (IOException e) {
+                System.out.println("MsgWebSocket: 推送给用户 [" + username + "] 消息时发生异常...");
+                e.printStackTrace();
+            }
+        });*/
+
         Stream<CompletableFuture<Void>> futureStream = userMap.keySet().stream()
                 // 第一步,对当前所有的登录用户进行异步消费消息
                 .map(username -> CompletableFuture.supplyAsync(() -> {
+                    System.out.println("1.创建消费者:"+username);
                     Consumer<String, String> consumer = messageConsumer.build(username);
                     List<SysMessage> messageList = messageConsumer.consumeSystemMsg(consumer);
                     String msgStr = JSON.toJSONString(messageList);
+                    System.out.println("2.消费到消息:"+msgStr);
                     return new TempMap(username,msgStr);
                 }, ExecutorUtil.build(poolSize)))
                 // 第二步,将每个用户消费到的消息异步通过websocket推送到前端(查询出一个,推送出一个)
                 .map(future -> future.thenAcceptAsync(tempMap -> {
                     String username = tempMap.getUsername();
                     WebSocketSession session = userMap.get(username);
+                    System.out.println("3.推送消息到:"+username);
                     try {
                         if (session != null && session.isOpen()) {
                             session.sendMessage(new TextMessage(tempMap.getMessage()));

@@ -30,6 +30,7 @@ public class MessageProducer {
      */
     public void push(String key,SysMessage message){
         try {
+            System.out.println("开始推送新消息: " + JSON.toJSONString(message));
             String topic = message.getTopic();
             if(StringUtils.isNotBlank(topic)){
                 kafkaTemplate.send(topic,key,JSON.toJSONString(message));
@@ -37,6 +38,7 @@ public class MessageProducer {
                 kafkaTemplate.sendDefault(key,JSON.toJSONString(message));
             }
             kafkaTemplate.flush();
+            System.out.println("新消息推送成功");
         }catch (Exception e){
             throw new ExceptionWrapper(e,"MessageProducer.push 发布消息失败");
         }
