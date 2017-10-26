@@ -1,7 +1,6 @@
 package cn.don9cn.blog.action.bussiness.articleclassify;
 
 import cn.don9cn.blog.action.BaseAction;
-import cn.don9cn.blog.autoconfigs.kafka.MessageProducer;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
 import cn.don9cn.blog.model.system.msg.SysMessage;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;

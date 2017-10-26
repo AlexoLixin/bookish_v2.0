@@ -1,13 +1,10 @@
 package cn.don9cn.blog.service.system.msg.impl;
 
-import cn.don9cn.blog.autoconfigs.kafka.MessageProducer;
+import cn.don9cn.blog.autoconfigs.activemq.core.MqProducer;
 import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
-import cn.don9cn.blog.autoconfigs.websocket.msg.MsgWebSocketHandler;
 import cn.don9cn.blog.model.system.msg.SysMessage;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.msg.interf.SysMessageService;
-import cn.don9cn.blog.util.MsgKeyGenerator;
-import cn.don9cn.blog.util.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,16 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class SysMessageServiceImpl implements SysMessageService{
 
     @Autowired
-    private MessageProducer messageProducer;
-
-    @Autowired
-    private MsgKeyGenerator msgKeyGenerator;
+    private MqProducer mqProducer;
 
     @Override
     public OperaResult push(SysMessage message) {
         message.setProducer(MyShiroSessionUtil.getUserNameFromSession());
         try{
-            messageProducer.push(msgKeyGenerator.get()+"",message);
+            //mqProducer.sendToQueue("test.queue",message);
+            mqProducer.pushToTopic("test",message);
         }catch (Exception e){
             return new OperaResult(false,"消息发布失败");
         }

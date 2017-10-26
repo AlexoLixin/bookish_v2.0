@@ -1,6 +1,5 @@
 package cn.don9cn.blog.autoconfigs.websocket.msg;
 
-import cn.don9cn.blog.autoconfigs.kafka.MessageConsumer;
 import cn.don9cn.blog.model.system.msg.SysMessage;
 import cn.don9cn.blog.util.ExecutorUtil;
 import com.alibaba.fastjson.JSON;
@@ -27,8 +26,8 @@ import java.util.stream.Stream;
  */
 public class MsgWebSocketHandler extends TextWebSocketHandler {
 
-    @Autowired
-    private MessageConsumer messageConsumer;
+    /*@Autowired
+    private MessageConsumer messageConsumer;*/
 
     private static final ConcurrentMap<String,WebSocketSession> userMap;
 
@@ -50,9 +49,9 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
         userMap.put(username,session);
         System.out.println("MsgWebSocket: 新用户 ["+username+"] 连接成功... 当前用户数量: " + userMap.values().size());
         // 登录用户从kafka读取未读消息,并由webSocket推送到前端
-        Consumer<String, String> consumer = messageConsumer.build(username);
+        /*Consumer<String, String> consumer = messageConsumer.build(username);
         List<SysMessage> messageList = messageConsumer.consumeSystemMsg(consumer);
-        session.sendMessage(new TextMessage(JSON.toJSONString(messageList)));
+        session.sendMessage(new TextMessage(JSON.toJSONString(messageList)));*/
     }
 
     /**
@@ -107,7 +106,7 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
                 e.printStackTrace();
             }
         });*/
-        Stream<CompletableFuture<Void>> futureStream = userMap.keySet().stream()
+        /*Stream<CompletableFuture<Void>> futureStream = userMap.keySet().stream()
                 // 第一步,对当前所有的登录用户进行异步消费消息
                 .map(username -> CompletableFuture.supplyAsync(() -> {
                     System.out.println("1.创建消费者:"+username);
@@ -132,7 +131,7 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
                     }
                 },ExecutorUtil.build(poolSize)));
         CompletableFuture[] futures = futureStream.toArray(size -> new CompletableFuture[size]);
-        CompletableFuture.allOf(futures).join();
+        CompletableFuture.allOf(futures).join();*/
     }
 
     /**
