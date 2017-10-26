@@ -163,6 +163,11 @@ public class ArticleServiceImpl implements ArticleService {
 	//@Cacheable(value = "Article")
 	public OperaResult doFindByPageByUser(PageResult<Article> pageResult) {
 		pageResult.getEntity().setCreateBy(MyShiroSessionUtil.getUserCodeFromSession());
-		return OperaResultUtil.findPage(articleDao.baseFindByPage(pageResult));
+		Optional<PageResult<Article>> resultOptional = articleDao.baseFindByPage(pageResult);
+		resultOptional.ifPresent(pageResult1 -> pageResult1.getRows().forEach(article -> {
+			Optional<ArticleClassify> articleClassify = articleClassifyDao.baseFindById(article.getClassify());
+			articleClassify.ifPresent(articleClassify1 -> article.setClassifyName(articleClassify1.getName()));
+		}));
+		return OperaResultUtil.findPage(resultOptional);
 	}
 }
