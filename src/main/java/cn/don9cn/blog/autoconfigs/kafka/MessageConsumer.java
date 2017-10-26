@@ -37,7 +37,7 @@ public class MessageConsumer {
     public KafkaConsumer<String,String> build(String groupId){
         Map<String, Object> properties = kafkaProperties.buildConsumerProperties();
         properties.put("group.id",groupId);
-        properties.put("session.timeout.ms","10000");
+        properties.put("session.timeout.ms","4000");
         return new KafkaConsumer<>(properties);
     }
 

@@ -26,7 +26,6 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
-      group-id: application
       auto-offset-reset: earliest
       enable-auto-commit: true
       fetch-max-wait: 3000
@@ -35,6 +34,8 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       fetch-min-size: 0
+      group-id: application
+      heartbeat-interval: 3000
 
 
 
@@ -62,12 +63,13 @@ spring:
     host: 47.94.206.26
     port: 6379
   kafka:
-    bootstrap-servers: 47.94.206.26:9092
+    bootstrap-servers: 45.77.6.109:9092
     template:
       default-topic: test
     system-msg:
+      listener-name: application
       topic: test
-      timeout: 2000
+      timeout: 10000
   data:
     mongodb:
       uri: mongodb://liuxindong:123456@127.0.0.1:27017/don9blog

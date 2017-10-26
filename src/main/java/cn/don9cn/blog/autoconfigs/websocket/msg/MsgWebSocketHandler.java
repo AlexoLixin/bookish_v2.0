@@ -107,7 +107,6 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
                 e.printStackTrace();
             }
         });*/
-
         Stream<CompletableFuture<Void>> futureStream = userMap.keySet().stream()
                 // 第一步,对当前所有的登录用户进行异步消费消息
                 .map(username -> CompletableFuture.supplyAsync(() -> {
