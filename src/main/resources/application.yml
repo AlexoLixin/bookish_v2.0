@@ -44,7 +44,7 @@ spring:
     port: 6379
   data:
     mongodb:
-      uri: mongodb://liuxindong:123456@localhost:27017/don9blog
+      uri: mongodb://liuxindong:123456@47.94.206.26:27017/don9blog
   activemq:
     broker-url: tcp://45.77.6.109:61616
     user: admin

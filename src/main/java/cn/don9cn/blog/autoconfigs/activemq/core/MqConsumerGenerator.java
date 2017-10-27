@@ -27,10 +27,11 @@ public class MqConsumerGenerator {
     private final ConcurrentHashMap<String,Connection> cache = new ConcurrentHashMap<>();
 
     public void startListen(String username, MsgWebSocketHandler msgWebSocketHandler){
-        Connection connection = cache.get(username);
-        if(connection==null){
-            synchronized (this){
-                try {
+
+        synchronized (this){
+            try {
+                Connection connection = cache.get(username);
+                if(connection==null){
                     connection = connectionFactory.createConnection();
                     connection.setClientID(username);
                     Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -38,29 +39,26 @@ public class MqConsumerGenerator {
                     TopicSubscriber consumer = session.createDurableSubscriber(topic, username);
                     consumer.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
                     cache.put(username,connection);
-                } catch (JMSException e) {
-                    throw new ExceptionWrapper(e,"MqConsumerGenerator.startListen 启动订阅者监听失败");
                 }
+                connection.start();
+            } catch (JMSException e) {
+                throw new ExceptionWrapper(e,"MqConsumerGenerator.startListen 启动订阅者监听失败");
             }
         }
-        try {
-            connection.start();
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
-        
+
     }
 
     public void closeListen(String username){
-        Connection connection = cache.get(username);
-        if(connection!=null){
-            synchronized (this){
-                try {
+
+        synchronized (this){
+            try {
+                Connection connection = cache.get(username);
+                if(connection!=null){
                     connection.close();
                     cache.remove(username);
-                } catch (JMSException e) {
-                    throw new ExceptionWrapper(e,"MqConsumerGenerator.closeListen 关闭订阅者监听失败");
                 }
+            } catch (JMSException e) {
+                throw new ExceptionWrapper(e,"MqConsumerGenerator.closeListen 关闭订阅者监听失败");
             }
         }
     }
