@@ -2,13 +2,14 @@ package cn.don9cn.blog.model.system.msg;
 
 import cn.don9cn.blog.util.DateUtil;
 
+
 /**
  * @Author: liuxindong
  * @Description: 消息实体
  * @Create: 2017/10/23 10:16
  * @Modify:
  */
-public class SysMessage{
+public class SysMessage {
 
     /**
      * 所属topic

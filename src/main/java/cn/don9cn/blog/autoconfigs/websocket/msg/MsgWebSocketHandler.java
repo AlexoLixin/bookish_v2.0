@@ -1,8 +1,11 @@
 package cn.don9cn.blog.autoconfigs.websocket.msg;
 
+import cn.don9cn.blog.autoconfigs.activemq.core.MqConsumerGenerator;
+import cn.don9cn.blog.exception.ExceptionWrapper;
 import cn.don9cn.blog.model.system.msg.SysMessage;
 import cn.don9cn.blog.util.ExecutorUtil;
 import com.alibaba.fastjson.JSON;
+import org.apache.activemq.command.ActiveMQTextMessage;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,9 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -26,15 +32,18 @@ import java.util.stream.Stream;
  */
 public class MsgWebSocketHandler extends TextWebSocketHandler {
 
-    /*@Autowired
-    private MessageConsumer messageConsumer;*/
+    @Autowired
+    private MqConsumerGenerator mqConsumerGenerator;
 
     private static final ConcurrentMap<String,WebSocketSession> userMap;
+
+    private static final ConcurrentMap<String,CompletableFuture<Void>> futureMap;
 
     private static Logger logger = Logger.getLogger(MsgWebSocketHandler.class);
 
     static {
         userMap = new ConcurrentHashMap<>();
+        futureMap = new ConcurrentHashMap<>();
     }
 
     public MsgWebSocketHandler() {
@@ -48,10 +57,9 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
         String username = (String) session.getAttributes().get("system_msg_webSocket_user");
         userMap.put(username,session);
         System.out.println("MsgWebSocket: 新用户 ["+username+"] 连接成功... 当前用户数量: " + userMap.values().size());
-        // 登录用户从kafka读取未读消息,并由webSocket推送到前端
-        /*Consumer<String, String> consumer = messageConsumer.build(username);
-        List<SysMessage> messageList = messageConsumer.consumeSystemMsg(consumer);
-        session.sendMessage(new TextMessage(JSON.toJSONString(messageList)));*/
+        // 开始监听并推送消息
+        mqConsumerGenerator.startListen(username,this);
+        System.out.println("用户 ["+username+"] 启动系统消息监听");
     }
 
     /**
@@ -61,7 +69,9 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
 
         String username= (String) session.getAttributes().get("system_msg_webSocket_user");
         userMap.remove(username);
+        mqConsumerGenerator.closeListen(username);
         System.out.println("MsgWebSocket: 用户 [" + username + "] 退出连接... 当前用户数量: " + userMap.values().size());
+        System.out.println("用户 ["+username+"] 关闭系统消息监听");
 
     }
 
@@ -80,7 +90,9 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
         if(session.isOpen()) session.close();
         String username= (String) session.getAttributes().get("system_msg_webSocket_user");
         userMap.remove(username);
+        mqConsumerGenerator.closeListen(username);
         System.out.println("MsgWebSocket: 发生异常,用户 [" + username + "] 退出连接... 当前用户数量: " + userMap.values().size());
+        System.out.println("用户 ["+username+"] 关闭系统消息监听");
     }
 
     public boolean supportsPartialMessages() {
@@ -88,51 +100,21 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
     }
 
     /**
-     * 管理员发布新的系统消息,推送给所有在线用户
+     * 推送消息
      */
-    public void sendMessageToAll() {
-        int poolSize = userMap.keySet().size();
-        /*userMap.keySet().forEach(username ->{
-            Consumer<String, String> consumer = messageConsumer.build(username);
-            List<SysMessage> messageList = messageConsumer.consumeSystemMsg(consumer);
-            String msgStr = JSON.toJSONString(messageList);
+    public void sendToUser(String username,String message){
+
+        try {
             WebSocketSession session = userMap.get(username);
-            try {
-                if (session != null && session.isOpen()) {
-                    session.sendMessage(new TextMessage(msgStr));
-                }
-            } catch (IOException e) {
-                System.out.println("MsgWebSocket: 推送给用户 [" + username + "] 消息时发生异常...");
-                e.printStackTrace();
+            if (session != null && session.isOpen()) {
+                session.sendMessage(new TextMessage(message));
             }
-        });*/
-        /*Stream<CompletableFuture<Void>> futureStream = userMap.keySet().stream()
-                // 第一步,对当前所有的登录用户进行异步消费消息
-                .map(username -> CompletableFuture.supplyAsync(() -> {
-                    System.out.println("1.创建消费者:"+username);
-                    Consumer<String, String> consumer = messageConsumer.build(username);
-                    List<SysMessage> messageList = messageConsumer.consumeSystemMsg(consumer);
-                    String msgStr = JSON.toJSONString(messageList);
-                    System.out.println("2.消费到消息:"+msgStr);
-                    return new TempMap(username,msgStr);
-                }, ExecutorUtil.build(poolSize)))
-                // 第二步,将每个用户消费到的消息异步通过websocket推送到前端(查询出一个,推送出一个)
-                .map(future -> future.thenAcceptAsync(tempMap -> {
-                    String username = tempMap.getUsername();
-                    WebSocketSession session = userMap.get(username);
-                    System.out.println("3.推送消息到:"+username);
-                    try {
-                        if (session != null && session.isOpen()) {
-                            session.sendMessage(new TextMessage(tempMap.getMessage()));
-                        }
-                    } catch (IOException e) {
-                        System.out.println("MsgWebSocket: 推送给用户 [" + username + "] 消息时发生异常...");
-                        e.printStackTrace();
-                    }
-                },ExecutorUtil.build(poolSize)));
-        CompletableFuture[] futures = futureStream.toArray(size -> new CompletableFuture[size]);
-        CompletableFuture.allOf(futures).join();*/
+        } catch (IOException e) {
+            System.out.println("MsgWebSocket: 推送给用户 [" + username + "] 消息时发生异常,推送失败...");
+            e.printStackTrace();
+        }
     }
+
 
     /**
      * 内部类,用于封装 用户-未读信息 的对应关系

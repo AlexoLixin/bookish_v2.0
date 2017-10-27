@@ -44,13 +44,15 @@ spring:
     port: 6379
   data:
     mongodb:
-      uri: mongodb://liuxindong:123456@47.94.206.26:27017/don9blog
+      uri: mongodb://liuxindong:123456@localhost:27017/don9blog
   activemq:
     broker-url: tcp://45.77.6.109:61616
     user: admin
     password: admin
     default-queue: test.queue
     default-topic: test.topic
+    system-msg-topic: test
+    system-listener-clientId: Application
 # 文件保存路径
 fileSavePath:
   serverUrl: http://localhost:9999

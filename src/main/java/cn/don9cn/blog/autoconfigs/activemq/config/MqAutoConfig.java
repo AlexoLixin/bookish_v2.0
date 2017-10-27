@@ -1,13 +1,13 @@
 package cn.don9cn.blog.autoconfigs.activemq.config;
 
+import cn.don9cn.blog.autoconfigs.activemq.core.SysMqListener;
 import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
-import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
@@ -26,6 +26,16 @@ public class MqAutoConfig {
     @Value("${spring.activemq.default-queue}")
     private String defaultQueue;
 
+    @Value("${spring.activemq.default-topic}")
+    private String defaultTopic;
+
+    @Value("${spring.activemq.system-msg-topic}")
+    private String sysMsgTopic;
+
+    @Value("${spring.activemq.system-listener-clientId}")
+    private String sysListenerClientId;
+
+
     /**
      * 默认队列
      * @return
@@ -35,12 +45,29 @@ public class MqAutoConfig {
         return new ActiveMQQueue(defaultQueue);
     }
 
+    /**
+     * 消息监听容器(适用于自定义javaConfig方式配置监听器)
+     * @param connectionFactory
+     * @return
+     */
     @Bean
-    public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
-                                                    DefaultJmsListenerContainerFactoryConfigurer configurer) {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        configurer.configure(factory, connectionFactory);
-        return factory;
+    public DefaultMessageListenerContainer defaultMessageListenerContainer(ConnectionFactory connectionFactory, SysMqListener sysMqListener) {
+
+        DefaultMessageListenerContainer container = new DefaultMessageListenerContainer();
+        // 设置连接工厂
+        container.setConnectionFactory(connectionFactory);
+        // 设置客户端id,ActiveMQ通过clientId来实现持久订阅
+        container.setClientId(sysListenerClientId);
+        // 设置持久订阅
+        container.setSubscriptionDurable(true);
+        // 订阅系统消息topic
+        container.setDestination(new ActiveMQTopic(sysMsgTopic));
+        // 设置消息转换器
+        container.setMessageConverter(messageConverter());
+        // 设置消息监听器,用来处理监听到新消息后的动作
+        container.setMessageListener(sysMqListener);
+
+        return container;
     }
 
     /**
