@@ -39,7 +39,7 @@ public class MqConsumerGenerator {
                     consumer.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
                     cache.put(username,connection);
                 } catch (JMSException e) {
-                    throw new ExceptionWrapper(e,"MqConsumerGenerator.createConsumer 启动订阅者监听失败");
+                    throw new ExceptionWrapper(e,"MqConsumerGenerator.startListen 启动订阅者监听失败");
                 }
             }
         }
