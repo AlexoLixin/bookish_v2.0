@@ -34,13 +34,16 @@ public class MqConsumerGenerator {
                 connection.start();
             }else{
                 synchronized (cache){
-                    connection = connectionFactory.createConnection();
-                    connection.setClientID(username);
-                    Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                    Topic topic = session.createTopic(sysMsgTopic);
-                    TopicSubscriber consumer = session.createDurableSubscriber(topic, username);
-                    consumer.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
-                    cache.put(username,connection);
+                    connection = cache.get(username);
+                    if(connection==null){
+                        connection = connectionFactory.createConnection();
+                        connection.setClientID(username);
+                        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                        Topic topic = session.createTopic(sysMsgTopic);
+                        TopicSubscriber consumer = session.createDurableSubscriber(topic, username);
+                        consumer.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
+                        cache.put(username,connection);
+                    }
                 }
             }
         } catch (JMSException e) {
@@ -54,6 +57,7 @@ public class MqConsumerGenerator {
         Connection connection = cache.get(username);
         if(connection!=null){
             synchronized (cache){
+                connection = cache.get(username);
                 try {
                     connection.close();
                     cache.remove(username);
