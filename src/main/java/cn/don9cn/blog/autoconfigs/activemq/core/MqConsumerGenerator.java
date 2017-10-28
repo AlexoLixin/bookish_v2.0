@@ -30,9 +30,7 @@ public class MqConsumerGenerator {
 
         try {
             Connection connection = cache.get(username);
-            if(connection!=null){
-                connection.start();
-            }else{
+            if(connection==null){
                 synchronized (cache){
                     connection = cache.get(username);
                     if(connection==null){
@@ -42,10 +40,11 @@ public class MqConsumerGenerator {
                         Topic topic = session.createTopic(sysMsgTopic);
                         TopicSubscriber consumer = session.createDurableSubscriber(topic, username);
                         consumer.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
-                        cache.put(username,connection);
+                        cache.putIfAbsent(username,connection);
                     }
                 }
             }
+            connection.start();
         } catch (JMSException e) {
             throw new ExceptionWrapper(e,"MqConsumerGenerator.startListen 启动订阅者监听失败");
         }
@@ -58,11 +57,13 @@ public class MqConsumerGenerator {
         if(connection!=null){
             synchronized (cache){
                 connection = cache.get(username);
-                try {
-                    connection.close();
-                    cache.remove(username);
-                } catch (JMSException e) {
-                    throw new ExceptionWrapper(e,"MqConsumerGenerator.closeListen 关闭订阅者监听失败");
+                if(connection!=null){
+                    try {
+                        connection.close();
+                        cache.remove(username,connection);
+                    } catch (JMSException e) {
+                        throw new ExceptionWrapper(e,"MqConsumerGenerator.closeListen 关闭订阅者监听失败");
+                    }
                 }
             }
         }
