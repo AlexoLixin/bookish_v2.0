@@ -28,10 +28,12 @@ public class MqConsumerGenerator {
 
     public void startListen(String username, MsgWebSocketHandler msgWebSocketHandler){
 
-        synchronized (this){
-            try {
-                Connection connection = cache.get(username);
-                if(connection==null){
+        try {
+            Connection connection = cache.get(username);
+            if(connection!=null){
+                connection.start();
+            }else{
+                synchronized (cache){
                     connection = connectionFactory.createConnection();
                     connection.setClientID(username);
                     Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -40,27 +42,27 @@ public class MqConsumerGenerator {
                     consumer.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
                     cache.put(username,connection);
                 }
-                connection.start();
-            } catch (JMSException e) {
-                throw new ExceptionWrapper(e,"MqConsumerGenerator.startListen 启动订阅者监听失败");
             }
+        } catch (JMSException e) {
+            throw new ExceptionWrapper(e,"MqConsumerGenerator.startListen 启动订阅者监听失败");
         }
 
     }
 
     public void closeListen(String username){
 
-        synchronized (this){
-            try {
-                Connection connection = cache.get(username);
-                if(connection!=null){
+        Connection connection = cache.get(username);
+        if(connection!=null){
+            synchronized (cache){
+                try {
                     connection.close();
                     cache.remove(username);
+                } catch (JMSException e) {
+                    throw new ExceptionWrapper(e,"MqConsumerGenerator.closeListen 关闭订阅者监听失败");
                 }
-            } catch (JMSException e) {
-                throw new ExceptionWrapper(e,"MqConsumerGenerator.closeListen 关闭订阅者监听失败");
             }
         }
+
     }
 
 }
