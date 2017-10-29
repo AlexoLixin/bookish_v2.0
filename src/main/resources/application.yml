@@ -45,6 +45,14 @@ spring:
   data:
     mongodb:
       uri: mongodb://liuxindong:123456@47.94.206.26:27017/don9blog
+      options:
+        connections-per-host: 8
+        threads-allowed-to-block-for-connection-multiplier: 4
+        connect-timeout: 1000
+        max-wait-time: 1500
+        auto-connect-retry: true
+        socket-keep-alive: true
+        socket-timeout: 1500
   activemq:
     broker-url: tcp://45.77.6.109:61616
     user: admin
