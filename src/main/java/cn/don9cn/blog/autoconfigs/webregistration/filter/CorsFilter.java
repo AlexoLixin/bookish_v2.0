@@ -21,10 +21,9 @@ public class CorsFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("--- 执行跨域过滤器 ---");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        response.setHeader("Access-Control-Allow-origin","http://localhost:8888");
+        response.setHeader("Access-Control-Allow-origin","*");
         response.setHeader("Access-Control-Allow-Methods","POST,GET,OPTIONS,PUT,DELETE");
         response.setHeader("Access-Control-Allow-Headers","Accept, Origin, X-Requested-With, Content-Type, Last-Modified, authorization");
         response.addHeader("Access-Control-Allow-Credentials", "true");

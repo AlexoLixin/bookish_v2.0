@@ -15,7 +15,7 @@ spring:
     auto: true
   # 应用环境配置
   profiles:
-    active: development
+    active: production
 
 
 ---

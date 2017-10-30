@@ -27,7 +27,6 @@ public class WebRegistration {
      * @return
      */
     @Bean
-    @Profile("development")
     public FilterRegistrationBean corsFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean(new CorsFilter());
         registration.addUrlPatterns("/*");
