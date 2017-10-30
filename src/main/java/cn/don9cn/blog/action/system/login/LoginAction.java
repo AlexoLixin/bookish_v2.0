@@ -66,7 +66,30 @@ public class LoginAction {
     public OperaResult noPermission(){
         return new OperaResult(false,"对不起,您没有相应的操作权限!");
     }
-    
+
+    /**
+     * 注销登陆
+     * @return
+     */
+    @RequestMapping("/logout")
+    public OperaResult logout(){
+        Subject subject = SecurityUtils.getSubject();
+        if(subject!=null){
+            subject.logout();
+        }
+        return new OperaResult(true,"注销成功!");
+    }
+
+    /**
+     * 登录
+     * @param username
+     * @param password
+     * @param role
+     * @param request
+     * @return
+     * @throws IOException
+     * @throws ServletException
+     */
     @RequestMapping("/doLogin")
     public LoginResult doLogin(String username, String password, String role, HttpServletRequest request) throws IOException, ServletException {
 

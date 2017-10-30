@@ -2,7 +2,7 @@ package cn.don9cn.blog.dao;
 
 import cn.don9cn.blog.model.BaseModel;
 import cn.don9cn.blog.plugins.daohelper.core.DaoHelper;
-import cn.don9cn.blog.plugins.daohelper.core.MyMongoOperator;
+import cn.don9cn.blog.autoconfigs.mongodb.MyMongoOperator;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 
 import java.lang.reflect.ParameterizedType;
@@ -98,7 +98,7 @@ public interface BaseDao<T extends BaseModel> {
      * @return
      */
     default Optional<List<T>> baseFindAll(){
-        return getMyMongoOperator().findAll(getTypeClass());
+        return getMyMongoOperator().exFindAll(getTypeClass());
     }
 
     /**

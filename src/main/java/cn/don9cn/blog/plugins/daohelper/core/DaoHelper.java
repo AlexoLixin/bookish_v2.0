@@ -1,8 +1,8 @@
 package cn.don9cn.blog.plugins.daohelper.core;
 
+import cn.don9cn.blog.autoconfigs.mongodb.MyMongoOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 
 

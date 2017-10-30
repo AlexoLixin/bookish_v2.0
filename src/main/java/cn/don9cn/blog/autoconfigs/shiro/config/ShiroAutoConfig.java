@@ -46,7 +46,7 @@ public class ShiroAutoConfig {
         filterChainMap.put("/sockjs/chatRoomWebSocket","anon");
 
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
-        filterChainMap.put("/logout", "logout");
+        // filterChainMap.put("/logout", "logout");
 
         // 拦截器先校验url是否是上述配置的匿名路径,最后,设置其他所有路径进行权限校验
         filterChainMap.put("/**", "authc");

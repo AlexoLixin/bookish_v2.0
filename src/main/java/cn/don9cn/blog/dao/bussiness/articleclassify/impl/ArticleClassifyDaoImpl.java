@@ -3,7 +3,7 @@ package cn.don9cn.blog.dao.bussiness.articleclassify.impl;
 import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.dao.bussiness.articleclassify.interf.ArticleClassifyDao;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
-import cn.don9cn.blog.plugins.daohelper.core.MyMongoOperator;
+import cn.don9cn.blog.autoconfigs.mongodb.MyMongoOperator;
 import cn.don9cn.blog.util.DateUtil;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
