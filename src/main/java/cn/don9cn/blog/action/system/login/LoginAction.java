@@ -2,6 +2,7 @@ package cn.don9cn.blog.action.system.login;
 
 import cn.don9cn.blog.annotation.SkipOperaLog;
 import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
+import cn.don9cn.blog.autoconfigs.websocket.msg.MsgWebSocketHandler;
 import cn.don9cn.blog.model.system.LoginResult;
 import cn.don9cn.blog.model.system.log.SysLoginLog;
 import cn.don9cn.blog.model.system.rbac.SysRole;
@@ -34,6 +35,9 @@ public class LoginAction {
 
     @Autowired
     private SysLoginLogService sysLoginLogService;
+
+    @Autowired
+    private MsgWebSocketHandler msgWebSocketHandler;
 
     /**
      * 提示登录
@@ -74,9 +78,11 @@ public class LoginAction {
     @RequestMapping("/logout")
     public OperaResult logout(){
         Subject subject = SecurityUtils.getSubject();
-        if(subject!=null){
-            subject.logout();
-        }
+        String userNameFromSession = MyShiroSessionUtil.getUserNameFromSession();
+        //关闭登录用户的webSocket连接
+        msgWebSocketHandler.closeSession(userNameFromSession);
+        //注销用户
+        subject.logout();
         return new OperaResult(true,"注销成功!");
     }
 

@@ -115,6 +115,23 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    /**
+     * 关闭用户的webSocket推送
+     */
+    public void closeSession(String username){
+        try{
+            WebSocketSession session = userMap.get(username);
+            if(session!=null && session.isOpen()){
+                session.close();
+            }
+            userMap.remove(username);
+        } catch (IOException e) {
+            System.out.println("MsgWebSocket: 用户 [" + username + "] 的会话session关闭失败...");
+        } finally {
+            mqConsumerGenerator.closeListen(username);
+        }
+    }
+
 
     /**
      * 内部类,用于封装 用户-未读信息 的对应关系

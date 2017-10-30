@@ -27,10 +27,12 @@ public class MyShiroAuthcFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-
-
-        //请求路径
+        //项目名称
+        String contextPath = request.getContextPath();
+        //请求全路径
         String requestURI = request.getRequestURI();
+        //去掉项目名称后的请求地址
+        String targetURL = requestURI.split(contextPath)[1];
         //请求方法
         String requestMethod = request.getMethod();
 
@@ -48,18 +50,18 @@ public class MyShiroAuthcFilter implements Filter {
             String token = request.getHeader("authorization");
             // token不一致,提示重新登录
             if(!MyShiroSessionUtil.getTokenFromSession().equals(token)){
-                response.sendRedirect("/login/reLogin");
+                response.sendRedirect(contextPath+"/login/reLogin");
                 return;
             }
             // 验证权限,无权限的话提示并禁止操作
-            if(!subject.isPermitted(new MyPermission(requestURI,requestMethod))){
-                response.sendRedirect("/login/noPermission");
+            if(!subject.isPermitted(new MyPermission(targetURL,requestMethod))){
+                response.sendRedirect(contextPath+"/login/noPermission");
                 return;
             }
 
         }else{
             // 未登录,提示登录
-            response.sendRedirect("/login/needLogin");
+            response.sendRedirect(contextPath+"/login/needLogin");
             return;
         }
 

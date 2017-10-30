@@ -1,0 +1,44 @@
+Manifest-Version: 1.0
+Class-Path: activemq-client-5.14.5.jar spring-retry-1.2.1.RELEASE.jar 
+ spring-data-keyvalue-1.2.7.RELEASE.jar jackson-core-2.8.10.jar geroni
+ mo-jms_1.1_spec-1.1.1.jar opentest4j-1.0.0.jar druid-1.0.29.jar sprin
+ g-boot-starter-1.5.7.RELEASE.jar spring-boot-starter-web-1.5.7.RELEAS
+ E.jar spring-context-support-4.3.11.RELEASE.jar validation-api-1.1.0.
+ Final.jar spring-boot-starter-data-redis-1.5.7.RELEASE.jar shiro-conf
+ ig-core-1.4.0.jar activemq-broker-5.14.5.jar commons-pool2-2.4.2.jar 
+ spring-boot-devtools-1.5.7.RELEASE.jar tomcat-embed-el-8.5.20.jar jed
+ is-2.9.0.jar geronimo-j2ee-management_1.1_spec-1.0.1.jar spring-boot-
+ autoconfigure-1.5.7.RELEASE.jar commons-beanutils-1.9.3.jar spring-bo
+ ot-starter-cache-1.5.7.RELEASE.jar spring-oxm-4.3.11.RELEASE.jar juni
+ t-platform-commons-1.0.1.jar spring-boot-starter-logging-1.5.7.RELEAS
+ E.jar shiro-crypto-core-1.4.0.jar slf4j-api-1.7.25.jar logback-core-1
+ .1.11.jar shiro-crypto-cipher-1.4.0.jar jconsole.jar spring-webmvc-4.
+ 3.11.RELEASE.jar spring-aop-4.3.11.RELEASE.jar spring-boot-starter-ao
+ p-1.5.7.RELEASE.jar spring-websocket-4.3.11.RELEASE.jar tomcat-embed-
+ core-8.5.20.jar activemq-openwire-legacy-5.14.5.jar mongodb-driver-3.
+ 4.3.jar android-json-0.0.20131108.vaadin1.jar spring-boot-starter-dat
+ a-mongodb-1.5.7.RELEASE.jar tools.jar spring-boot-1.5.7.RELEASE.jar s
+ pring-data-redis-1.8.7.RELEASE.jar spring-data-mongodb-1.10.7.RELEASE
+ .jar junit-jupiter-api-5.0.1.jar mongodb-driver-core-3.4.3.jar spring
+ -web-4.3.11.RELEASE.jar spring-boot-starter-websocket-1.5.7.RELEASE.j
+ ar shiro-spring-1.4.0.jar logback-classic-1.1.11.jar spring-tx-4.3.11
+ .RELEASE.jar shiro-lang-1.4.0.jar activation-1.1.jar shiro-web-1.4.0.
+ jar spring-messaging-4.3.11.RELEASE.jar spring-context-4.3.11.RELEASE
+ .jar jul-to-slf4j-1.7.25.jar spring-boot-starter-tomcat-1.5.7.RELEASE
+ .jar hawtbuf-1.11.jar spring-expression-4.3.11.RELEASE.jar jcl-over-s
+ lf4j-1.7.25.jar log4j-over-slf4j-1.7.25.jar tomcat-embed-websocket-8.
+ 5.20.jar spring-boot-starter-activemq-1.5.7.RELEASE.jar commons-lang3
+ -3.4.jar spring-boot-starter-actuator-1.5.7.RELEASE.jar aspectjweaver
+ -1.8.10.jar hibernate-validator-5.3.5.Final.jar javax.mail-1.5.6.jar 
+ spring-data-commons-1.13.7.RELEASE.jar spring-boot-starter-mail-1.5.7
+ .RELEASE.jar lz4-1.3.0.jar jboss-logging-3.3.1.Final.jar shiro-event-
+ 1.4.0.jar spring-jms-4.3.11.RELEASE.jar spring-core-4.3.11.RELEASE.ja
+ r shiro-crypto-hash-1.4.0.jar classmate-1.3.4.jar jackson-annotations
+ -2.8.0.jar shiro-cache-1.4.0.jar snakeyaml-1.17.jar spring-kafka-1.1.
+ 6.RELEASE.jar spring-boot-configuration-processor-1.5.7.RELEASE.jar s
+ hiro-core-1.4.0.jar shiro-config-ogdl-1.4.0.jar snappy-java-1.1.2.6.j
+ ar kafka-clients-0.10.1.1.jar bson-3.4.3.jar commons-collections-3.2.
+ 2.jar jackson-databind-2.8.10.jar fastjson-1.2.38.jar spring-boot-act
+ uator-1.5.7.RELEASE.jar spring-beans-4.3.11.RELEASE.jar
+Main-Class: cn.don9cn.blog.Don9cnApplication
+
