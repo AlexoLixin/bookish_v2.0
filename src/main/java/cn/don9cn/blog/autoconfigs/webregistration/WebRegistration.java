@@ -1,10 +1,6 @@
 package cn.don9cn.blog.autoconfigs.webregistration;
 
-import cn.don9cn.blog.autoconfigs.webregistration.filter.CorsFilter;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 /**
  * @Author: liuxindong
@@ -26,12 +22,12 @@ public class WebRegistration {
      * 跨域filter注册
      * @return
      */
-    @Bean
+    /*@Bean
     public FilterRegistrationBean corsFilterRegistration() {
-        FilterRegistrationBean registration = new FilterRegistrationBean(new CorsFilter());
-        registration.addUrlPatterns("/*");
+        FilterRegistrationBean registration = new FilterRegistrationBean(new DevCorsFilter());
+        registration.addUrlPatterns("*//*");
         return registration;
-    }
+    }*/
 
     /**
      * listener注册

@@ -10,12 +10,12 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 @SpringBootApplication(scanBasePackages = { "cn.don9cn.blog" })
 @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
-public class Don9cnApplication extends SpringBootServletInitializer {
+public class Don9cnApplication /*extends SpringBootServletInitializer*/ {
 
-	@Override
+	/*@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(Don9cnApplication.class);
-	}
+	}*/
 
 	public static void main(String[] args) {
 		SpringApplication.run(Don9cnApplication.class, args);

@@ -50,18 +50,18 @@ public class MyShiroAuthcFilter implements Filter {
             String token = request.getHeader("authorization");
             // token不一致,提示重新登录
             if(!MyShiroSessionUtil.getTokenFromSession().equals(token)){
-                response.sendRedirect(contextPath+"/login/reLogin");
+                response.sendRedirect(/*contextPath+*/"/login/reLogin");
                 return;
             }
             // 验证权限,无权限的话提示并禁止操作
-            if(!subject.isPermitted(new MyPermission(targetURL,requestMethod))){
-                response.sendRedirect(contextPath+"/login/noPermission");
+            if(!subject.isPermitted(new MyPermission(requestURI,requestMethod))){
+                response.sendRedirect(/*contextPath+*/"/login/noPermission");
                 return;
             }
 
         }else{
             // 未登录,提示登录
-            response.sendRedirect(contextPath+"/login/needLogin");
+            response.sendRedirect(/*contextPath+*/"/login/needLogin");
             return;
         }
 

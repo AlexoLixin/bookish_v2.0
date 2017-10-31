@@ -6,7 +6,7 @@
 	<groupId>cn.don9cn.blog</groupId>
 	<artifactId>don9cn</artifactId>
 	<version>2.0</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>don9cn</name>
 	<description>a spring boot application for my blog</description>
@@ -26,11 +26,11 @@
 
 	<dependencies>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
-		</dependency>
+		</dependency>-->
 
 		<!-- **************** spring 自动加载配置文件属性并注入到实体中 **************** -->
 		<dependency>

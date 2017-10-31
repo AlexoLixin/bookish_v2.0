@@ -1,6 +1,9 @@
 package cn.don9cn.blog.autoconfigs.webregistration.filter;
 
 
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,11 +11,13 @@ import java.io.IOException;
 
 /**
  * @Author: liuxindong
- * @Description: 跨域过滤器
+ * @Description: 开发环境下的跨域过滤器
  * @Create: 2017/10/12 10:23
  * @Modify:
  */
-public class CorsFilter implements Filter {
+@Component
+@Profile("development")
+public class DevCorsFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
