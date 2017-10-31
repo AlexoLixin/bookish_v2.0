@@ -15,8 +15,23 @@ spring:
     auto: true
   # 应用环境配置
   profiles:
-    active: production
+    active: development
+  # session
+  #session:
+  #  store-type: redis
 
+# mongodb
+mongodb:
+  host: 127.0.0.1
+  port: 27017
+  database: don9blog
+  username: liuxindong
+  password: 123456
+
+# 文件保存路径
+fileSavePath:
+  images: /don9cn/images
+  uploadFiles: /don9cn/uploadFiles
 
 ---
 
@@ -35,20 +50,11 @@ spring:
     default-topic: system.topic
     system-msg-topic: system
     system-listener-clientId: Application
-# mongodb
-mongodb:
-  host: 127.0.0.1
-  port: 27017
-  database: don9blog
-  username: liuxindong
-  password: 123456
 
 # 文件保存路径
 fileSavePath:
   serverUrl: http://47.94.206.26:8999
   serverRoot: /var/www/html
-  images: /don9cn/images
-  uploadFiles: /don9cn/uploadFiles
 
 ---
 
@@ -66,19 +72,10 @@ spring:
     default-queue: test.queue
     default-topic: test.topic
     system-msg-topic: test
-    system-listener-clientId: Application
-# mongodb
-mongodb:
-  host: 127.0.0.1
-  port: 27017
-  database: don9blog
-  username: liuxindong
-  password: 123456
+    system-listener-clientId: devApplication
 
 # 文件保存路径
 fileSavePath:
   serverUrl: http://localhost:9999
   serverRoot: E:/Apache24/htdocs
-  images: /don9cn/images
-  uploadFiles: /don9cn/uploadFiles
 

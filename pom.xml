@@ -32,6 +32,7 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- **************** spring 自动加载配置文件属性并注入到实体中 **************** -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -55,6 +56,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
+
+		<!-- **************** spring session ****************
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session</artifactId>
+			<version>1.3.1.RELEASE</version>
+		</dependency>-->
 
 		<!-- **************** spring kafka **************** -->
 		<dependency>
@@ -114,13 +122,14 @@
 			<version>1.5.7.RELEASE</version>
 		</dependency>
 
-		<!-- **************** 阿里druid **************** -->
+		<!-- **************** 阿里 druid **************** -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 			<version>1.0.29</version>
 		</dependency>
 
+		<!-- **************** 阿里 fastjson **************** -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>

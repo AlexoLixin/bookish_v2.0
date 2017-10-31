@@ -2,13 +2,20 @@ package cn.don9cn.blog.autoconfigs.shiro.core;
 
 import org.apache.shiro.authz.Permission;
 
+import java.io.Serializable;
+
 /**
  * @Author: liuxindong
  * @Description: 自定义shiro Permission的实现
  * @Create: 2017/10/17 15:27
  * @Modify:
  */
-public class MyPermission implements Permission{
+public class MyPermission implements Permission,Serializable{
+
+    /**
+     * 实现序列化接口
+     */
+    private static final long serialVersionUID = 1L;
 
     private final String requestUrl;
 
