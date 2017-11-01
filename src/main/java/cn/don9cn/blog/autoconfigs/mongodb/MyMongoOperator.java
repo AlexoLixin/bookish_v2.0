@@ -8,6 +8,7 @@ import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.util.DateUtil;
 import cn.don9cn.blog.util.EntityParserUtil;
+import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -399,6 +400,8 @@ public class MyMongoOperator extends MongoTemplate {
     public <T extends BaseModel> Optional<PageResult<T>> freeFindPage(PageResult<T> pageResult, Query query) {
         Integer skip = pageResult.getSkip();
         T entity = pageResult.getEntity();
+        if(StringUtils.isNotBlank(pageResult.getStartTime())) query.addCriteria(Criteria.where("createTime").gt(pageResult.getStartTime()));
+        if(StringUtils.isNotBlank(pageResult.getEndTime())) query.addCriteria(Criteria.where("createTime").lt(pageResult.getEndTime()));
         try{
             long count = super.count(query, entity.getClass(), getCollectionName(entity));
             pageResult.setTotalCount(count);

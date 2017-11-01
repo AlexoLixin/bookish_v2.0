@@ -28,7 +28,7 @@ public class DevCorsFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        response.setHeader("Access-Control-Allow-origin","http://192.168.2.246:8888");
+        response.setHeader("Access-Control-Allow-origin","http://localhost:8888");
         response.setHeader("Access-Control-Allow-Methods","POST,GET,OPTIONS,PUT,DELETE");
         response.setHeader("Access-Control-Allow-Headers","Accept, Origin, X-Requested-With, Content-Type, Last-Modified, authorization");
         response.addHeader("Access-Control-Allow-Credentials", "true");

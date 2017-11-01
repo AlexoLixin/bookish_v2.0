@@ -2,8 +2,10 @@ package cn.don9cn.blog.dao.bussiness.article.interf;
 
 import cn.don9cn.blog.dao.BaseDao;
 import cn.don9cn.blog.model.bussiness.article.Article;
+import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -29,5 +31,19 @@ public interface ArticleDao extends BaseDao<Article> {
      * @return
      */
     OptionalInt updateByUser(Article entity);
+
+    /**
+     * 分页查询文章(但是不包含content字段,以加快速度)
+     * @param pageResult
+     * @return
+     */
+    Optional<PageResult<Article>> findPageWithoutContent(PageResult<Article> pageResult);
+
+    /**
+     * 查询文章集合(不包含content字段)
+     * @param entity
+     * @return
+     */
+    Optional<List<Article>> findListWithoutContent(Article entity);
 
 }

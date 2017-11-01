@@ -116,13 +116,13 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	//@Cacheable(value = "Article")
 	public OperaResult baseFindListByParams(Article entity) {
-		return OperaResultUtil.findListByParams(articleDao.baseFindListByParams(entity));
+		return OperaResultUtil.findListByParams(articleDao.findListWithoutContent(entity));
 	}
 
 	@Override
 	//@Cacheable(value = "Article")
 	public OperaResult baseFindByPage(PageResult<Article> pageResult) {
-		Optional<PageResult<Article>> resultOptional = articleDao.baseFindByPage(pageResult);
+		Optional<PageResult<Article>> resultOptional = articleDao.findPageWithoutContent(pageResult);
 		resultOptional.ifPresent(pageResult1 -> pageResult1.getRows().forEach(article -> {
             Optional<ArticleClassify> articleClassify = articleClassifyDao.baseFindById(article.getClassify());
             articleClassify.ifPresent(articleClassify1 -> article.setClassifyName(articleClassify1.getName()));
@@ -163,7 +163,7 @@ public class ArticleServiceImpl implements ArticleService {
 	//@Cacheable(value = "Article")
 	public OperaResult doFindByPageByUser(PageResult<Article> pageResult) {
 		pageResult.getEntity().setCreateBy(MyShiroSessionUtil.getUserCodeFromSession());
-		Optional<PageResult<Article>> resultOptional = articleDao.baseFindByPage(pageResult);
+		Optional<PageResult<Article>> resultOptional = articleDao.findPageWithoutContent(pageResult);
 		resultOptional.ifPresent(pageResult1 -> pageResult1.getRows().forEach(article -> {
 			Optional<ArticleClassify> articleClassify = articleClassifyDao.baseFindById(article.getClassify());
 			articleClassify.ifPresent(articleClassify1 -> article.setClassifyName(articleClassify1.getName()));
