@@ -4,6 +4,7 @@ version 2.0 of my blog application which based on SpringBoot<br>
 
 ### 重构内容
 * 基础架构改为Spring Boot
+* 消息中间件由Kafka改为ActiveMq(由于个人vps内存小,相同单机模式下,ActiveMq比Kafka少占用100M左右内存)
 * 项目整体业务实现代码使用 Java8 重构<br>
 default 特性精简dao层<br>
 Optional 解决空指针异常<br>
@@ -19,4 +20,4 @@ SpringBoot          基础架构<br>
 Shiro               权限控制<br>
 Redis               缓存实现<br>
 MongoDB             数据库<br>
-Kafka+WebSocket     消息推送<br>
+ActiveMq+WebSocket     消息推送<br>
