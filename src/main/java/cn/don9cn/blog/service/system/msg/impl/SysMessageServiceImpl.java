@@ -26,8 +26,7 @@ public class SysMessageServiceImpl implements SysMessageService{
     public OperaResult push(SysMessage message) {
         message.setProducer(MyShiroSessionUtil.getUserNameFromSession());
         try{
-            //mqProducer.sendToQueue("test.queue",message);
-            mqProducer.pushToTopic("test",message);
+            mqProducer.pushToDefaultTopic(message);
         }catch (Exception e){
             return new OperaResult(false,"消息发布失败");
         }

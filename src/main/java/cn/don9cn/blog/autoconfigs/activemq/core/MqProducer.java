@@ -4,6 +4,7 @@ import cn.don9cn.blog.model.system.msg.SysMessage;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
 
@@ -16,6 +17,8 @@ import org.springframework.jms.core.JmsTemplate;
 @Configuration
 public class MqProducer {
 
+    @Value("${spring.activemq.default-topic}")
+    private String defaultTopic;
 
     @Autowired
     private JmsTemplate jmsTemplate;
@@ -45,6 +48,15 @@ public class MqProducer {
      */
     public void pushToTopic(String destination,SysMessage message){
         ActiveMQTopic topic = new ActiveMQTopic(destination);
+        jmsTemplate.convertAndSend(topic,message);
+    }
+
+    /**
+     * 发布到默认topic
+     * @param message
+     */
+    public void pushToDefaultTopic(SysMessage message){
+        ActiveMQTopic topic = new ActiveMQTopic(defaultTopic);
         jmsTemplate.convertAndSend(topic,message);
     }
 

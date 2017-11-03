@@ -26,9 +26,6 @@ public class MqAutoConfig {
     @Value("${spring.activemq.default-queue}")
     private String defaultQueue;
 
-    @Value("${spring.activemq.default-topic}")
-    private String defaultTopic;
-
     @Value("${spring.activemq.system-msg-topic}")
     private String sysMsgTopic;
 
