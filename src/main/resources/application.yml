@@ -47,7 +47,7 @@ spring:
     user: admin
     password: admin
     default-queue: system.queue
-    default-topic: system.topic
+    default-topic: system
     system-msg-topic: system
     system-listener-clientId: Application
 
@@ -70,7 +70,7 @@ spring:
     user: admin
     password: admin
     default-queue: test.queue
-    default-topic: test.topic
+    default-topic: test
     system-msg-topic: test
     system-listener-clientId: devApplication
 
