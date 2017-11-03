@@ -143,6 +143,13 @@
 			<version>3.4</version>
 		</dependency>
 
+		<!-- **************** google.guava **************** -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>23.3-jre</version>
+		</dependency>
+
 		<!-- **************** 单元测试 **************** -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
