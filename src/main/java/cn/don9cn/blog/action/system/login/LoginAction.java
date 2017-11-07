@@ -8,17 +8,25 @@ import cn.don9cn.blog.model.system.log.SysLoginLog;
 import cn.don9cn.blog.model.system.rbac.SysRole;
 import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
+import cn.don9cn.blog.plugins.validatecode.ValidateCode;
+import cn.don9cn.blog.plugins.validatecode.ValidateCodeCache;
 import cn.don9cn.blog.service.system.log.interf.SysLoginLogService;
 import cn.don9cn.blog.util.RequestUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 
@@ -87,6 +95,22 @@ public class LoginAction {
     }
 
     /**
+     * 生成验证码
+     * @return
+     */
+    @GetMapping("/generateValidateCode")
+    public void generateValidateCode(HttpServletResponse response) throws IOException {
+        //生成文字验证码
+        String verifyCode = ValidateCode.generateTextCode(ValidateCode.TYPE_NUM_LOWER, 6, null);
+        //将验证码放入缓存
+        ValidateCodeCache.cache(verifyCode);
+        //生成图片验证码
+        BufferedImage bim = ValidateCode.generateImageCode(verifyCode, 135, 30, 6,
+                true, Color.WHITE, Color.BLACK, null);
+        ImageIO.write(bim, "JPEG", response.getOutputStream());
+    }
+
+    /**
      * 登录
      * @param username
      * @param password
@@ -97,7 +121,12 @@ public class LoginAction {
      * @throws ServletException
      */
     @RequestMapping("/doLogin")
-    public LoginResult doLogin(String username, String password, String role, HttpServletRequest request) throws IOException, ServletException {
+    public LoginResult doLogin(String username, String password, String role, String validateCode, HttpServletRequest request) throws IOException, ServletException {
+
+        //先校验验证码
+        if(StringUtils.isBlank(validateCode) || !ValidateCodeCache.validate(validateCode)){
+            return new LoginResult(false,"验证码校验失败,请重新输入!");
+        }
 
         // 生成登录日志,无论登陆是否成功,都会保存该日志信息
         SysLoginLog loginLog = RequestUtil.getLoginLog(request, username, password);
@@ -147,6 +176,7 @@ public class LoginAction {
         }
         return new LoginResult(false,"对不起,您不是系统管理员");
     }
+
 
 
 }
