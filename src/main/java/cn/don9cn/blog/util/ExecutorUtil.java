@@ -13,11 +13,6 @@ public class ExecutorUtil {
 
     public static Executor build(int poolSize){
         return Executors.newFixedThreadPool(poolSize,
-                r -> {
-                    Thread t = new Thread(r);
-                    //每个线程设置为守护线程
-                    t.setDaemon(true);
-                    return t;
-                });
+                Thread::new);
     }
 }
