@@ -1,9 +1,12 @@
 package cn.don9cn.blog.dao.system.rbac.impl;
 
-import cn.don9cn.blog.dao.BaseDao;
 import cn.don9cn.blog.dao.system.rbac.interf.SysRoleDao;
 import cn.don9cn.blog.model.system.rbac.SysRole;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  *@Author: liuxindong
@@ -13,5 +16,11 @@ import org.springframework.stereotype.Repository;
  **/
 @Repository
 public class SysRoleDaoImpl implements SysRoleDao {
+
+    @Override
+    public Optional<SysRole> findByRoleEncoding(String encoding) {
+        Query query = Query.query(Criteria.where("encoding").is(encoding));
+        return getMyMongoOperator().freeFindOne(query,SysRole.class);
+    }
 
 }

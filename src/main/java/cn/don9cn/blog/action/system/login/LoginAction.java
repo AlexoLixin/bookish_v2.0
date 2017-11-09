@@ -125,7 +125,7 @@ public class LoginAction {
 
         //先校验验证码
         if(StringUtils.isBlank(validateCode) || !ValidateCodeCache.validate(validateCode)){
-            return new LoginResult(false,"验证码校验失败,请重新输入!");
+            return new LoginResult(false,"验证码校验失败");
         }
 
         // 生成登录日志,无论登陆是否成功,都会保存该日志信息

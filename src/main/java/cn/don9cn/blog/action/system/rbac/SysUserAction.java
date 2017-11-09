@@ -83,6 +83,11 @@ public class SysUserAction extends BaseAction<SysUser> {
         return sysUserService.checkUserName(username);
     }
 
+    @PostMapping("/register")
+    public OperaResult register(String validateCode,SysUser sysUser) {
+        return sysUserService.register(validateCode,sysUser);
+    }
+
     @PutMapping("/authorize")
     public OperaResult authorizeUser(String userCode,String roleCodes) {
         return sysUserService.authorizeUser(userCode,roleCodes);

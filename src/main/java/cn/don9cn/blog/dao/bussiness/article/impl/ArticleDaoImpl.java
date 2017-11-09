@@ -52,7 +52,7 @@ public class ArticleDaoImpl implements ArticleDao {
      * @return
      */
     public Optional<PageResult<Article>> findPageWithoutContent(PageResult<Article> pageResult){
-        BasicDBObject query = BasicDBObject.parse(JSON.toJSONString(new Article()));
+        BasicDBObject query = BasicDBObject.parse(JSON.toJSONString(pageResult.getEntity()));
         BasicDBObject fields = new BasicDBObject("content",false);
         BasicQuery resultQuery = new BasicQuery(query,fields);
         return getMyMongoOperator().freeFindPage(pageResult,resultQuery);

@@ -3,6 +3,8 @@ package cn.don9cn.blog.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @Author: liuxindong
@@ -24,4 +26,15 @@ public class MyStringUtil {
         Arrays.stream(strings).forEach(code -> list.add(code));
         return list;
     }
+
+    /**
+     * 校验字符串与正则表达式是否匹配
+     * @return
+     */
+    public static boolean match(String regex,String str){
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.matches();
+    }
+
 }

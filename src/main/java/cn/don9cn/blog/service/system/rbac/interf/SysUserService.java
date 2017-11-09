@@ -47,5 +47,13 @@ public interface SysUserService extends BaseService<SysUser> {
      * @return
      */
     OperaResult updateUserInfo(SysUser sysUser);
+
+    /**
+     * 注册用户
+     * @param validateCode
+     * @param sysUser
+     * @return
+     */
+    OperaResult register(String validateCode, SysUser sysUser);
 }
 

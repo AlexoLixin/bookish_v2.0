@@ -35,6 +35,7 @@ public class ShiroAutoConfig {
         // 设置不拦截的路径
         filterChainMap.put("/login/*","anon");                                  // 登录相关
         filterChainMap.put("/system/rbac/user/register","anon");                // 用户注册
+        filterChainMap.put("/system/rbac/user/checkName","anon");                // 用户注册(检查用户名)
         filterChainMap.put("/bussiness/article/public","anon");                 // 加载文章
         filterChainMap.put("/bussiness/article/list/public","anon");            // 加载文章列表
         filterChainMap.put("/bussiness/articleClassify/tree/public","anon");    // 加载文章分类树

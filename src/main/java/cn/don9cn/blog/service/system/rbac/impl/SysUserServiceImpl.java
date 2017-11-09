@@ -3,18 +3,22 @@ package cn.don9cn.blog.service.system.rbac.impl;
 import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.dao.system.rbac.interf.SysRoleDao;
 import cn.don9cn.blog.dao.system.rbac.interf.SysUserDao;
+import cn.don9cn.blog.model.system.LoginResult;
 import cn.don9cn.blog.model.system.rbac.SysRole;
 import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.plugins.operaresult.util.OperaResultUtil;
+import cn.don9cn.blog.plugins.validatecode.ValidateCodeCache;
 import cn.don9cn.blog.service.system.rbac.interf.SysUserService;
 import cn.don9cn.blog.util.MyStringUtil;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +42,9 @@ public class SysUserServiceImpl implements SysUserService {
 
 	@Override
 	public OperaResult baseInsert(SysUser entity) {
+		entity.setByWay("管理员添加");
+		sysRoleDao.findByRoleEncoding("ROLE_USER")
+				.ifPresent(sysRole -> entity.setRoleCodes(Lists.newArrayList(sysRole.getCode())));
 		return OperaResultUtil.insert(sysUserDao.baseInsert(entity));
 	}
 
@@ -153,5 +160,26 @@ public class SysUserServiceImpl implements SysUserService {
 			return OperaResultUtil.update(sysUserDao.baseUpdate(sysUser));
 		}
 		return new OperaResult(false,"更新失败");
+	}
+
+	@Override
+	public OperaResult register(String validateCode, SysUser sysUser) {
+		//先校验验证码
+		if(StringUtils.isBlank(validateCode) || !ValidateCodeCache.validate(validateCode)){
+			return new OperaResult(false,"验证码校验失败");
+		}
+		//校验邮箱
+		String regex = "\\w+@\\w+(.\\w+)+";
+		if(!MyStringUtil.match(regex,sysUser.getEmail())){
+			return new OperaResult(false,"邮箱校验失败");
+		}
+		//校验用户名
+		if(!checkUserName(sysUser.getUsername()).isSuccess()){
+			return new OperaResult(false,"用户名不可用");
+		}
+		sysUser.setByWay("用户注册");
+		sysRoleDao.findByRoleEncoding("ROLE_USER")
+				.ifPresent(sysRole -> sysUser.setRoleCodes(Lists.newArrayList(sysRole.getCode())));
+		return OperaResultUtil.insert(sysUserDao.baseInsert(sysUser));
 	}
 }

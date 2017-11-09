@@ -41,6 +41,9 @@ public class SysUser extends BaseModel {
     @DbColumn(content = "性别")
     private String gender;
 
+    @DbColumn(content = "创建方式")
+    private String byWay;
+
     /**
      * 角色主键
      */
@@ -149,5 +152,13 @@ public class SysUser extends BaseModel {
 
     public void setRoleCodes(List<String> roleCodes) {
         this.roleCodes = roleCodes;
+    }
+
+    public String getByWay() {
+        return byWay;
+    }
+
+    public void setByWay(String byWay) {
+        this.byWay = byWay;
     }
 }
