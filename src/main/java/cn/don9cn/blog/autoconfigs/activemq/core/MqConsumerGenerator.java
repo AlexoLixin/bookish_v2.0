@@ -21,8 +21,8 @@ public class MqConsumerGenerator {
     @Autowired
     private ConnectionFactory connectionFactory;
 
-    @Value("${spring.activemq.system-msg-topic}")
-    private String sysMsgTopic;
+    @Autowired
+    private MqConstant mqConstant;
 
     private final ConcurrentHashMap<String,Connection> cache = new ConcurrentHashMap<>();
 
@@ -37,7 +37,7 @@ public class MqConsumerGenerator {
                         connection = connectionFactory.createConnection();
                         connection.setClientID(username);
                         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                        Topic topic = session.createTopic(sysMsgTopic);
+                        Topic topic = session.createTopic(mqConstant.SYS_MSG_TOPIC);
                         TopicSubscriber consumer = session.createDurableSubscriber(topic, username);
                         consumer.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
                         cache.putIfAbsent(username,connection);

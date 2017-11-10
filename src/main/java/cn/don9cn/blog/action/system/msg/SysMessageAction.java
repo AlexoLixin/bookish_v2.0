@@ -1,6 +1,6 @@
 package cn.don9cn.blog.action.system.msg;
 
-import cn.don9cn.blog.model.system.msg.SysMessage;
+import cn.don9cn.blog.autoconfigs.activemq.model.SysMessage;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.msg.interf.SysMessageService;
 import org.springframework.beans.factory.annotation.Autowired;

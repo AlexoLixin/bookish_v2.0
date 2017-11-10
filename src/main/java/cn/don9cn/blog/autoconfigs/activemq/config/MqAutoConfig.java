@@ -1,9 +1,10 @@
 package cn.don9cn.blog.autoconfigs.activemq.config;
 
+import cn.don9cn.blog.autoconfigs.activemq.core.MqConstant;
 import cn.don9cn.blog.autoconfigs.activemq.core.SysMqListener;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
@@ -23,24 +24,8 @@ import javax.jms.ConnectionFactory;
 @Configuration
 public class MqAutoConfig {
 
-    @Value("${spring.activemq.default-queue}")
-    private String defaultQueue;
-
-    @Value("${spring.activemq.system-msg-topic}")
-    private String sysMsgTopic;
-
-    @Value("${spring.activemq.system-listener-clientId}")
-    private String sysListenerClientId;
-
-
-    /**
-     * 默认队列
-     * @return
-     */
-    @Bean
-    public ActiveMQQueue defaultQueue(){
-        return new ActiveMQQueue(defaultQueue);
-    }
+    @Autowired
+    private MqConstant mqConstant;
 
     /**
      * 消息监听容器(适用于自定义javaConfig方式配置监听器)
@@ -54,11 +39,11 @@ public class MqAutoConfig {
         // 设置连接工厂
         container.setConnectionFactory(connectionFactory);
         // 设置客户端id,ActiveMQ通过clientId来实现持久订阅
-        container.setClientId(sysListenerClientId);
+        container.setClientId(mqConstant.SYS_LISTENER_CLIENT_ID);
         // 设置持久订阅
         container.setSubscriptionDurable(true);
         // 订阅系统消息topic
-        container.setDestination(new ActiveMQTopic(sysMsgTopic));
+        container.setDestination(new ActiveMQTopic(mqConstant.SYS_MSG_TOPIC));
         // 设置消息转换器
         container.setMessageConverter(messageConverter());
         // 设置消息监听器,用来处理监听到新消息后的动作
@@ -86,10 +71,10 @@ public class MqAutoConfig {
      * @return
      */
     @Bean
-    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory,MessageConverter messageConverter,ActiveMQQueue defaultQueue){
+    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory,MessageConverter messageConverter){
         JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory);
         jmsTemplate.setMessageConverter(messageConverter);
-        jmsTemplate.setDefaultDestination(defaultQueue);
+        jmsTemplate.setDefaultDestination(new ActiveMQQueue(mqConstant.DEFAULT_QUEUE));
         return jmsTemplate;
     }
 

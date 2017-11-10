@@ -2,7 +2,7 @@ package cn.don9cn.blog.service.system.msg.impl;
 
 import cn.don9cn.blog.autoconfigs.activemq.core.MqProducer;
 import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
-import cn.don9cn.blog.model.system.msg.SysMessage;
+import cn.don9cn.blog.autoconfigs.activemq.model.SysMessage;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.msg.interf.SysMessageService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package cn.don9cn.blog.service.system.msg.interf;
 
-import cn.don9cn.blog.model.system.msg.SysMessage;
+import cn.don9cn.blog.autoconfigs.activemq.model.SysMessage;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 
 /**

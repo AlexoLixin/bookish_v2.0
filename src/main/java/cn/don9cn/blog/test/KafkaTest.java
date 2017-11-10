@@ -1,7 +1,7 @@
 package cn.don9cn.blog.test;
 
 
-import cn.don9cn.blog.model.system.msg.SysMessage;
+import cn.don9cn.blog.autoconfigs.activemq.model.SysMessage;
 import com.alibaba.fastjson.JSON;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -12,8 +12,6 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 /**

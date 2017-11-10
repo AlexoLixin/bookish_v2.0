@@ -1,10 +1,9 @@
 package cn.don9cn.blog.autoconfigs.activemq.core;
 
-import cn.don9cn.blog.model.system.msg.SysMessage;
+import cn.don9cn.blog.autoconfigs.activemq.model.MqMessage;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
 
@@ -17,8 +16,8 @@ import org.springframework.jms.core.JmsTemplate;
 @Configuration
 public class MqProducer {
 
-    @Value("${spring.activemq.default-topic}")
-    private String defaultTopic;
+    @Autowired
+    private MqConstant mqConstant;
 
     @Autowired
     private JmsTemplate jmsTemplate;
@@ -28,17 +27,18 @@ public class MqProducer {
      * @param destination
      * @param message
      */
-    public void sendToQueue(String destination,SysMessage message){
+    public void sendToQueue(String destination,MqMessage message){
         ActiveMQQueue queue = new ActiveMQQueue(destination);
         jmsTemplate.convertAndSend(queue,message);
     }
 
     /**
-     * 点对点发送
+     * 默认点对点发送
      * @param message
      */
-    public void sendToDefaultQueue(SysMessage message){
-        jmsTemplate.convertAndSend(message);
+    public void sendToDefaultQueue(MqMessage message){
+        ActiveMQQueue queue = new ActiveMQQueue(mqConstant.DEFAULT_QUEUE);
+        jmsTemplate.convertAndSend(queue,message);
     }
 
     /**
@@ -46,7 +46,7 @@ public class MqProducer {
      * @param destination
      * @param message
      */
-    public void pushToTopic(String destination,SysMessage message){
+    public void pushToTopic(String destination,MqMessage message){
         ActiveMQTopic topic = new ActiveMQTopic(destination);
         jmsTemplate.convertAndSend(topic,message);
     }
@@ -55,8 +55,8 @@ public class MqProducer {
      * 发布到默认topic
      * @param message
      */
-    public void pushToDefaultTopic(SysMessage message){
-        ActiveMQTopic topic = new ActiveMQTopic(defaultTopic);
+    public void pushToDefaultTopic(MqMessage message){
+        ActiveMQTopic topic = new ActiveMQTopic(mqConstant.DEFAULT_TOPIC);
         jmsTemplate.convertAndSend(topic,message);
     }
 

@@ -1,12 +1,6 @@
 package cn.don9cn.blog.autoconfigs.websocket.msg;
 
 import cn.don9cn.blog.autoconfigs.activemq.core.MqConsumerGenerator;
-import cn.don9cn.blog.exception.ExceptionWrapper;
-import cn.don9cn.blog.model.system.msg.SysMessage;
-import cn.don9cn.blog.util.ExecutorUtil;
-import com.alibaba.fastjson.JSON;
-import org.apache.activemq.command.ActiveMQTextMessage;
-import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
@@ -14,15 +8,10 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Stream;
 
 /**
  * @Author: liuxindong

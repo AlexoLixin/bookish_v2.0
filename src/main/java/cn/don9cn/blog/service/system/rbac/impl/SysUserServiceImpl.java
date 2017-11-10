@@ -1,5 +1,8 @@
 package cn.don9cn.blog.service.system.rbac.impl;
 
+import cn.don9cn.blog.autoconfigs.activemq.core.MqConstant;
+import cn.don9cn.blog.autoconfigs.activemq.core.MqProducer;
+import cn.don9cn.blog.autoconfigs.activemq.model.MailMessage;
 import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.dao.system.rbac.interf.SysRoleDao;
 import cn.don9cn.blog.dao.system.rbac.interf.SysUserDao;
@@ -39,6 +42,11 @@ public class SysUserServiceImpl implements SysUserService {
 	@Autowired
 	private SysRoleDao sysRoleDao;
 
+	@Autowired
+	private MqConstant mqConstant;
+
+	@Autowired
+	private MqProducer mqProducer;
 
 	@Override
 	public OperaResult baseInsert(SysUser entity) {
@@ -177,9 +185,25 @@ public class SysUserServiceImpl implements SysUserService {
 		if(!checkUserName(sysUser.getUsername()).isSuccess()){
 			return new OperaResult(false,"用户名不可用");
 		}
+
+		//保存用户信息到数据库
 		sysUser.setByWay("用户注册");
 		sysRoleDao.findByRoleEncoding("ROLE_USER")
 				.ifPresent(sysRole -> sysUser.setRoleCodes(Lists.newArrayList(sysRole.getCode())));
-		return OperaResultUtil.insert(sysUserDao.baseInsert(sysUser));
+
+		OperaResult result = OperaResultUtil.insert(sysUserDao.baseInsert(sysUser));
+
+		//注册成功后,推送信息到activeMq
+		if(result.isSuccess()){
+			try{
+				mqProducer.pushToTopic(mqConstant.MAIL_MSG_TOPIC,new MailMessage(sysUser.getUsername(),sysUser.getEmail()));
+			}catch (Exception e){
+				// TODO
+				//将用户的注册信息推送到activeMq失败,暂时先不处理,等完善好了异常处理系统再修改
+				System.out.println("新用户的注册消息推送到activeMq失败!");
+			}
+		}
+
+		return result;
 	}
 }
