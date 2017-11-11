@@ -5,6 +5,8 @@ import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.BaseService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  *@Author: liuxindong
  *@Description: 用户service接口
@@ -54,6 +56,6 @@ public interface SysUserService extends BaseService<SysUser> {
      * @param sysUser
      * @return
      */
-    OperaResult register(String validateCode, SysUser sysUser);
+    OperaResult register(String validateCode, SysUser sysUser, HttpServletRequest request);
 }
 

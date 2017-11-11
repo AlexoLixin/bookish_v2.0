@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -171,10 +172,15 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 
 	@Override
-	public OperaResult register(String validateCode, SysUser sysUser) {
+	public OperaResult register(String validateCode, SysUser sysUser,HttpServletRequest request) {
 		//先校验验证码
-		if(StringUtils.isBlank(validateCode) || !ValidateCodeCache.validate(validateCode)){
+		if(StringUtils.isBlank(validateCode)){
 			return new OperaResult(false,"验证码校验失败");
+		}else{
+			Object verifyCode = request.getSession().getAttribute("verifyCode");
+			if(verifyCode==null || !verifyCode.toString().equals(validateCode)){
+				return new OperaResult(false,"验证码校验失败");
+			}
 		}
 		//校验邮箱
 		String regex = "\\w+@\\w+(.\\w+)+";

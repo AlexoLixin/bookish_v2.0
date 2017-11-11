@@ -99,11 +99,12 @@ public class LoginAction {
      * @return
      */
     @GetMapping("/generateValidateCode")
-    public void generateValidateCode(HttpServletResponse response) throws IOException {
+    public void generateValidateCode(HttpServletRequest request,HttpServletResponse response) throws IOException {
         //生成文字验证码
         String verifyCode = ValidateCode.generateTextCode(ValidateCode.TYPE_NUM_LOWER, 6, null);
         //将验证码放入缓存
-        ValidateCodeCache.cache(verifyCode);
+        //ValidateCodeCache.cache(verifyCode);
+        request.getSession().setAttribute("verifyCode",verifyCode);
         //生成图片验证码
         BufferedImage bim = ValidateCode.generateImageCode(verifyCode, 135, 30, 6,
                 true, Color.WHITE, Color.BLACK, null);
@@ -124,8 +125,13 @@ public class LoginAction {
     public LoginResult doLogin(String username, String password, String role, String validateCode, HttpServletRequest request) throws IOException, ServletException {
 
         //先校验验证码
-        if(StringUtils.isBlank(validateCode) || !ValidateCodeCache.validate(validateCode)){
+        if(StringUtils.isBlank(validateCode)){
             return new LoginResult(false,"验证码校验失败");
+        }else{
+            Object verifyCode = request.getSession().getAttribute("verifyCode");
+            if(verifyCode==null || !verifyCode.toString().equals(validateCode)){
+                return new LoginResult(false,"验证码校验失败");
+            }
         }
 
         // 生成登录日志,无论登陆是否成功,都会保存该日志信息

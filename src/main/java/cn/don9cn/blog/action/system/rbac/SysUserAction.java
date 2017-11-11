@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.processing.SupportedSourceVersion;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -84,8 +85,8 @@ public class SysUserAction extends BaseAction<SysUser> {
     }
 
     @PostMapping("/register")
-    public OperaResult register(String validateCode,SysUser sysUser) {
-        return sysUserService.register(validateCode,sysUser);
+    public OperaResult register(String validateCode, SysUser sysUser, HttpServletRequest request) {
+        return sysUserService.register(validateCode,sysUser,request);
     }
 
     @PutMapping("/authorize")
