@@ -72,7 +72,7 @@ public class ArticleAction extends BaseAction<Article> {
     }
 
     @Override
-    @GetMapping("/page")
+    @GetMapping({"/page","/publish/new/public"})
     protected OperaResult baseFindByPage(int page, int limit,String startTime,String endTime, String orderBy, Article article) {
         return articleService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,article));
     }

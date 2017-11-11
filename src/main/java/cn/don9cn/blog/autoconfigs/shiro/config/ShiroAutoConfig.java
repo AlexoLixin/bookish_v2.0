@@ -39,6 +39,7 @@ public class ShiroAutoConfig {
         filterChainMap.put("/bussiness/article/public","anon");                 // 加载文章
         filterChainMap.put("/bussiness/article/list/public","anon");            // 加载文章列表
         filterChainMap.put("/bussiness/articleClassify/tree/public","anon");    // 加载文章分类树
+        filterChainMap.put("/bussiness/article/publish/new/public","anon");     // 加载最新发布的文章
         filterChainMap.put("/system/upload/image","anon");                      // 图片上传
         filterChainMap.put("/system/upload/fileDownLoad","anon");               // 文件下载
         filterChainMap.put("/msgWebSocket","anon");                             // 消息推送 webSocket
