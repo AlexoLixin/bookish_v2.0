@@ -1,26 +1,32 @@
 ########### spring
 spring:
-  # 热部署
+  #-----------------------------------------> 热部署
   devtools:
     livereload:
       enabled: true
     restart:
       additional-paths: src/main
-  # 多文件上传
+  #-----------------------------------------> 多文件上传
   http:
     multipart:
       enabled: true
-  # 开启aop
+  #-----------------------------------------> 开启aop
   aop:
     auto: true
-  # 应用环境配置
-  profiles:
-    active: production
-  # session
+  #-----------------------------------------> activeMq配置
+  activemq:
+      broker-url: tcp://45.77.6.109:61616
+      user: admin
+      password: admin
+  #-----------------------------------------> session共享
   #session:
   #  store-type: redis
+  #-----------------------------------------> 应用环境配置
+  profiles:
+    active: production
 
-# mongodb
+
+#-------------------------------------------> mongodb数据库配置
 mongodb:
   host: 127.0.0.1
   port: 27017
@@ -28,7 +34,7 @@ mongodb:
   username: liuxindong
   password: 123456
 
-# 文件保存路径
+#-------------------------------------------> 文件(上传文件以及上传图片)保存路径
 fileSavePath:
   images: /don9cn/images
   uploadFiles: /don9cn/uploadFiles
@@ -43,14 +49,11 @@ spring:
     host: 127.0.0.1
     port: 6379
   activemq:
-    broker-url: tcp://127.0.0.1:61616
-    user: admin
-    password: admin
     default-queue: system.queue
     default-topic: system
     system-msg-topic: system
     mail-msg-topic: mail
-    system-listener-clientId: proBlogApplication
+    system-listener-clientId: Pro_BlogApplication
 
 # 文件保存路径
 fileSavePath:
@@ -67,14 +70,11 @@ spring:
     host: 47.94.206.26
     port: 6379
   activemq:
-    broker-url: tcp://47.94.206.26:61616
-    user: admin
-    password: admin
     default-queue: test.queue
     default-topic: test
     system-msg-topic: test
     mail-msg-topic: mailtest
-    system-listener-clientId: devBlogApplication
+    system-listener-clientId: Dev_BlogApplication
 
 # 文件保存路径
 fileSavePath:
