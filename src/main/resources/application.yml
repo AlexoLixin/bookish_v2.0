@@ -23,7 +23,7 @@ spring:
   #  store-type: redis
   #-----------------------------------------> 应用环境配置
   profiles:
-    active: production
+    active: development
 
 
 #-------------------------------------------> mongodb数据库配置
