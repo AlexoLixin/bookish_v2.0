@@ -47,12 +47,13 @@ public class ArticleCommentAction extends BaseAction<ArticleComment> {
 	}
 
 	@Override
+	@DeleteMapping
 	protected OperaResult baseRemove(String code) {
-		return null;
+		return articleCommentService.baseDeleteById(code);
 	}
 
 	@Override
-	@DeleteMapping
+	@DeleteMapping("/batch")
 	protected OperaResult baseRemoveBatch(String codes) {
 		return articleCommentService.baseDeleteBatch(codes);
 	}

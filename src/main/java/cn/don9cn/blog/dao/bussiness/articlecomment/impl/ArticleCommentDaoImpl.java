@@ -2,6 +2,8 @@ package cn.don9cn.blog.dao.bussiness.articlecomment.impl;
 
 import cn.don9cn.blog.dao.bussiness.articlecomment.interf.ArticleCommentDao;
 import cn.don9cn.blog.model.bussiness.acticlecomment.ArticleComment;
+import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -24,13 +26,24 @@ public class ArticleCommentDaoImpl implements ArticleCommentDao {
 
 
     /**
-     * 删除节点
+     * 批量删除节点
      * @param ids
      * @return
      */
     @Override
     public Optional<List<ArticleComment>> removeNodes(List<String> ids) {
         Query query = Query.query(Criteria.where("_id").in(ids));
+        return getMyMongoOperator().freeFindAllAndRemove(query,ArticleComment.class);
+    }
+
+    /**
+     * 删除单个节点
+     * @param id
+     * @return
+     */
+    @Override
+    public Optional<List<ArticleComment>> removeNode(String id) {
+        Query query = Query.query(Criteria.where("_id").is(id));
         return getMyMongoOperator().freeFindAllAndRemove(query,ArticleComment.class);
     }
 
@@ -60,11 +73,29 @@ public class ArticleCommentDaoImpl implements ArticleCommentDao {
         return getMyMongoOperator().freeUpdateMulti(query,update,ArticleComment.class);
     }
 
+    /**
+     * 根据文章主键查询留言列表
+     * @param articleCode
+     * @return
+     */
     @Override
     public Optional<List<ArticleComment>> findListByArticleCode(String articleCode) {
         Query query = Query.query(Criteria.where("articleCode").is(articleCode));
+        query.with(new Sort(Sort.Direction.DESC,"createTime"));
         return getMyMongoOperator().freeFindList(query,ArticleComment.class);
     }
 
-
+    @Override
+    public Optional<PageResult<ArticleComment>> baseFindByPage(PageResult<ArticleComment> pageResult) {
+        Query query = getMyMongoOperator().createFreeQuery(pageResult.getEntity(),fieldObjectMap -> {
+            Query resultQuery = new Query();
+            fieldObjectMap.keySet().forEach(key -> {
+                if(!key.equals("childrenCodes") && !key.equals("replies")){
+                    resultQuery.addCriteria(Criteria.where(key).is(fieldObjectMap.get(key)));
+                }
+            });
+            return resultQuery;
+        });
+        return getMyMongoOperator().freeFindPage(pageResult,query);
+    }
 }

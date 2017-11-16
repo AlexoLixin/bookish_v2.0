@@ -23,6 +23,13 @@ public interface ArticleCommentDao extends BaseDao<ArticleComment> {
     Optional<List<ArticleComment>> removeNodes(List<String> ids);
 
     /**
+     * 删除单个节点
+     * @param id
+     * @return
+     */
+    Optional<List<ArticleComment>> removeNode(String id);
+
+    /**
      * 更新父节点(为其添加子节点)
      * @param code
      * @param child

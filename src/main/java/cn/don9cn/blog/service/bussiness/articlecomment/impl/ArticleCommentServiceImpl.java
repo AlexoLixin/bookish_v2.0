@@ -64,7 +64,20 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 	@Override
 	//@CacheEvict(value = "ArticleClassify",allEntries = true)
 	public OperaResult baseDeleteById(String id) {
-		return OperaResultUtil.deleteOne(articleCommentDao.baseDeleteById(id));
+		// 先删除节点
+		Optional<List<ArticleComment>> removeNodes = articleCommentDao.removeNode(id);
+		if(removeNodes.isPresent()){
+			List<ArticleComment> list = removeNodes.get();
+			list.forEach(comment -> {
+				// 级联删除其子节点
+				comment.getReplyCodes().forEach(code -> articleCommentDao.baseDeleteById(code));
+				// 更新父节点
+				articleCommentDao.updateParentForPull(comment.getParent(),comment.getCode());
+			});
+			return OperaResultUtil.deleteBatch(OptionalInt.of(list.size()));
+		}else{
+			return OperaResultUtil.deleteBatch(OptionalInt.empty());
+		}
 	}
 
 	@Override
@@ -76,11 +89,11 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 			Optional<List<ArticleComment>> removeNodes = articleCommentDao.removeNodes(codesList);
 			if(removeNodes.isPresent()){
 				List<ArticleComment> list = removeNodes.get();
-				list.forEach(articleClassify -> {
+				list.forEach(comment -> {
 					// 级联删除其子节点
-					articleClassify.getReplyCodes().forEach(code -> articleCommentDao.baseDeleteById(code));
+					comment.getReplyCodes().forEach(code -> articleCommentDao.baseDeleteById(code));
 					// 更新父节点
-					articleCommentDao.updateParentForPull(articleClassify.getParent(),articleClassify.getCode());
+					articleCommentDao.updateParentForPull(comment.getParent(),comment.getCode());
 				});
 				return OperaResultUtil.deleteBatch(OptionalInt.of(list.size()));
 			}else{
@@ -129,7 +142,9 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 			Map<String,ArticleComment> tempMap = new HashMap<>();
 			comments.forEach(comment -> tempMap.put(comment.getCode(),comment));
 			comments.forEach(comment -> comment.getReplyCodes().forEach(childCode -> {
-				comment.addReply(tempMap.get(childCode));
+				if(tempMap.get(childCode)!=null){
+					comment.addReply(tempMap.get(childCode));
+				}
             }));
 			List<ArticleComment> classifyList = comments.stream()
 															.filter(comment -> comment.getParent().equals("ROOT"))

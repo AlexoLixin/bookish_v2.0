@@ -35,9 +35,14 @@ public class ArticleComment extends BaseModel{
     private String parent;
 
     /**
+     * 父节点昵称
+     */
+    private String parentName;
+
+    /**
      * 回复主键集合
      */
-    private List<String> replyCodes = new ArrayList<>();
+    private List<String> childrenCodes = new ArrayList<>();
 
     /**
      * 回复实体集合
@@ -62,11 +67,11 @@ public class ArticleComment extends BaseModel{
     }
 
     public List<String> getReplyCodes() {
-        return replyCodes;
+        return childrenCodes;
     }
 
-    public void setReplyCodes(List<String> replyCodes) {
-        this.replyCodes = replyCodes;
+    public void setReplyCodes(List<String> childrenCodes) {
+        this.childrenCodes = childrenCodes;
     }
 
     public List<ArticleComment> getReplies() {
@@ -95,5 +100,13 @@ public class ArticleComment extends BaseModel{
 
     public void addReply(ArticleComment reply){
         this.replies.add(reply);
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 }

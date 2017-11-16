@@ -63,8 +63,8 @@ public class MyMongoOperator extends MongoTemplate {
      * @param <T>
      * @return
      */
-    public <T extends BaseModel> Map<Field,Object> parseEntity(T entity) {
-        Map<Field,Object> resultMap = new HashMap<>();
+    public <T extends BaseModel> Map<String,Object> parseEntity(T entity) {
+        Map<String,Object> resultMap = new HashMap<>();
         Class<? extends Serializable> entityClass = entity.getClass();
         EntityParserUtil.getAllFields(entity).forEach(field -> {
             String fieldName = field.getName();
@@ -73,7 +73,7 @@ public class MyMongoOperator extends MongoTemplate {
                 Method getMethod = entityClass.getMethod(getMethodName,null);
                 Object value = getMethod.invoke(entity, null);
                 if(value!=null){
-                    resultMap.put(field,value);
+                    resultMap.put(field.getName(),value);
                 }
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                 logger.info("MyMongoOperator.parseEntity 未能获取实体 "+entityClass.getSimpleName()+" 中字段 " + fieldName + "的值,选择跳过该字段");
@@ -106,7 +106,7 @@ public class MyMongoOperator extends MongoTemplate {
      * @param entity
      * @return
      */
-    public <T extends BaseModel> Query createFreeQuery(T entity, Function<Map<Field,Object>,Query> function){
+    public <T extends BaseModel> Query createFreeQuery(T entity, Function<Map<String,Object>,Query> function){
         return function.apply(parseEntity(entity));
     }
 
@@ -116,9 +116,9 @@ public class MyMongoOperator extends MongoTemplate {
      * @return
      */
     public <T extends BaseModel> Update createDefaultUpdate(T entity){
-        Map<Field,Object> fieldMap = parseEntity(entity);
+        Map<String,Object> fieldMap = parseEntity(entity);
         Update update = new Update();
-        fieldMap.keySet().forEach(field -> update.set(field.getName(),fieldMap.get(field)));
+        fieldMap.keySet().forEach(field -> update.set(field,fieldMap.get(field)));
         return update;
     }
 
@@ -127,7 +127,7 @@ public class MyMongoOperator extends MongoTemplate {
      * @param entity
      * @return
      */
-    public <T extends BaseModel> Update createFreeUpdate(T entity, Function<Map<Field,Object>,Update> function){
+    public <T extends BaseModel> Update createFreeUpdate(T entity, Function<Map<String,Object>,Update> function){
         return function.apply(parseEntity(entity));
     }
 
@@ -232,7 +232,7 @@ public class MyMongoOperator extends MongoTemplate {
      */
     public <T extends BaseModel> OptionalInt removeById(String id, Class<T> typeClass) {
         try{
-            int   x = super.remove(Query.query(Criteria.where("_id").is(id)),typeClass,typeClass.getSimpleName()).getN();
+            int x = super.remove(Query.query(Criteria.where("_id").is(id)),typeClass,typeClass.getSimpleName()).getN();
             return OptionalInt.of(x);
         }catch (Exception e){
             throw new MyMongoOperatorException(e,"MyMongoOperator.removeById 删除失败");

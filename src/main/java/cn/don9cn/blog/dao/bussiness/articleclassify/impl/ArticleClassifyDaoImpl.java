@@ -77,8 +77,8 @@ public class ArticleClassifyDaoImpl implements ArticleClassifyDao {
         Update update = myMongoOperator.createFreeUpdate(entity,fieldObjectMap -> {
             Update updateResult = new Update();
             fieldObjectMap.keySet().forEach(field -> {
-                if(!field.getName().equals("childrenCodes"))
-                    updateResult.set(field.getName(),fieldObjectMap.get(field));
+                if(!field.equals("childrenCodes"))
+                    updateResult.set(field,fieldObjectMap.get(field));
             });
             return updateResult;
         });
