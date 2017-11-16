@@ -24,9 +24,12 @@ public class SysMessageServiceImpl implements SysMessageService{
 
     @Override
     public OperaResult push(SysMessage message) {
+        // TODO
+        // 重构系统消息推送模块
         message.setProducer(MyShiroSessionUtil.getUserNameFromSession());
         try{
             mqProducer.pushToDefaultTopic(message);
+            mqProducer.sendToQueue("queue-user-liuxindong",message);
         }catch (Exception e){
             return new OperaResult(false,"消息发布失败");
         }

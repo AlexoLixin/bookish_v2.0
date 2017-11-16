@@ -3,7 +3,6 @@ package cn.don9cn.blog.autoconfigs.activemq.core;
 import cn.don9cn.blog.autoconfigs.websocket.msg.MsgWebSocketHandler;
 import cn.don9cn.blog.exception.ExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.jms.*;
@@ -37,9 +36,17 @@ public class MqConsumerGenerator {
                         connection = connectionFactory.createConnection();
                         connection.setClientID(username);
                         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                        //监听系统通知
                         Topic topic = session.createTopic(mqConstant.SYS_MSG_TOPIC);
-                        TopicSubscriber consumer = session.createDurableSubscriber(topic, username);
-                        consumer.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
+                        //监听用户自身的queue队列
+                        Queue queue = session.createQueue("queue-user-" + username);
+                        //创建queue消费者
+                        MessageConsumer consumer1 = session.createConsumer(queue);
+                        //创建topic订阅者
+                        TopicSubscriber consumer2 = session.createDurableSubscriber(topic, username);
+                        //设置消息处理器
+                        consumer1.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
+                        consumer2.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
                         cache.putIfAbsent(username,connection);
                     }
                 }

@@ -1,6 +1,7 @@
 package cn.don9cn.blog.autoconfigs.activemq.core;
 
 import org.apache.activemq.command.ActiveMQTextMessage;
+import org.springframework.context.annotation.Scope;
 import org.springframework.jms.listener.SessionAwareMessageListener;
 import org.springframework.stereotype.Component;
 
