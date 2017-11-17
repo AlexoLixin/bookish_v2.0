@@ -1,7 +1,16 @@
 package cn.don9cn.blog.service.bussiness.articlecomment.impl;
 
+import cn.don9cn.blog.autoconfigs.activemq.constant.MqDestinationType;
+import cn.don9cn.blog.autoconfigs.activemq.core.MqManager;
+import cn.don9cn.blog.autoconfigs.activemq.model.CommonMqMessage;
+import cn.don9cn.blog.autoconfigs.activemq.model.MqRegisterMessage;
+import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
+import cn.don9cn.blog.dao.bussiness.article.interf.ArticleDao;
 import cn.don9cn.blog.dao.bussiness.articlecomment.interf.ArticleCommentDao;
+import cn.don9cn.blog.dao.system.rbac.interf.SysUserDao;
 import cn.don9cn.blog.model.bussiness.acticlecomment.ArticleComment;
+import cn.don9cn.blog.model.bussiness.article.Article;
+import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.plugins.operaresult.util.OperaResultUtil;
@@ -32,6 +41,8 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 	@Autowired
 	private ArticleCommentDao articleCommentDao;
 
+	@Autowired
+	private ArticleDao articleDao;
 
 	@Override
 	//@CacheEvict(value = "ArticleClassify",allEntries = true)
@@ -46,7 +57,20 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 				articleCommentDao.updateParentForPush(entity.getParent(),code);
 			}
 		});
-		return OperaResultUtil.insert(optional);
+		OperaResult result = OperaResultUtil.insert(optional);
+		//保存成功后推送消息到用户的个人消息队列
+		if(result.isSuccess()){
+			Optional<Article> article = articleDao.baseFindById(entity.getArticleCode());
+			article.ifPresent(article1 -> {
+				CommonMqMessage message = new CommonMqMessage();
+				message.setTitle("您有新留言!");
+				message.setContent("您的文章 《"+article1.getTitle()+"》 收到一条来自 ["+ entity.getNickname() +"] 的新留言!");
+				message.setLink("/loadArticle?articleCode="+article1.getCode());
+				MqManager.submit(new MqRegisterMessage(MqDestinationType.QUEUE,
+						"queue-user-" + article1.getAuthor(),message));
+			});
+		}
+		return result;
 	}
 
 	@Override

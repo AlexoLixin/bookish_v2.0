@@ -101,12 +101,12 @@ public class LoginAction {
     @GetMapping("/generateValidateCode")
     public void generateValidateCode(HttpServletRequest request,HttpServletResponse response) throws IOException {
         //生成文字验证码
-        String verifyCode = ValidateCode.generateTextCode(ValidateCode.TYPE_NUM_LOWER, 6, null);
+        String verifyCode = ValidateCode.generateTextCode(ValidateCode.TYPE_NUM_LOWER, 4, null);
         //将验证码放入缓存
         //ValidateCodeCache.cache(verifyCode);
         request.getSession().setAttribute("verifyCode",verifyCode);
         //生成图片验证码
-        BufferedImage bim = ValidateCode.generateImageCode(verifyCode, 135, 30, 6,
+        BufferedImage bim = ValidateCode.generateImageCode(verifyCode, 100, 30, 6,
                 true, Color.WHITE, Color.BLACK, null);
         ImageIO.write(bim, "JPEG", response.getOutputStream());
     }
