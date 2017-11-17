@@ -15,20 +15,14 @@ public class MqConstant {
     /**
      * 默认queue
      */
-    @Value("${spring.activemq.default-queue}")
+    @Value("${spring.activemq.queue-default}")
     public  String DEFAULT_QUEUE;
 
     /**
      * 默认topic
      */
-    @Value("${spring.activemq.default-topic}")
+    @Value("${spring.activemq.topic-default}")
     public String DEFAULT_TOPIC;
-
-    /**
-     * 系统消息topic
-     */
-    @Value("${spring.activemq.system-msg-topic}")
-    public String SYS_MSG_TOPIC;
 
     /**
      * 应用监听的clientId
@@ -37,10 +31,16 @@ public class MqConstant {
     public String SYS_LISTENER_CLIENT_ID;
 
     /**
-     * 邮件消息topic
+     * 系统消息topic
      */
-    @Value("${spring.activemq.mail-msg-topic}")
-    public String MAIL_MSG_TOPIC;
+    @Value("${spring.activemq.topic-msg-system}")
+    public String TOPIC_MSG_SYSTEM;
+
+    /**
+     * 注册邮件消息topic
+     */
+    @Value("${spring.activemq.topic-mail-register}")
+    public String TOPIC_MAIL_REGISTER;
 
 
 }

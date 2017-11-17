@@ -5,6 +5,7 @@ import cn.don9cn.blog.autoconfigs.activemq.listener.SysMqListener;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
@@ -13,7 +14,7 @@ import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
-import javax.jms.ConnectionFactory;
+import javax.jms.*;
 
 /**
  * @Author: liuxindong
@@ -22,36 +23,42 @@ import javax.jms.ConnectionFactory;
  * @Modify:
  */
 @Configuration
+@AutoConfigureAfter(ConnectionFactory.class)
 public class MqAutoConfig {
 
+    private final MqConstant mqConstant;
+
+    private ConnectionFactory connectionFactory;
+
     @Autowired
-    private MqConstant mqConstant;
+    public MqAutoConfig(MqConstant mqConstant, ConnectionFactory connectionFactory){
+        this.mqConstant = mqConstant;
+        this.connectionFactory = connectionFactory;
+        initListener();
+    }
 
     /**
-     * 消息监听容器(适用于自定义javaConfig方式配置监听器)
-     * @param connectionFactory
-     * @return
+     * 启动系统监听器(支持多topic同时订阅或者queue监听)
      */
-    @Bean
-    public DefaultMessageListenerContainer defaultMessageListenerContainer(ConnectionFactory connectionFactory, SysMqListener sysMqListener) {
+    private void initListener() {
 
-        DefaultMessageListenerContainer container = new DefaultMessageListenerContainer();
-        // 设置连接工厂
-        container.setConnectionFactory(connectionFactory);
-        // 设置客户端id,ActiveMQ通过clientId来实现持久订阅
-        container.setClientId(mqConstant.SYS_LISTENER_CLIENT_ID);
-        // 设置持久订阅
-        container.setSubscriptionDurable(true);
-        // 订阅系统消息topic
-        container.setDestination(new ActiveMQTopic(mqConstant.SYS_MSG_TOPIC));
-        // 设置消息转换器
-        container.setMessageConverter(messageConverter());
-        // 设置消息监听器,用来处理监听到新消息后的动作
-        container.setMessageListener(sysMqListener);
+        try {
+            Connection connection = connectionFactory.createConnection();
+            connection.setClientID(mqConstant.SYS_LISTENER_CLIENT_ID);
+            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            //监听系统通知
+            Topic topic = session.createTopic(mqConstant.TOPIC_MSG_SYSTEM);
+            //创建topic订阅者
+            TopicSubscriber consumer1 = session.createDurableSubscriber(topic, mqConstant.SYS_LISTENER_CLIENT_ID);
+            //设置消息处理器
+            consumer1.setMessageListener(new SysMqListener());
 
-        System.out.println("成功启动ActiveMQ系统监听器 >>>");
+            System.out.println("成功启动ActiveMQ系统监听器 >>>");
 
-        return container;
+        }catch (Exception e){
+            throw new RuntimeException("系统ActiveMQ监听器初始化失败!",e);
+        }
+
     }
 
     /**
@@ -79,7 +86,6 @@ public class MqAutoConfig {
         jmsTemplate.setDefaultDestination(new ActiveMQQueue(mqConstant.DEFAULT_QUEUE));
         return jmsTemplate;
     }
-
 
 
 }

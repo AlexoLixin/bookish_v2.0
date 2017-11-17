@@ -2,7 +2,6 @@ package cn.don9cn.blog.service.system.rbac.impl;
 
 import cn.don9cn.blog.autoconfigs.activemq.constant.MqConstant;
 import cn.don9cn.blog.autoconfigs.activemq.constant.MqDestinationType;
-import cn.don9cn.blog.autoconfigs.activemq.core.MqExTemplate;
 import cn.don9cn.blog.autoconfigs.activemq.core.MqManager;
 import cn.don9cn.blog.autoconfigs.activemq.model.MailMessage;
 import cn.don9cn.blog.autoconfigs.activemq.model.MqRegisterMessage;
@@ -199,7 +198,7 @@ public class SysUserServiceImpl implements SysUserService {
 		//注册成功后,推送信息到activeMq
 		if(result.isSuccess()){
 			try{
-				MqManager.submit(new MqRegisterMessage(MqDestinationType.TOPIC,mqConstant.MAIL_MSG_TOPIC,
+				MqManager.submit(new MqRegisterMessage(MqDestinationType.TOPIC,mqConstant.TOPIC_MAIL_REGISTER,
 						new MailMessage(sysUser.getUsername(),sysUser.getEmail())));
 			}catch (Exception e){
 				// TODO

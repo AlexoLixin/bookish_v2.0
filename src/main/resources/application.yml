@@ -49,10 +49,10 @@ spring:
     host: 127.0.0.1
     port: 6379
   activemq:
-    default-queue: system.queue
-    default-topic: system
-    system-msg-topic: system
-    mail-msg-topic: mail
+    queue-default: queue-default
+    topic-default: topic-default
+    topic-msg-system: topic-msg-system
+    topic-mail-register: topic-mail-register
     system-listener-clientId: Pro_BlogApplication
 
 # 文件保存路径
@@ -70,10 +70,10 @@ spring:
     host: 47.94.206.26
     port: 6379
   activemq:
-    default-queue: test.queue
-    default-topic: test
-    system-msg-topic: test
-    mail-msg-topic: mailtest
+    queue-default: queue-default
+    topic-default: topic-default
+    topic-msg-system: systemtest
+    topic-mail-register: mailtest
     system-listener-clientId: Dev_BlogApplication
 
 # 文件保存路径

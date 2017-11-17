@@ -22,7 +22,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 @AutoConfigureAfter(MqExTemplate.class)
 public class MqManager {
 
-    private static MqExTemplate mqExTemplate;
+    private MqExTemplate mqExTemplate;
 
     /**
      * 管理待push到ActiveMQ的队列
@@ -35,11 +35,18 @@ public class MqManager {
     private static final ExecutorService exec = Executors.newFixedThreadPool(2);
 
     /**
-     * 管理器初始化后开启消费者线程,等待获取要push的新消息
+     * 管理器初始化后开启消费者线程
      */
     @Autowired
     public MqManager(MqExTemplate mqExTemplate){
-        MqManager.mqExTemplate = mqExTemplate;
+        this.mqExTemplate = mqExTemplate;
+        start();
+    }
+
+    /**
+     * 启动消费者,等待获取要push的新消息
+     */
+    private void start(){
         exec.execute(new MqConsumerTask(queue, mqExTemplate));
     }
 

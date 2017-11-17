@@ -39,7 +39,7 @@ public class MqConsumerGenerator {
                         connection.setClientID(username);
                         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
                         //监听系统通知
-                        Topic topic = session.createTopic(mqConstant.SYS_MSG_TOPIC);
+                        Topic topic = session.createTopic(mqConstant.TOPIC_MSG_SYSTEM);
                         //监听用户自身的queue队列
                         Queue queue = session.createQueue("queue-user-" + username);
                         //创建queue消费者

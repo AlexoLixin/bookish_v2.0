@@ -30,7 +30,7 @@ public class SysMessageServiceImpl implements SysMessageService{
         try{
             message.setProducer(MyShiroSessionUtil.getUserNameFromSession());
             //利用消息管理器,实现异步推送,前端直接响应成功状态,后台线程处理消息推送的任务
-            MqManager.submit(new MqRegisterMessage(MqDestinationType.TOPIC,mqConstant.DEFAULT_TOPIC,message));
+            MqManager.submit(new MqRegisterMessage(MqDestinationType.TOPIC,mqConstant.TOPIC_MSG_SYSTEM,message));
         }catch (Exception e){
             return new OperaResult(false,"消息发布失败");
         }
