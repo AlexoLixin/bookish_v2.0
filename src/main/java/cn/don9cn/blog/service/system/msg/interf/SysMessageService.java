@@ -1,6 +1,6 @@
 package cn.don9cn.blog.service.system.msg.interf;
 
-import cn.don9cn.blog.autoconfigs.activemq.model.SysMessage;
+import cn.don9cn.blog.autoconfigs.activemq.model.CommonMqMessage;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 
 /**
@@ -11,7 +11,7 @@ import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
  */
 public interface SysMessageService {
 
-    OperaResult push(SysMessage message);
+    OperaResult push(CommonMqMessage message);
 
     OperaResult pull();
 

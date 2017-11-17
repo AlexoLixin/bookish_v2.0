@@ -5,16 +5,11 @@ import cn.don9cn.blog.util.DateUtil;
 
 /**
  * @Author: liuxindong
- * @Description: 系统消息实体
+ * @Description: 通用消息实体
  * @Create: 2017/10/23 10:16
  * @Modify:
  */
-public class SysMessage implements MqMessage {
-
-    /**
-     * 所属topic
-     */
-    private String topic;
+public class CommonMqMessage implements MqMessage {
 
     /**
      * 消息标题
@@ -41,17 +36,11 @@ public class SysMessage implements MqMessage {
      */
     private String link;
 
-    public SysMessage(){
+    public CommonMqMessage(){
 
     }
 
-    public SysMessage(String title,String content){
-        this.title = title;
-        this.content = content;
-    }
-
-    public SysMessage(String topic,String title,String content){
-        this.topic = topic;
+    public CommonMqMessage(String title, String content){
         this.title = title;
         this.content = content;
     }
@@ -79,14 +68,6 @@ public class SysMessage implements MqMessage {
 
     public void setLink(String link) {
         this.link = link;
-    }
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
     }
 
     public String getProducer() {

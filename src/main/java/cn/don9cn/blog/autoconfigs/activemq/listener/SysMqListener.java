@@ -1,4 +1,4 @@
-package cn.don9cn.blog.autoconfigs.activemq.core;
+package cn.don9cn.blog.autoconfigs.activemq.listener;
 
 import org.apache.activemq.command.ActiveMQTextMessage;
 import org.springframework.context.annotation.Scope;

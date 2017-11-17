@@ -48,7 +48,7 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
         System.out.println("MsgWebSocket: 新用户 ["+username+"] 连接成功... 当前用户数量: " + userMap.values().size());
         // 开始监听并推送消息
         mqConsumerGenerator.startListen(username,this);
-        System.out.println("用户 ["+username+"] 启动系统消息监听");
+
     }
 
     /**

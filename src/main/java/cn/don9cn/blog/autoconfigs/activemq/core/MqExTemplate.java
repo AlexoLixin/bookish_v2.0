@@ -1,6 +1,9 @@
 package cn.don9cn.blog.autoconfigs.activemq.core;
 
+import cn.don9cn.blog.autoconfigs.activemq.constant.MqConstant;
+import cn.don9cn.blog.autoconfigs.activemq.constant.MqDestinationType;
 import cn.don9cn.blog.autoconfigs.activemq.model.MqMessage;
+import cn.don9cn.blog.autoconfigs.activemq.model.MqRegisterMessage;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,7 @@ import org.springframework.jms.core.JmsTemplate;
  * @Modify:
  */
 @Configuration
-public class MqProducer {
+public class MqExTemplate {
 
     @Autowired
     private MqConstant mqConstant;
@@ -58,6 +61,19 @@ public class MqProducer {
     public void pushToDefaultTopic(MqMessage message){
         ActiveMQTopic topic = new ActiveMQTopic(mqConstant.DEFAULT_TOPIC);
         jmsTemplate.convertAndSend(topic,message);
+    }
+
+    /**
+     * 解析注册的消息并且推送到ActiveMQ
+     * @param mqRegisterMessage
+     */
+    public void parseAndPush(MqRegisterMessage mqRegisterMessage){
+        MqDestinationType destinationType = mqRegisterMessage.getDestinationType();
+        if(destinationType.equals(MqDestinationType.QUEUE)){
+            sendToQueue(mqRegisterMessage.getDestination(),mqRegisterMessage.getMessage());
+        }else{
+            pushToTopic(mqRegisterMessage.getDestination(),mqRegisterMessage.getMessage());
+        }
     }
 
 

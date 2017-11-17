@@ -1,6 +1,6 @@
 package cn.don9cn.blog.action.system.msg;
 
-import cn.don9cn.blog.autoconfigs.activemq.model.SysMessage;
+import cn.don9cn.blog.autoconfigs.activemq.model.CommonMqMessage;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.msg.interf.SysMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,8 @@ public class SysMessageAction {
     private SysMessageService sysMessageService;
 
     @PostMapping("/push")
-    public OperaResult push(SysMessage sysMessage){
-        return sysMessageService.push(sysMessage);
+    public OperaResult push(CommonMqMessage commonMqMessage){
+        return sysMessageService.push(commonMqMessage);
     }
 
 }

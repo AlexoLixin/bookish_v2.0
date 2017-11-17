@@ -1,7 +1,7 @@
 package cn.don9cn.blog.autoconfigs.activemq.config;
 
-import cn.don9cn.blog.autoconfigs.activemq.core.MqConstant;
-import cn.don9cn.blog.autoconfigs.activemq.core.SysMqListener;
+import cn.don9cn.blog.autoconfigs.activemq.constant.MqConstant;
+import cn.don9cn.blog.autoconfigs.activemq.listener.SysMqListener;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +48,8 @@ public class MqAutoConfig {
         container.setMessageConverter(messageConverter());
         // 设置消息监听器,用来处理监听到新消息后的动作
         container.setMessageListener(sysMqListener);
+
+        System.out.println("成功启动ActiveMQ系统监听器 >>>");
 
         return container;
     }

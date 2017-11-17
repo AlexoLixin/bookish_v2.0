@@ -1,5 +1,7 @@
 package cn.don9cn.blog.autoconfigs.activemq.core;
 
+import cn.don9cn.blog.autoconfigs.activemq.constant.MqConstant;
+import cn.don9cn.blog.autoconfigs.activemq.listener.UserMqListener;
 import cn.don9cn.blog.autoconfigs.websocket.msg.MsgWebSocketHandler;
 import cn.don9cn.blog.exception.ExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author: liuxindong
- * @Description: 消费者生成器,用于动态生成topic的持久订阅者
+ * @Description: 消费者生成器,用于用户登录后动态开启监听
  * @Create: 2017/10/27 9:46
  * @Modify:
  */
@@ -52,6 +54,7 @@ public class MqConsumerGenerator {
                 }
             }
             connection.start();
+            System.out.println("成功启动用户 ["+username+"] 的ActiveMQ消息监听器 >>>");
         } catch (JMSException e) {
             throw new ExceptionWrapper(e,"MqConsumerGenerator.startListen 启动订阅者监听失败");
         }

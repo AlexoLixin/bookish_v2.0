@@ -1,4 +1,4 @@
-package cn.don9cn.blog.autoconfigs.activemq.core;
+package cn.don9cn.blog.autoconfigs.activemq.constant;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

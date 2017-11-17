@@ -1,7 +1,7 @@
 package cn.don9cn.blog.test;
 
 
-import cn.don9cn.blog.autoconfigs.activemq.model.SysMessage;
+import cn.don9cn.blog.autoconfigs.activemq.model.CommonMqMessage;
 import com.alibaba.fastjson.JSON;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -25,8 +25,8 @@ public class KafkaTest {
     public static void main(String[] args) {
         KafkaTemplate<String,String> kafkaTemplate = kafkaTemplate();
         System.out.println("---push start----");
-        SysMessage sysMessage = new SysMessage("aaa","111111111");
-        kafkaTemplate.send("test","1", JSON.toJSONString(sysMessage));
+        CommonMqMessage commonMqMessage = new CommonMqMessage("aaa","111111111");
+        kafkaTemplate.send("test","1", JSON.toJSONString(commonMqMessage));
         kafkaTemplate.flush();
         System.out.println("----push Done----");
         System.out.println("----poll start----");

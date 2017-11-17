@@ -1,18 +1,19 @@
 package cn.don9cn.blog.service.system.rbac.impl;
 
-import cn.don9cn.blog.autoconfigs.activemq.core.MqConstant;
-import cn.don9cn.blog.autoconfigs.activemq.core.MqProducer;
+import cn.don9cn.blog.autoconfigs.activemq.constant.MqConstant;
+import cn.don9cn.blog.autoconfigs.activemq.constant.MqDestinationType;
+import cn.don9cn.blog.autoconfigs.activemq.core.MqExTemplate;
+import cn.don9cn.blog.autoconfigs.activemq.core.MqManager;
 import cn.don9cn.blog.autoconfigs.activemq.model.MailMessage;
+import cn.don9cn.blog.autoconfigs.activemq.model.MqRegisterMessage;
 import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.dao.system.rbac.interf.SysRoleDao;
 import cn.don9cn.blog.dao.system.rbac.interf.SysUserDao;
-import cn.don9cn.blog.model.system.LoginResult;
 import cn.don9cn.blog.model.system.rbac.SysRole;
 import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.plugins.operaresult.util.OperaResultUtil;
-import cn.don9cn.blog.plugins.validatecode.ValidateCodeCache;
 import cn.don9cn.blog.service.system.rbac.interf.SysUserService;
 import cn.don9cn.blog.util.MyStringUtil;
 import com.google.common.collect.Lists;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,9 +45,6 @@ public class SysUserServiceImpl implements SysUserService {
 
 	@Autowired
 	private MqConstant mqConstant;
-
-	@Autowired
-	private MqProducer mqProducer;
 
 	@Override
 	public OperaResult baseInsert(SysUser entity) {
@@ -202,11 +199,12 @@ public class SysUserServiceImpl implements SysUserService {
 		//注册成功后,推送信息到activeMq
 		if(result.isSuccess()){
 			try{
-				mqProducer.pushToTopic(mqConstant.MAIL_MSG_TOPIC,new MailMessage(sysUser.getUsername(),sysUser.getEmail()));
+				MqManager.submit(new MqRegisterMessage(MqDestinationType.TOPIC,mqConstant.MAIL_MSG_TOPIC,
+						new MailMessage(sysUser.getUsername(),sysUser.getEmail())));
 			}catch (Exception e){
 				// TODO
 				//将用户的注册信息推送到activeMq失败,暂时先不处理,等完善好了异常处理系统再修改
-				System.out.println("新用户的注册消息推送到activeMq失败!");
+				System.out.println("新用户的注册消息推送到ActiveMQ失败!");
 			}
 		}
 

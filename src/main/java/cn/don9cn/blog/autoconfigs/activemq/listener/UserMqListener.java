@@ -1,4 +1,4 @@
-package cn.don9cn.blog.autoconfigs.activemq.core;
+package cn.don9cn.blog.autoconfigs.activemq.listener;
 
 import cn.don9cn.blog.autoconfigs.websocket.msg.MsgWebSocketHandler;
 import org.apache.activemq.command.ActiveMQTextMessage;
