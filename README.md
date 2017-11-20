@@ -1,10 +1,10 @@
-# don9cn_v2.0
+# booklish_v2.0
 version 2.0 of my blog application which based on SpringBoot<br>
-基于SpringBoot的原don9cn_v1.0重构版本
+基于SpringBoot的原booklish_v1.0重构版本
 
 ### 重构内容
 * 基础架构改为Spring Boot
-* 消息中间件由Kafka改为ActiveMq(由于个人vps内存小,相同单机模式下,ActiveMq比Kafka少占用100M左右内存)
+* 消息中间件由Kafka改为ActiveMq(由于个人vps内存小,相同单机模式下,ActiveMq比Kafka占用内存少,且web管理页面更加方面管理)
 * 项目整体业务实现代码使用 Java8 重构<br>
 default 特性精简dao层<br>
 Optional 解决空指针异常<br>
