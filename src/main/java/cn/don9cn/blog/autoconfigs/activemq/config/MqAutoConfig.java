@@ -41,9 +41,9 @@ public class MqAutoConfig {
      * 启动系统监听器(支持多topic同时订阅或者queue监听)
      */
     private void initListener() {
-
+        Connection connection = null;
         try {
-            Connection connection = connectionFactory.createConnection();
+            connection = connectionFactory.createConnection();
             connection.setClientID(mqConstant.SYS_LISTENER_CLIENT_ID);
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             //监听系统通知
@@ -53,9 +53,18 @@ public class MqAutoConfig {
             //设置消息处理器
             consumer1.setMessageListener(new SysMqListener());
 
+            connection.start();
+
             System.out.println("成功启动ActiveMQ系统监听器 >>>");
 
         }catch (Exception e){
+            if(connection!=null){
+                try {
+                    connection.close();
+                } catch (JMSException e1) {
+                    throw new RuntimeException("系统ActiveMQ监听器初始化失败!",e);
+                }
+            }
             throw new RuntimeException("系统ActiveMQ监听器初始化失败!",e);
         }
 
