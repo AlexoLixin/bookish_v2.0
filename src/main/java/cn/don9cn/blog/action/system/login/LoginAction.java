@@ -115,14 +115,13 @@ public class LoginAction {
      * 登录
      * @param username
      * @param password
-     * @param role
      * @param request
      * @return
      * @throws IOException
      * @throws ServletException
      */
     @RequestMapping("/doLogin")
-    public LoginResult doLogin(String username, String password, String role, String validateCode, HttpServletRequest request) throws IOException, ServletException {
+    public LoginResult doLogin(String username, String password, String validateCode, HttpServletRequest request) throws IOException, ServletException {
 
         //先校验验证码
         if(StringUtils.isBlank(validateCode)){
@@ -152,10 +151,7 @@ public class LoginAction {
         sysLoginLogService.baseInsert(loginLog.withState("成功"));
         //登陆成功,设置用户名到session,消息推送中用得到
         request.getSession(false).setAttribute("CURRENT_USER",username);
-        //登陆成功,检查是否是管理员登录
-        if(role.equals("admin")){
-            return checkAdmin();
-        }
+
         return new LoginResult(true,"登陆成功!")
                                 .setAdmin(false)
                                 .setToken(MyShiroSessionUtil.getTokenFromSession())
@@ -164,23 +160,21 @@ public class LoginAction {
     }
 
     /**
-     * 检查当前用户是否是管理员,并设置返回信息
+     * 检查当前用户是否是管理员
      * @return
      */
-    private LoginResult checkAdmin(){
+    @GetMapping("/authcUserRole")
+    public OperaResult checkAdmin(){
         SysUser user = MyShiroSessionUtil.getUserFromSession();
         List<SysRole> roleList = user.getRoleList();
         if(roleList!=null && roleList.size()>0){
             for(SysRole role:roleList){
                 if(role.getEncoding().contains("ADMIN")){
-                    return new LoginResult(true,"登陆成功!")
-                                        .setAdmin(true)
-                                        .setToken(MyShiroSessionUtil.getTokenFromSession())
-                                        .setUser(user);
+                    return new OperaResult(true,"验证成功!");
                 }
             }
         }
-        return new LoginResult(false,"对不起,您不是系统管理员");
+        return new OperaResult(false,"对不起,验证失败,您不是系统管理员");
     }
 
 

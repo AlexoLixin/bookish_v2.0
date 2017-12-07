@@ -103,6 +103,7 @@ public class ArticleServiceImpl implements ArticleService {
 			if(StringUtils.isNotBlank(a.getFiles())){
 				uploadFileDao.findListInCodes(MyStringUtil.codesStr2List(a.getFiles())).ifPresent(a::setFilesList);
 			}
+			articleClassifyDao.baseFindById(a.getClassify()).ifPresent(articleClassify -> a.setClassifyName(articleClassify.getName()));
 		});
 		return OperaResultUtil.findOne(article);
 	}
