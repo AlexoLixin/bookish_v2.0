@@ -17,6 +17,6 @@ public interface SysPermissionService extends BaseService<SysPermission> {
      * 获取分类树
      * @return
      */
-    OperaResult getTree();
+    Object getTree();
 
 }

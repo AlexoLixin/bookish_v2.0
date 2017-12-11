@@ -71,7 +71,7 @@ public class SysOperaLogServiceImpl implements SysOperaLogService {
         sysOperaLogOptional.ifPresent(sysOperaLog -> {
             String userCode = sysOperaLog.getUserCode();
             if(StringUtils.isNotBlank(userCode)){
-                OperaResult operaResult = sysUserService.baseFindById(userCode);
+                OperaResult operaResult = (OperaResult) sysUserService.baseFindById(userCode);
                 if(operaResult.isSuccess()){
                     SysUser user = (SysUser) operaResult.getObj();
                     sysOperaLog.setUserName(user.getUsername());

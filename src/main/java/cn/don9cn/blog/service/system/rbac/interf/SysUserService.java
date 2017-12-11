@@ -20,14 +20,14 @@ public interface SysUserService extends BaseService<SysUser> {
      * @param username
      * @return
      */
-    OperaResult findByUserName(String username);
+    Object findByUserName(String username);
 
     /**
      * 检查用户名是否已经存在
      * @param username
      * @return
      */
-    OperaResult checkUserName(String username);
+    Object checkUserName(String username);
 
     /**
      * 为用户进行角色授权
@@ -35,20 +35,20 @@ public interface SysUserService extends BaseService<SysUser> {
      * @param roleCodes
      * @return
      */
-    OperaResult authorizeUser(String userCode,String roleCodes);
+    Object authorizeUser(String userCode,String roleCodes);
 
     /**
      * 获取用户个人信息(开放给普通用户)
      * @return
      */
-    OperaResult getUserInfo();
+    Object getUserInfo();
 
     /**
      * 更新用户个人信息(开放给普通用户)
      * @param sysUser
      * @return
      */
-    OperaResult updateUserInfo(SysUser sysUser);
+    Object updateUserInfo(SysUser sysUser);
 
     /**
      * 注册用户
@@ -56,6 +56,6 @@ public interface SysUserService extends BaseService<SysUser> {
      * @param sysUser
      * @return
      */
-    OperaResult register(String validateCode, SysUser sysUser, HttpServletRequest request);
+    Object register(String validateCode, SysUser sysUser, HttpServletRequest request);
 }
 

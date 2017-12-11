@@ -11,8 +11,8 @@ import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
  */
 public interface SysMessageService {
 
-    OperaResult push(CommonMqMessage message);
+    Object push(CommonMqMessage message);
 
-    OperaResult pull();
+    Object pull();
 
 }

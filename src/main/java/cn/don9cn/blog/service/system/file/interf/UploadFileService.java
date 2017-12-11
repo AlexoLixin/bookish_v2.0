@@ -18,6 +18,6 @@ public interface UploadFileService extends BaseService<UploadFile> {
      * @param file
      * @return
      */
-    OperaResult insertWithCode(UploadFile file);
+    Object insertWithCode(UploadFile file);
 
 }

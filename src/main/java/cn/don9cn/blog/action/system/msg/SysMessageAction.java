@@ -22,7 +22,7 @@ public class SysMessageAction {
     private SysMessageService sysMessageService;
 
     @PostMapping("/push")
-    public OperaResult push(CommonMqMessage commonMqMessage){
+    public Object push(CommonMqMessage commonMqMessage){
         return sysMessageService.push(commonMqMessage);
     }
 

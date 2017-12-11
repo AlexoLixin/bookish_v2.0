@@ -19,7 +19,7 @@ public interface SysExceptionLogService extends BaseService<SysExceptionLog> {
      * 删除30天前的日志
      * @return
      */
-    OperaResult doRemoveEarly30();
+    Object doRemoveEarly30();
 
 }
 

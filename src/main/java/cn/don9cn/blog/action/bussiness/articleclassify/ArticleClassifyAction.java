@@ -31,53 +31,53 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 
 	@Override
 	@PostMapping
-	protected OperaResult baseInsert(ArticleClassify articleClassify) {
+	protected Object baseInsert(ArticleClassify articleClassify) {
 		return articleClassifyService.baseInsert(articleClassify);
 	}
 
 	@Override
-	protected OperaResult baseInsertBatch(List<ArticleClassify> list) {
+	protected Object baseInsertBatch(List<ArticleClassify> list) {
 		return null;
 	}
 
 	@Override
 	@PutMapping
-	protected OperaResult baseUpdate(ArticleClassify articleClassify) {
+	protected Object baseUpdate(ArticleClassify articleClassify) {
 		return articleClassifyService.baseUpdate(articleClassify);
 	}
 
 	@Override
-	protected OperaResult baseRemove(String code) {
+	protected Object baseRemove(String code) {
 		return null;
 	}
 
 	@Override
 	@DeleteMapping
-	protected OperaResult baseRemoveBatch(String codes) {
+	protected Object baseRemoveBatch(String codes) {
 		return articleClassifyService.baseDeleteBatch(codes);
 	}
 
 	@Override
 	@GetMapping
-	protected OperaResult baseFindById(String code) {
+	protected Object baseFindById(String code) {
 		return articleClassifyService.baseFindById(code);
 	}
 
 	@Override
 	@GetMapping("/all")
-	protected OperaResult baseFindAll() {
+	protected Object baseFindAll() {
 		return articleClassifyService.baseFindAll();
 	}
 
 	@Override
 	@GetMapping("/list")
-	protected OperaResult baseFindListByParams(ArticleClassify articleClassify) {
+	protected Object baseFindListByParams(ArticleClassify articleClassify) {
 		return articleClassifyService.baseFindListByParams(articleClassify);
 	}
 
 	@Override
 	@GetMapping("/page")
-	protected OperaResult baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,ArticleClassify articleClassify) {
+	protected Object baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,ArticleClassify articleClassify) {
 		return articleClassifyService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,articleClassify));
 	}
 
@@ -86,7 +86,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 * @return
 	 */
 	@GetMapping("/selectOptions")
-	public OperaResult doGetSelectOptions() {
+	public Object doGetSelectOptions() {
 		return articleClassifyService.doGetSelectOptions();
 	}
 
@@ -95,7 +95,7 @@ public class ArticleClassifyAction extends BaseAction<ArticleClassify> {
 	 * @return
 	 */
 	@GetMapping(path = {"/tree","/tree/public"})
-	public OperaResult getTree() {
+	public Object getTree() {
 		return articleClassifyService.getTree();
 	}
 }

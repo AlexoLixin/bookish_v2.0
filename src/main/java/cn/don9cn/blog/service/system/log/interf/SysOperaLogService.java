@@ -18,7 +18,7 @@ public interface SysOperaLogService extends BaseService<SysOperaLog> {
      * 删除30天前的日志
      * @return
      */
-    OperaResult doRemoveEarly30();
+    Object doRemoveEarly30();
 
 }
 

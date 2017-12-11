@@ -20,58 +20,58 @@ public interface BaseService<T extends Serializable> {
      * @param entity
      * @return
      */
-    OperaResult baseInsert(T entity);
+    Object baseInsert(T entity);
 
     /**
      * 批量添加实体对象
      * @return
      */
-    OperaResult baseInsertBatch(List<T> list);
+    Object baseInsertBatch(List<T> list);
 
     /**
      * 通过id更新实体
      * @param entity
      * @return
      */
-    OperaResult baseUpdate(T entity);
+    Object baseUpdate(T entity);
 
     /**
      * 通过id删除实体
      * @param id
      * @return
      */
-    OperaResult baseDeleteById(String id);
+    Object baseDeleteById(String id);
 
     /**
      * 批量删除实体对象
      * @return
      */
-    OperaResult baseDeleteBatch(String codes);
+    Object baseDeleteBatch(String codes);
 
     /**
      * 通过id查找实体
      * @param id
      * @return
      */
-    OperaResult baseFindById(String id);
+    Object baseFindById(String id);
 
     /**
      * 查询所有数据
      * @return
      */
-    OperaResult baseFindAll();
+    Object baseFindAll();
 
     /**
      * 查询指定条件的实体集合
      * @param entity
      * @return
      */
-    OperaResult baseFindListByParams(T entity);
+    Object baseFindListByParams(T entity);
 
     /**
      * 带参数的分页查询
      * @param pageResult
      * @return
      */
-    OperaResult baseFindByPage(PageResult<T> pageResult);
+    Object baseFindByPage(PageResult<T> pageResult);
 }

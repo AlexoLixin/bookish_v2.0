@@ -110,7 +110,7 @@ public class UploadAction {
                 Optional<UploadFile> optional = FileSaveUtil.saveFile(file, fileSavePathConfig);
                 //数据库保存上传文件信息
                 optional.ifPresent(uploadFile -> {
-                    OperaResult operaResult = uploadFileService.insertWithCode(uploadFile);
+                    OperaResult operaResult = (OperaResult) uploadFileService.insertWithCode(uploadFile);
                     if(operaResult.isSuccess()) successFiles.add((UploadFile) operaResult.getObj());
                 });
             }, ExecutorUtil.build(files.size())));
@@ -133,7 +133,7 @@ public class UploadAction {
     @SkipOperaLog
     @GetMapping("/fileDownLoad")
     public void doDownload(String code, HttpServletResponse response) {
-        OperaResult operaResult = uploadFileService.baseFindById(code);
+        OperaResult operaResult = (OperaResult) uploadFileService.baseFindById(code);
         if(operaResult.isSuccess()){
             UploadFile file = (UploadFile) operaResult.getObj();
             try(

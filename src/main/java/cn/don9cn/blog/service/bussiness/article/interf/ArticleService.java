@@ -14,10 +14,10 @@ import cn.don9cn.blog.service.BaseService;
  */
 public interface ArticleService extends BaseService<Article> {
 
-    OperaResult doRemoveByUser(String code);
+    Object doRemoveByUser(String code);
 
-    OperaResult doUpdateByUser(Article article);
+    Object doUpdateByUser(Article article);
 
-    OperaResult doFindByPageByUser(PageResult<Article> pageResult);
+    Object doFindByPageByUser(PageResult<Article> pageResult);
 }
 

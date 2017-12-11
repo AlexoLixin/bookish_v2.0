@@ -24,56 +24,56 @@ public class SysLoginLogAction extends BaseAction<SysLoginLog> {
     private SysLoginLogService sysLoginLogService;
 
     @Override
-    protected OperaResult baseInsert(SysLoginLog sysLoginLog) {
+    protected Object baseInsert(SysLoginLog sysLoginLog) {
         return null;
     }
 
     @Override
-    protected OperaResult baseInsertBatch(List<SysLoginLog> list) {
+    protected Object baseInsertBatch(List<SysLoginLog> list) {
         return null;
     }
 
     @Override
-    protected OperaResult baseUpdate(SysLoginLog sysLoginLog) {
+    protected Object baseUpdate(SysLoginLog sysLoginLog) {
         return null;
     }
 
     @Override
     @DeleteMapping
-    protected OperaResult baseRemove(String code) {
+    protected Object baseRemove(String code) {
         return sysLoginLogService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/batch")
-    protected OperaResult baseRemoveBatch(String codes) {
+    protected Object baseRemoveBatch(String codes) {
         return sysLoginLogService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping
-    protected OperaResult baseFindById(String code) {
+    protected Object baseFindById(String code) {
         return sysLoginLogService.baseFindById(code);
     }
 
     @Override
-    protected OperaResult baseFindAll() {
+    protected Object baseFindAll() {
         return null;
     }
 
     @Override
-    protected OperaResult baseFindListByParams(SysLoginLog sysLoginLog) {
+    protected Object baseFindListByParams(SysLoginLog sysLoginLog) {
         return null;
     }
 
     @Override
     @GetMapping("/page")
-    protected OperaResult baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysLoginLog sysLoginLog) {
+    protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysLoginLog sysLoginLog) {
         return sysLoginLogService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysLoginLog));
     }
 
     @DeleteMapping("/batch/pre30days")
-    public OperaResult remove30Early(){
+    public Object remove30Early(){
         return sysLoginLogService.doRemoveEarly30();
     }
 

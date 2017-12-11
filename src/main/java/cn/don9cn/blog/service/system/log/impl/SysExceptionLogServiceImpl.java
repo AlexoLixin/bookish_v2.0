@@ -75,7 +75,7 @@ public class SysExceptionLogServiceImpl implements SysExceptionLogService {
         sysExceptionLogOptional.ifPresent(sysExceptionLog -> {
             String userCode = sysExceptionLog.getUserCode();
             if(StringUtils.isNotBlank(userCode)){
-                OperaResult operaResult = sysUserService.baseFindById(userCode);
+                OperaResult operaResult = (OperaResult) sysUserService.baseFindById(userCode);
                 if(operaResult.isSuccess()){
                     SysUser user = (SysUser) operaResult.getObj();
                     sysExceptionLog.setUserName(user.getUsername());

@@ -24,56 +24,56 @@ public class SysOperaLogAction extends BaseAction<SysOperaLog> {
     private SysOperaLogService sysOperaLogService;
 
     @Override
-    protected OperaResult baseInsert(SysOperaLog sysOperaLog) {
+    protected Object baseInsert(SysOperaLog sysOperaLog) {
         return null;
     }
 
     @Override
-    protected OperaResult baseInsertBatch(List<SysOperaLog> list) {
+    protected Object baseInsertBatch(List<SysOperaLog> list) {
         return null;
     }
 
     @Override
-    protected OperaResult baseUpdate(SysOperaLog sysOperaLog) {
+    protected Object baseUpdate(SysOperaLog sysOperaLog) {
         return null;
     }
 
     @Override
     @DeleteMapping
-    protected OperaResult baseRemove(String code) {
+    protected Object baseRemove(String code) {
         return sysOperaLogService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/batch")
-    protected OperaResult baseRemoveBatch(String codes) {
+    protected Object baseRemoveBatch(String codes) {
         return sysOperaLogService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping
-    protected OperaResult baseFindById(String code) {
+    protected Object baseFindById(String code) {
         return sysOperaLogService.baseFindById(code);
     }
 
     @Override
-    protected OperaResult baseFindAll() {
+    protected Object baseFindAll() {
         return null;
     }
 
     @Override
-    protected OperaResult baseFindListByParams(SysOperaLog sysOperaLog) {
+    protected Object baseFindListByParams(SysOperaLog sysOperaLog) {
         return null;
     }
 
     @Override
     @GetMapping("/page")
-    protected OperaResult baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysOperaLog sysOperaLog) {
+    protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysOperaLog sysOperaLog) {
         return sysOperaLogService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysOperaLog));
     }
 
     @DeleteMapping("/batch/pre30days")
-    public OperaResult remove30Early(){
+    public Object remove30Early(){
         return sysOperaLogService.doRemoveEarly30();
     }
 }

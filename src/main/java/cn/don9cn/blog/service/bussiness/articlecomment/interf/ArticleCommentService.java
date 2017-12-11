@@ -19,7 +19,7 @@ public interface ArticleCommentService extends BaseService<ArticleComment> {
      * 获取留言树
      * @return
      */
-    OperaResult getTree(String articleCode);
+    Object getTree(String articleCode);
 
 }
 

@@ -1,5 +1,7 @@
 package cn.don9cn.blog.action.system.login;
 
+import cn.booklish.sharp.client.SharpClient;
+import cn.booklish.sharp.config.SharpAutoConfigureCenter;
 import cn.don9cn.blog.annotation.SkipOperaLog;
 import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.autoconfigs.websocket.msg.MsgWebSocketHandler;
@@ -10,6 +12,8 @@ import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.plugins.validatecode.ValidateCode;
 import cn.don9cn.blog.plugins.validatecode.ValidateCodeCache;
+import cn.don9cn.blog.service.bussiness.articleclassify.impl.ArticleClassifyServiceImpl;
+import cn.don9cn.blog.service.bussiness.articleclassify.interf.ArticleClassifyService;
 import cn.don9cn.blog.service.system.log.interf.SysLoginLogService;
 import cn.don9cn.blog.util.RequestUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +21,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -176,6 +181,17 @@ public class LoginAction {
         }
         return new OperaResult(false,"对不起,验证失败,您不是系统管理员");
     }
+
+    /*@Autowired
+    private SharpAutoConfigureCenter sharpAutoConfigureCenter;
+
+    @GetMapping("/test")
+    public Object test(){
+        ArticleClassifyService service = (ArticleClassifyService) sharpAutoConfigureCenter.getSharpClient()
+                .getService("/rpc/cn/booklish/blogApplication/ArticleClassifyServiceImpl", ArticleClassifyService.class);
+
+        return service.getTree();
+    }*/
 
 
 

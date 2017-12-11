@@ -12,22 +12,22 @@ import java.util.List;
  */
 public abstract class BaseAction<T> {
 
-    protected abstract OperaResult baseInsert(T t);
+    protected abstract Object baseInsert(T t);
 
-    protected abstract OperaResult baseInsertBatch(List<T> list);
+    protected abstract Object baseInsertBatch(List<T> list);
 
-    protected abstract OperaResult baseUpdate(T t);
+    protected abstract Object baseUpdate(T t);
 
-    protected abstract OperaResult baseRemove(String code);
+    protected abstract Object baseRemove(String code);
 
-    protected abstract OperaResult baseRemoveBatch(String codes);
+    protected abstract Object baseRemoveBatch(String codes);
 
-    protected abstract OperaResult baseFindById(String code);
+    protected abstract Object baseFindById(String code);
 
-    protected abstract OperaResult baseFindAll();
+    protected abstract Object baseFindAll();
 
-    protected abstract OperaResult baseFindListByParams(T t);
+    protected abstract Object baseFindListByParams(T t);
 
-    protected abstract OperaResult baseFindByPage(int page, int limit,String startTime,String endTime, String orderBy, T t);
+    protected abstract Object baseFindByPage(int page, int limit,String startTime,String endTime, String orderBy, T t);
 
 }

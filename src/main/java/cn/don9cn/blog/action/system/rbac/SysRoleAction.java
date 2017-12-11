@@ -27,59 +27,59 @@ public class SysRoleAction extends BaseAction<SysRole> {
 
     @Override
     @PostMapping
-    protected OperaResult baseInsert(SysRole sysRole) {
+    protected Object baseInsert(SysRole sysRole) {
         return sysRoleService.baseInsert(sysRole);
     }
 
     @Override
-    protected OperaResult baseInsertBatch(List<SysRole> list) {
+    protected Object baseInsertBatch(List<SysRole> list) {
         return null;
     }
 
     @Override
     @PutMapping
-    protected OperaResult baseUpdate(SysRole sysRole) {
+    protected Object baseUpdate(SysRole sysRole) {
         return sysRoleService.baseUpdate(sysRole);
     }
 
     @Override
     @DeleteMapping
-    protected OperaResult baseRemove(String code) {
+    protected Object baseRemove(String code) {
         return sysRoleService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/batch")
-    protected OperaResult baseRemoveBatch(String codes) {
+    protected Object baseRemoveBatch(String codes) {
         return sysRoleService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping
-    protected OperaResult baseFindById(String code) {
+    protected Object baseFindById(String code) {
         return sysRoleService.baseFindById(code);
     }
 
     @Override
     @GetMapping("/all")
-    protected OperaResult baseFindAll() {
+    protected Object baseFindAll() {
         return sysRoleService.baseFindAll();
     }
 
     @Override
     @GetMapping("/list")
-    protected OperaResult baseFindListByParams(SysRole sysRole) {
+    protected Object baseFindListByParams(SysRole sysRole) {
         return sysRoleService.baseFindListByParams(sysRole);
     }
 
     @Override
     @GetMapping("/page")
-    protected OperaResult baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysRole sysRole) {
+    protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysRole sysRole) {
         return sysRoleService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysRole));
     }
 
     @PutMapping("/authorize")
-    protected OperaResult authorizeRole(String roleCode,String permissionCodes) {
+    protected Object authorizeRole(String roleCode,String permissionCodes) {
         return sysRoleService.authorizeRole(roleCode,permissionCodes);
     }
 }

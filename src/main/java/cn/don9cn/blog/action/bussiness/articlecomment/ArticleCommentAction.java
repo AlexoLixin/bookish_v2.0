@@ -32,50 +32,50 @@ public class ArticleCommentAction extends BaseAction<ArticleComment> {
 
 	@Override
 	@PostMapping({"","/insert/public"})
-	protected OperaResult baseInsert(ArticleComment articleComment) {
+	protected Object baseInsert(ArticleComment articleComment) {
 		return articleCommentService.baseInsert(articleComment);
 	}
 
 	@Override
-	protected OperaResult baseInsertBatch(List<ArticleComment> list) {
+	protected Object baseInsertBatch(List<ArticleComment> list) {
 		return null;
 	}
 
 	@Override
-	protected OperaResult baseUpdate(ArticleComment articleComment) {
+	protected Object baseUpdate(ArticleComment articleComment) {
 		return null;
 	}
 
 	@Override
 	@DeleteMapping
-	protected OperaResult baseRemove(String code) {
+	protected Object baseRemove(String code) {
 		return articleCommentService.baseDeleteById(code);
 	}
 
 	@Override
 	@DeleteMapping("/batch")
-	protected OperaResult baseRemoveBatch(String codes) {
+	protected Object baseRemoveBatch(String codes) {
 		return articleCommentService.baseDeleteBatch(codes);
 	}
 
 	@Override
-	protected OperaResult baseFindById(String code) {
+	protected Object baseFindById(String code) {
 		return null;
 	}
 
 	@Override
-	protected OperaResult baseFindAll() {
+	protected Object baseFindAll() {
 		return null;
 	}
 
 	@Override
-	protected OperaResult baseFindListByParams(ArticleComment articleComment) {
+	protected Object baseFindListByParams(ArticleComment articleComment) {
 		return null;
 	}
 
 	@Override
 	@GetMapping("/page")
-	protected OperaResult baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,ArticleComment articleComment) {
+	protected Object baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,ArticleComment articleComment) {
 		return articleCommentService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,articleComment));
 	}
 
@@ -84,7 +84,7 @@ public class ArticleCommentAction extends BaseAction<ArticleComment> {
 	 * @return
 	 */
 	@GetMapping("/tree/public")
-	public OperaResult getTree(String articleCode) {
+	public Object getTree(String articleCode) {
 		return articleCommentService.getTree(articleCode);
 	}
 }

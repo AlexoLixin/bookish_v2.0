@@ -26,54 +26,54 @@ public class ArticleAction extends BaseAction<Article> {
 
     @Override
     @PostMapping
-    protected OperaResult baseInsert(Article article) {
+    protected Object baseInsert(Article article) {
         return articleService.baseInsert(article);
     }
 
     @Override
-    protected OperaResult baseInsertBatch(List<Article> list) {
+    protected Object baseInsertBatch(List<Article> list) {
         return null;
     }
 
     @Override
     @PutMapping
-    protected OperaResult baseUpdate(Article article) {
+    protected Object baseUpdate(Article article) {
         return articleService.baseUpdate(article);
     }
 
     @Override
     @DeleteMapping
-    protected OperaResult baseRemove(String code) {
+    protected Object baseRemove(String code) {
         return articleService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/batch")
-    protected OperaResult baseRemoveBatch(String codes) {
+    protected Object baseRemoveBatch(String codes) {
         return articleService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping(path = {"","/public"})
-    protected OperaResult baseFindById(String code) {
+    protected Object baseFindById(String code) {
         return articleService.baseFindById(code);
     }
 
     @Override
     @GetMapping("/all")
-    protected OperaResult baseFindAll() {
+    protected Object baseFindAll() {
         return articleService.baseFindAll();
     }
 
     @Override
     @GetMapping(path = {"/list","/list/public"})
-    protected OperaResult baseFindListByParams(Article article) {
+    protected Object baseFindListByParams(Article article) {
         return articleService.baseFindListByParams(article);
     }
 
     @Override
     @GetMapping({"/page","/publish/new/public"})
-    protected OperaResult baseFindByPage(int page, int limit,String startTime,String endTime, String orderBy, Article article) {
+    protected Object baseFindByPage(int page, int limit,String startTime,String endTime, String orderBy, Article article) {
         return articleService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,article));
     }
 
@@ -83,7 +83,7 @@ public class ArticleAction extends BaseAction<Article> {
      * @return
      */
     @PutMapping("/byUser")
-    public OperaResult doUpdateByUser(Article article){
+    public Object doUpdateByUser(Article article){
         return articleService.doUpdateByUser(article);
     }
 
@@ -93,7 +93,7 @@ public class ArticleAction extends BaseAction<Article> {
      * @return
      */
     @DeleteMapping("/byUser")
-    public OperaResult doRemoveByUser(String code) {
+    public Object doRemoveByUser(String code) {
         return articleService.doRemoveByUser(code);
     }
 
@@ -102,7 +102,7 @@ public class ArticleAction extends BaseAction<Article> {
      * @return
      */
     @GetMapping("/page/byUser")
-    public OperaResult doFindByPageByUser(int page, int limit,String startTime,String endTime, String orderBy, Article article) {
+    public Object doFindByPageByUser(int page, int limit,String startTime,String endTime, String orderBy, Article article) {
         return articleService.doFindByPageByUser(new PageResult<>(page,limit,startTime,endTime,orderBy,article));
     }
 }

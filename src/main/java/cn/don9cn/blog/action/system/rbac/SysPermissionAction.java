@@ -25,53 +25,53 @@ public class SysPermissionAction extends BaseAction<SysPermission> {
 
     @Override
     @PostMapping
-    protected OperaResult baseInsert(SysPermission sysPermission) {
+    protected Object baseInsert(SysPermission sysPermission) {
         return sysPermissionService.baseInsert(sysPermission);
     }
 
     @Override
-    protected OperaResult baseInsertBatch(List<SysPermission> list) {
+    protected Object baseInsertBatch(List<SysPermission> list) {
         return null;
     }
 
     @Override
     @PutMapping
-    protected OperaResult baseUpdate(SysPermission sysPermission) {
+    protected Object baseUpdate(SysPermission sysPermission) {
         return sysPermissionService.baseUpdate(sysPermission);
     }
 
     @Override
-    protected OperaResult baseRemove(String code) {
+    protected Object baseRemove(String code) {
         return null;
     }
 
     @Override
     @DeleteMapping
-    protected OperaResult baseRemoveBatch(String codes) {
+    protected Object baseRemoveBatch(String codes) {
         return sysPermissionService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping
-    protected OperaResult baseFindById(String code) {
+    protected Object baseFindById(String code) {
         return sysPermissionService.baseFindById(code);
     }
 
     @Override
     @GetMapping("/all")
-    protected OperaResult baseFindAll() {
+    protected Object baseFindAll() {
         return sysPermissionService.baseFindAll();
     }
 
     @Override
     @GetMapping("/list")
-    protected OperaResult baseFindListByParams(SysPermission sysPermission) {
+    protected Object baseFindListByParams(SysPermission sysPermission) {
         return sysPermissionService.baseFindListByParams(sysPermission);
     }
 
     @Override
     @GetMapping("/page")
-    protected OperaResult baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysPermission sysPermission) {
+    protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysPermission sysPermission) {
         return sysPermissionService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysPermission));
     }
 
@@ -80,7 +80,7 @@ public class SysPermissionAction extends BaseAction<SysPermission> {
      * @return
      */
     @GetMapping("/tree")
-    public OperaResult getTree() {
+    public Object getTree() {
         return sysPermissionService.getTree();
     }
 }

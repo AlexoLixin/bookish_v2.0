@@ -19,13 +19,13 @@ public interface ArticleClassifyService extends BaseService<ArticleClassify> {
      * 获取分类树
      * @return
      */
-    OperaResult getTree();
+    Object getTree();
 
     /**
      * 获取分类下拉列表
      * @return
      */
-    OperaResult doGetSelectOptions();
+    Object doGetSelectOptions();
 
 }
 

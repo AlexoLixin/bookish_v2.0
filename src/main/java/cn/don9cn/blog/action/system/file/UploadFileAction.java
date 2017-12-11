@@ -29,53 +29,53 @@ public class UploadFileAction extends BaseAction<UploadFile> {
 
 
     @Override
-    protected OperaResult baseInsert(UploadFile uploadFile) {
+    protected Object baseInsert(UploadFile uploadFile) {
         return null;
     }
 
     @Override
-    protected OperaResult baseInsertBatch(List<UploadFile> list) {
+    protected Object baseInsertBatch(List<UploadFile> list) {
         return null;
     }
 
     @Override
-    protected OperaResult baseUpdate(UploadFile uploadFile) {
+    protected Object baseUpdate(UploadFile uploadFile) {
         return null;
     }
 
     @Override
     @DeleteMapping
-    protected OperaResult baseRemove(String code) {
+    protected Object baseRemove(String code) {
         return uploadFileService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/batch")
-    protected OperaResult baseRemoveBatch(String codes) {
+    protected Object baseRemoveBatch(String codes) {
         return uploadFileService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping
-    protected OperaResult baseFindById(String code) {
+    protected Object baseFindById(String code) {
         return uploadFileService.baseFindById(code);
     }
 
     @Override
     @GetMapping("/all")
-    protected OperaResult baseFindAll() {
+    protected Object baseFindAll() {
         return uploadFileService.baseFindAll();
     }
 
     @Override
     @GetMapping("/list")
-    protected OperaResult baseFindListByParams(UploadFile uploadFile) {
+    protected Object baseFindListByParams(UploadFile uploadFile) {
         return uploadFileService.baseFindListByParams(uploadFile);
     }
 
     @Override
     @GetMapping("/page")
-    protected OperaResult baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,UploadFile uploadFile) {
+    protected Object baseFindByPage(int page,int limit,String startTime,String endTime,String orderBy,UploadFile uploadFile) {
         return uploadFileService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,uploadFile));
     }
 

@@ -54,7 +54,7 @@ public class MyShiroRealm extends AuthorizingRealm {
             List<String> userRoleCodes = user.getRoleCodes();
             if(userRoleCodes !=null){
                 for(String roleCode:userRoleCodes){
-                    OperaResult operaResult = sysRoleService.findRoleWithPermissions(roleCode);
+                    OperaResult operaResult = (OperaResult) sysRoleService.findRoleWithPermissions(roleCode);
                     if(operaResult.isSuccess()){
                         SysRole sysRole = (SysRole) operaResult.getObj();
                         info.addRole(sysRole.getEncoding());
@@ -89,7 +89,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         SimpleAuthenticationInfo userInfo = (SimpleAuthenticationInfo) MyShiroSessionUtil.getAuthenticationInfo();
         if(userInfo == null){
             // 2.session中没有用户认证信息，查询数据库，重新验证用户
-            OperaResult operaResult = sysUserService.findByUserName(username);
+            OperaResult operaResult = (OperaResult) sysUserService.findByUserName(username);
             if(operaResult.isSuccess()){
                 SysUser user = (SysUser) operaResult.getObj();
                 if(user.getPassword().equals(password)){

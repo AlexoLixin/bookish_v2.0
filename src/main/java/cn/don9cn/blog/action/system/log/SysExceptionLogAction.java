@@ -26,56 +26,56 @@ public class SysExceptionLogAction extends BaseAction<SysExceptionLog> {
 
 
     @Override
-    protected OperaResult baseInsert(SysExceptionLog sysExceptionLog) {
+    protected Object baseInsert(SysExceptionLog sysExceptionLog) {
         return null;
     }
 
     @Override
-    protected OperaResult baseInsertBatch(List<SysExceptionLog> list) {
+    protected Object baseInsertBatch(List<SysExceptionLog> list) {
         return null;
     }
 
     @Override
-    protected OperaResult baseUpdate(SysExceptionLog sysExceptionLog) {
+    protected Object baseUpdate(SysExceptionLog sysExceptionLog) {
         return null;
     }
 
     @Override
     @DeleteMapping
-    protected OperaResult baseRemove(String code) {
+    protected Object baseRemove(String code) {
         return sysExceptionLogService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/batch")
-    protected OperaResult baseRemoveBatch(String codes) {
+    protected Object baseRemoveBatch(String codes) {
         return sysExceptionLogService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping
-    protected OperaResult baseFindById(String code) {
+    protected Object baseFindById(String code) {
         return sysExceptionLogService.baseFindById(code);
     }
 
     @Override
-    protected OperaResult baseFindAll() {
+    protected Object baseFindAll() {
         return null;
     }
 
     @Override
-    protected OperaResult baseFindListByParams(SysExceptionLog sysExceptionLog) {
+    protected Object baseFindListByParams(SysExceptionLog sysExceptionLog) {
         return null;
     }
 
     @Override
     @GetMapping("/page")
-    protected OperaResult baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysExceptionLog sysExceptionLog) {
+    protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysExceptionLog sysExceptionLog) {
         return sysExceptionLogService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysExceptionLog));
     }
 
     @DeleteMapping("/batch/pre30days")
-    public OperaResult remove30Early(){
+    public Object remove30Early(){
         return sysExceptionLogService.doRemoveEarly30();
     }
 

@@ -28,79 +28,79 @@ public class SysUserAction extends BaseAction<SysUser> {
 
     @Override
     @PostMapping
-    protected OperaResult baseInsert(SysUser sysUser) {
+    protected Object baseInsert(SysUser sysUser) {
         return sysUserService.baseInsert(sysUser);
     }
 
     @Override
-    protected OperaResult baseInsertBatch(List<SysUser> list) {
+    protected Object baseInsertBatch(List<SysUser> list) {
         return null;
     }
 
     @Override
     @PutMapping
-    protected OperaResult baseUpdate(SysUser sysUser) {
+    protected Object baseUpdate(SysUser sysUser) {
         return sysUserService.baseUpdate(sysUser);
     }
 
     @Override
     @DeleteMapping
-    protected OperaResult baseRemove(String code) {
+    protected Object baseRemove(String code) {
         return sysUserService.baseDeleteById(code);
     }
 
     @Override
     @DeleteMapping("/batch")
-    protected OperaResult baseRemoveBatch(String codes) {
+    protected Object baseRemoveBatch(String codes) {
         return sysUserService.baseDeleteBatch(codes);
     }
 
     @Override
     @GetMapping
-    protected OperaResult baseFindById(String code) {
+    protected Object baseFindById(String code) {
         return sysUserService.baseFindById(code);
     }
 
     @Override
     @GetMapping("/all")
-    protected OperaResult baseFindAll() {
+    protected Object baseFindAll() {
         return sysUserService.baseFindAll();
     }
 
     @Override
     @GetMapping("/list")
-    protected OperaResult baseFindListByParams(SysUser sysUser) {
+    protected Object baseFindListByParams(SysUser sysUser) {
         return sysUserService.baseFindListByParams(sysUser);
     }
 
     @Override
     @GetMapping("/page")
-    protected OperaResult baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysUser sysUser) {
+    protected Object baseFindByPage(int page, int limit, String startTime, String endTime, String orderBy, SysUser sysUser) {
         return sysUserService.baseFindByPage(new PageResult<>(page,limit,startTime,endTime,orderBy,sysUser));
     }
 
     @GetMapping("/checkName")
-    public OperaResult checkUserName(String username) {
+    public Object checkUserName(String username) {
         return sysUserService.checkUserName(username);
     }
 
     @PostMapping("/register")
-    public OperaResult register(String validateCode, SysUser sysUser, HttpServletRequest request) {
+    public Object register(String validateCode, SysUser sysUser, HttpServletRequest request) {
         return sysUserService.register(validateCode,sysUser,request);
     }
 
     @PutMapping("/authorize")
-    public OperaResult authorizeUser(String userCode,String roleCodes) {
+    public Object authorizeUser(String userCode,String roleCodes) {
         return sysUserService.authorizeUser(userCode,roleCodes);
     }
 
     @GetMapping("/byUser")
-    public OperaResult getUserInfo() {
+    public Object getUserInfo() {
         return sysUserService.getUserInfo();
     }
 
     @PutMapping("/byUser")
-    public OperaResult updateUserInfo(SysUser sysUser) {
+    public Object updateUserInfo(SysUser sysUser) {
         return sysUserService.updateUserInfo(sysUser);
     }
 }
