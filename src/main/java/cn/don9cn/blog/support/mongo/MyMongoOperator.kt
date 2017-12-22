@@ -59,11 +59,7 @@ class MyMongoOperator(mongo: Mongo, databaseName: String) {
                 if (value != null) {
                     resultMap.put(field.name, value)
                 }
-            } catch (e: NoSuchMethodException) {
-                logger.info("MyMongoOperator.parseEntity 未能获取实体 " + entityClass.simpleName + " 中字段 " + fieldName + "的值,选择跳过该字段")
-            } catch (e: InvocationTargetException) {
-                logger.info("MyMongoOperator.parseEntity 未能获取实体 " + entityClass.simpleName + " 中字段 " + fieldName + "的值,选择跳过该字段")
-            } catch (e: IllegalAccessException) {
+            } catch (e: Exception) {
                 logger.info("MyMongoOperator.parseEntity 未能获取实体 " + entityClass.simpleName + " 中字段 " + fieldName + "的值,选择跳过该字段")
             }
         }
