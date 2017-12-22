@@ -25,7 +25,7 @@ import java.util.function.Function
  */
 class MyMongoOperator(mongo: Mongo, databaseName: String) {
 
-    private val logger = Logger.getLogger(cn.don9cn.blog.autoconfigs.mongodb.MyMongoOperator::class.java)
+    private val logger = Logger.getLogger(MyMongoOperator::class.java)
 
     private val mongoTemplate = MongoTemplate(mongo, databaseName)
 

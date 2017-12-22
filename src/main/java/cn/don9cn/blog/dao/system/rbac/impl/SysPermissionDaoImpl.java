@@ -3,7 +3,6 @@ package cn.don9cn.blog.dao.system.rbac.impl;
 import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.dao.system.rbac.interf.SysPermissionDao;
 import cn.don9cn.blog.model.system.rbac.SysPermission;
-import cn.don9cn.blog.autoconfigs.mongodb.MyMongoOperator;
 import cn.don9cn.blog.util.DateUtil;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;

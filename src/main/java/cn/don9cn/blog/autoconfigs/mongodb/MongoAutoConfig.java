@@ -1,5 +1,6 @@
 package cn.don9cn.blog.autoconfigs.mongodb;
 
+import cn.don9cn.blog.support.mongo.MyMongoOperator;
 import com.mongodb.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
