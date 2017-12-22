@@ -6,7 +6,7 @@ import cn.don9cn.blog.autoconfigs.activemq.core.MqManager;
 import cn.don9cn.blog.autoconfigs.activemq.model.MqRegisterMessage;
 import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.autoconfigs.activemq.model.CommonMqMessage;
-import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
+import cn.don9cn.blog.support.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.msg.interf.SysMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

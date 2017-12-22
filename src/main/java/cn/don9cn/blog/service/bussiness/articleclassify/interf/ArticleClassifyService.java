@@ -2,7 +2,6 @@ package cn.don9cn.blog.service.bussiness.articleclassify.interf;
 
 
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
-import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.BaseService;
 
 

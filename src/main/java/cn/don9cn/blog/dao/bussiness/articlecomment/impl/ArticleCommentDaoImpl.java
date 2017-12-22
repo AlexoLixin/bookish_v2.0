@@ -2,7 +2,7 @@ package cn.don9cn.blog.dao.bussiness.articlecomment.impl;
 
 import cn.don9cn.blog.dao.bussiness.articlecomment.interf.ArticleCommentDao;
 import cn.don9cn.blog.model.bussiness.acticlecomment.ArticleComment;
-import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import cn.don9cn.blog.support.daohelper.core.PageResult;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;

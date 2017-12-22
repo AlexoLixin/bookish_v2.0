@@ -2,8 +2,7 @@ package cn.don9cn.blog.service.bussiness.article.interf;
 
 
 import cn.don9cn.blog.model.bussiness.article.Article;
-import cn.don9cn.blog.plugins.daohelper.core.PageResult;
-import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
+import cn.don9cn.blog.support.daohelper.core.PageResult;
 import cn.don9cn.blog.service.BaseService;
 
 /**

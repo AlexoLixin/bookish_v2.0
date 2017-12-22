@@ -1,9 +1,9 @@
 package cn.don9cn.blog.dao;
 
 import cn.don9cn.blog.model.BaseModel;
-import cn.don9cn.blog.plugins.daohelper.core.DaoHelper;
+import cn.don9cn.blog.support.daohelper.core.DaoHelper;
 import cn.don9cn.blog.autoconfigs.mongodb.MyMongoOperator;
-import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import cn.don9cn.blog.support.daohelper.core.PageResult;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

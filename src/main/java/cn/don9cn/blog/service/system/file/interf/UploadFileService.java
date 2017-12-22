@@ -2,7 +2,6 @@ package cn.don9cn.blog.service.system.file.interf;
 
 
 import cn.don9cn.blog.model.system.file.UploadFile;
-import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.BaseService;
 
 /**

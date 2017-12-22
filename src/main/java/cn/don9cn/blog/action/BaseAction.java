@@ -1,7 +1,5 @@
 package cn.don9cn.blog.action;
 
-import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
-
 import java.util.List;
 
 /**

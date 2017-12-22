@@ -1,7 +1,6 @@
 package cn.don9cn.blog.service.system.msg.interf;
 
 import cn.don9cn.blog.autoconfigs.activemq.model.CommonMqMessage;
-import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 
 /**
  * @Author: liuxindong

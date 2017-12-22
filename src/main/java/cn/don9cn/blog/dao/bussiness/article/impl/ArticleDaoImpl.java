@@ -1,8 +1,8 @@
 package cn.don9cn.blog.dao.bussiness.article.impl;
 
 import cn.don9cn.blog.dao.bussiness.article.interf.ArticleDao;
-import cn.don9cn.blog.model.bussiness.article.Article;
-import cn.don9cn.blog.plugins.daohelper.core.PageResult;
+import cn.don9cn.blog.model.bussiness.Article;
+import cn.don9cn.blog.support.daohelper.core.PageResult;
 import com.alibaba.fastjson.JSON;
 import com.mongodb.BasicDBObject;
 import org.springframework.data.mongodb.core.query.BasicQuery;

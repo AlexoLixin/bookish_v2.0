@@ -2,7 +2,7 @@ package cn.don9cn.blog.aop.log;
 
 import cn.don9cn.blog.model.system.log.SysExceptionLog;
 import cn.don9cn.blog.model.system.log.SysOperaLog;
-import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
+import cn.don9cn.blog.support.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.system.log.interf.SysExceptionLogService;
 import cn.don9cn.blog.service.system.log.interf.SysOperaLogService;
 import cn.don9cn.blog.support.vue.VueImageUploadMsg;

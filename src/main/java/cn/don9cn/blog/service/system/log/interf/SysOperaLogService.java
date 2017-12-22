@@ -2,7 +2,6 @@ package cn.don9cn.blog.service.system.log.interf;
 
 
 import cn.don9cn.blog.model.system.log.SysOperaLog;
-import cn.don9cn.blog.plugins.operaresult.core.OperaResult;
 import cn.don9cn.blog.service.BaseService;
 
 

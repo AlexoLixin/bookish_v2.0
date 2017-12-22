@@ -48,6 +48,7 @@ public class ShiroAutoConfig {
         filterChainMap.put("/sockjs/msgWebSocket","anon");
         filterChainMap.put("/chatRoomWebSocket","anon");                        // 聊天室 webSocket
         filterChainMap.put("/sockjs/chatRoomWebSocket","anon");
+        filterChainMap.put("/bussiness/subscribe","anon");
 
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         // filterChainMap.put("/logout", "logout");
