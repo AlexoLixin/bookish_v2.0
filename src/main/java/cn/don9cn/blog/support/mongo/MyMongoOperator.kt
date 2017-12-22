@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
-import java.lang.reflect.InvocationTargetException
 import java.util.*
 import java.util.function.Function
 
@@ -33,20 +32,14 @@ class MyMongoOperator(mongo: Mongo, databaseName: String) {
 
     /**
      * 根据entity实体类型获取collectionName
-     * @param entity
-     * @param <T>
-     * @return
-    </T> */
+     */
     private fun <T : BaseModel> getCollectionName(entity: T): String {
         return entity.javaClass.simpleName
     }
 
     /**
      * 解析entity实体,提取其不为空的字段和对应的值
-     * @param entity
-     * @param <T>
-     * @return
-    </T> */
+     */
     fun <T : BaseModel> parseEntity(entity: T): Map<String, Any> {
         val resultMap = HashMap<String, Any>()
         val entityClass = entity.javaClass
@@ -68,8 +61,6 @@ class MyMongoOperator(mongo: Mongo, databaseName: String) {
 
     /**
      * 创建默认查询条件(只通过 id 值查找)
-     * @param entity
-     * @return
      */
     fun <T : BaseModel> createDefaultQuery(entity: T): Query {
         return Query.query(Criteria.where("_id").`is`(entity.code))
@@ -77,8 +68,6 @@ class MyMongoOperator(mongo: Mongo, databaseName: String) {
 
     /**
      * 创建查询条件(通过所有有值的字段查找)
-     * @param entity
-     * @return
      */
     fun <T : BaseModel> createQueryByAllFields(entity: T): Query {
         return Query.query(Criteria().alike(Example.of(entity)))
@@ -87,8 +76,6 @@ class MyMongoOperator(mongo: Mongo, databaseName: String) {
 
     /**
      * 自定义查询条件
-     * @param entity
-     * @return
      */
     fun <T : BaseModel> createFreeQuery(entity: T, function: Function<Map<String, Any>, Query>): Query {
         return function.apply(parseEntity(entity))
@@ -96,8 +83,6 @@ class MyMongoOperator(mongo: Mongo, databaseName: String) {
 
     /**
      * 创建默认更新条目
-     * @param entity
-     * @return
      */
     fun <T : BaseModel> createDefaultUpdate(entity: T): Update {
         val fieldMap = parseEntity(entity)
@@ -108,8 +93,6 @@ class MyMongoOperator(mongo: Mongo, databaseName: String) {
 
     /**
      * 自定义更新条目
-     * @param entity
-     * @return
      */
     fun <T : BaseModel> createFreeUpdate(entity: T, function: Function<Map<String, Any>, Update>): Update {
         return function.apply(parseEntity(entity))
@@ -117,8 +100,6 @@ class MyMongoOperator(mongo: Mongo, databaseName: String) {
 
     /**
      * 自定义更新条目
-     * @param update
-     * @return
      */
     fun createFreeUpdate(update: Update, function: Function<Update, Update>): Update {
         return function.apply(update)
