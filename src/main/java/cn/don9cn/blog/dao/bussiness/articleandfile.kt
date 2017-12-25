@@ -6,12 +6,9 @@ import cn.booklish.mongodsl.base.query
 import cn.don9cn.blog.dao.BaseDao
 import cn.don9cn.blog.model.bussiness.Article
 import cn.don9cn.blog.model.bussiness.ArticleAndFile
+import cn.don9cn.blog.model.bussiness.ArticleClassify
 import cn.don9cn.blog.model.system.UploadFile
-import cn.don9cn.blog.util.MyStringUtil
-import org.springframework.data.mongodb.core.query.Criteria
-import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Repository
-import java.util.stream.Collectors
 
 interface ArticleAndFileDao : BaseDao<ArticleAndFile> {
 
@@ -86,14 +83,15 @@ class ArticleAndFileDaoImpl : ArticleAndFileDao {
      * @param uploadFile
      */
     override fun fillLink(uploadFile: UploadFile) {
-        val articleAndFile = getMyMongoOperator().freeFindOne(
-                Query.query(Criteria.where("fileCode").`is`(uploadFile.getCode())), ArticleAndFile::class.java)
-        articleAndFile.ifPresent({ articleAndFile1 ->
-            val article = getMyMongoOperator().findById(articleAndFile1.getArticleCode(), Article::class.java)
-            article.ifPresent({ article1 ->
-                val articleClassify = getMyMongoOperator().findById(article1.getClassify(), ArticleClassify::class.java)
-                articleClassify.ifPresent({ articleClassify1 -> uploadFile.setLink(articleClassify1.getName() + " - " + article1.getTitle()) })
-            })
-        })
+        val articleAndFile = dslOperator{
+            findOne<ArticleAndFile>(query("fileCode" eq uploadFile.code!!))
+        }
+        val article = dslOperator{
+            findById<Article>(articleAndFile.articleCode)
+        }
+        val articleClassify = dslOperator{
+            findById<ArticleClassify>(article.classify!!)
+        }
+        uploadFile.link = articleClassify.name + "-" + article.title
     }
 }
