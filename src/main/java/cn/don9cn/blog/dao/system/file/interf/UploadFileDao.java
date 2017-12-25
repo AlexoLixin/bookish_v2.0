@@ -1,6 +1,5 @@
 package cn.don9cn.blog.dao.system.file.interf;
 
-import cn.don9cn.blog.dao.BaseDao;
 import cn.don9cn.blog.model.system.file.UploadFile;
 
 import java.util.List;

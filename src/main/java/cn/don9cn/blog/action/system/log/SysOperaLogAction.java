@@ -2,7 +2,6 @@ package cn.don9cn.blog.action.system.log;
 
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.system.log.SysOperaLog;
-import cn.don9cn.blog.support.daohelper.core.PageResult;
 import cn.don9cn.blog.service.system.log.interf.SysOperaLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

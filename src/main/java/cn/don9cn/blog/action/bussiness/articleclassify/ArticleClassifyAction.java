@@ -2,7 +2,6 @@ package cn.don9cn.blog.action.bussiness.articleclassify;
 
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
-import cn.don9cn.blog.support.daohelper.core.PageResult;
 import cn.don9cn.blog.service.bussiness.articleclassify.interf.ArticleClassifyService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

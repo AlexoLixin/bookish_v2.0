@@ -1,6 +1,6 @@
 package cn.don9cn.blog.support.daohelper.core;
 
-import cn.don9cn.blog.support.mongo.MyMongoOperator;
+import cn.booklish.mongodsl.core.DslOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
@@ -8,22 +8,22 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @Author: liuxindong
- * @Description: dao辅助插件,用于动态生成sql语句,实现mapper.xml映射文件的配置最小化
+ * @Description: dao辅助插件
  * @Create: don9 2017/10/8
  * @Modify:
  */
 @Configuration
-@AutoConfigureAfter(value = {MyMongoOperator.class})
+@AutoConfigureAfter(value = {DslOperator.class})
 public class DaoHelper {
 
-    private static MyMongoOperator myMongoOperator;
+    private static DslOperator dslOperator;
 
     @Autowired
-    public DaoHelper(MyMongoOperator myMongoOperator) {
-        DaoHelper.myMongoOperator = myMongoOperator;
+    public DaoHelper(DslOperator dslOperator) {
+        DaoHelper.dslOperator = dslOperator;
     }
 
-    public static MyMongoOperator getMyMongoOperator() {
-        return myMongoOperator;
+    public static DslOperator getDslOperator() {
+        return dslOperator;
     }
 }

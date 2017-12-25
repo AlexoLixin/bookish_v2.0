@@ -1,7 +1,7 @@
 package cn.don9cn.blog.model.bussiness
 
 import cn.don9cn.blog.model.BaseModel
-import cn.don9cn.blog.model.system.file.UploadFile
+import cn.don9cn.blog.model.system.UploadFile
 import java.util.ArrayList
 
 /**
@@ -26,10 +26,7 @@ class Article : BaseModel() {
  * @Created: 2017/12/22 15:20
  * @Modified:
  */
-class ArticleAndFile : BaseModel() {
-    var articleCode: String? = null     //文章主键
-    var fileCode: String? = null        //上传文件主键
-}
+class ArticleAndFile(val articleCode: String,val fileCode: String) : BaseModel()
 
 
 /**

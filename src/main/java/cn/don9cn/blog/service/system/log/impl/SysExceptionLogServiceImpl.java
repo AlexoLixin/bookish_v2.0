@@ -4,7 +4,6 @@ import cn.don9cn.blog.dao.system.log.interf.SysExceptionLogDao;
 import cn.don9cn.blog.model.system.log.SysExceptionLog;
 import cn.don9cn.blog.model.system.log.SysOperaLog;
 import cn.don9cn.blog.model.system.rbac.SysUser;
-import cn.don9cn.blog.support.daohelper.core.PageResult;
 import cn.don9cn.blog.support.operaresult.core.OperaResult;
 import cn.don9cn.blog.support.operaresult.util.OperaResultUtil;
 import cn.don9cn.blog.service.system.log.interf.SysExceptionLogService;

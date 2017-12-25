@@ -1,6 +1,5 @@
 package cn.don9cn.blog.dao.system.rbac.interf;
 
-import cn.don9cn.blog.dao.BaseDao;
 import cn.don9cn.blog.model.system.rbac.SysRole;
 
 import java.util.Optional;

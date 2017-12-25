@@ -161,6 +161,12 @@
 		<!-- **************** Kotlin **************** -->
 
 		<dependency>
+			<groupId>cn.booklish</groupId>
+			<artifactId>mongo-dsl-operator</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-stdlib</artifactId>
 			<version>${kotlin.version}</version>

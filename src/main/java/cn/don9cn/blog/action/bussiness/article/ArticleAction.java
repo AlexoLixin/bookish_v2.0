@@ -2,7 +2,6 @@ package cn.don9cn.blog.action.bussiness.article;
 
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.bussiness.article.Article;
-import cn.don9cn.blog.support.daohelper.core.PageResult;
 import cn.don9cn.blog.service.bussiness.article.interf.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

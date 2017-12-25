@@ -1,9 +1,6 @@
 package cn.don9cn.blog.dao.system.rbac.interf;
 
-import cn.don9cn.blog.dao.BaseDao;
 import cn.don9cn.blog.model.system.rbac.SysUser;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.Optional;
 

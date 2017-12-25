@@ -1,9 +1,12 @@
 package cn.don9cn.blog.dao.bussiness
 
+import cn.booklish.mongodsl.base.and
+import cn.booklish.mongodsl.base.eq
+import cn.booklish.mongodsl.base.query
+import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.BaseDao
-import cn.don9cn.blog.dao.bussiness.article.interf.ArticleDao
 import cn.don9cn.blog.model.bussiness.Article
-import cn.don9cn.blog.support.daohelper.core.PageResult
+import cn.don9cn.blog.support.daohelper.core.DaoHelper
 import com.alibaba.fastjson.JSON
 import com.mongodb.BasicDBObject
 import org.springframework.data.mongodb.core.query.BasicQuery
@@ -23,22 +26,22 @@ interface ArticleDao : BaseDao<Article> {
     /**
      * 开放给普通用户的删除文章功能,使其只能删除自己发布的文章
      */
-    fun removeByUser(code: String, userCode: String): OptionalInt
+    fun removeByUser(code: String, userCode: String): Int
 
     /**
      * 开放给普通用户的更新文章功能,使其只能更新自己发布的文章
      */
-    fun updateByUser(entity: Article): OptionalInt
+    fun updateByUser(entity: Article): Int
 
     /**
      * 分页查询文章(但是不包含content字段,以加快速度)
      */
-    fun findPageWithoutContent(pageResult: PageResult<Article>): Optional<PageResult<Article>>
+    fun findPageWithoutContent(pageResult: PageResult<Article>): PageResult<Article>
 
     /**
      * 查询文章集合(不包含content字段)
      */
-    fun findListWithoutContent(entity: Article): Optional<List<Article>>
+    fun findListWithoutContent(entity: Article): List<Article>
 
 }
 
@@ -49,16 +52,18 @@ interface ArticleDao : BaseDao<Article> {
  * @Modified:
  */
 @Repository
-class ArticleDaoImpl : ArticleDao {
+class ArticleDaoImpl:ArticleDao {
 
     /**
      * 开放给普通用户的删除文章功能,使其只能删除自己发布的文章
      * @param code
      * @return
      */
-    override fun removeByUser(code: String, userCode: String): OptionalInt {
-        val query = Query.query(Criteria.where("_id").`is`(code).and("createBy").`is`(userCode))
-        return myMongoOperator.freeRemove(query, Article::class.java)
+    override fun removeByUser(code: String, userCode: String): Int {
+        return dslOperator.remove(
+                query("_id" eq code).and("createBy" eq userCode),
+                Article::class.java
+        )
     }
 
     /**
@@ -66,9 +71,11 @@ class ArticleDaoImpl : ArticleDao {
      * @param entity
      * @return
      */
-    override fun updateByUser(entity: Article): OptionalInt {
-        val query = Query.query(Criteria.where("_id").`is`(entity.code).and("createBy").`is`(entity.createBy))
-        return myMongoOperator.freeUpdateOne(query, myMongoOperator.createDefaultUpdate<Article>(entity), Article::class.java)
+    override fun updateByUser(entity: Article): Int {
+        return dslOperator.updateOne(
+                query("_id" eq entity.code!!).and("createBy" eq entity.createBy!!),
+                entity
+        )
     }
 
     /**
@@ -76,11 +83,11 @@ class ArticleDaoImpl : ArticleDao {
      * @param pageResult
      * @return
      */
-    override fun findPageWithoutContent(pageResult: PageResult<Article>): Optional<PageResult<Article>> {
+    override fun findPageWithoutContent(pageResult: PageResult<Article>): PageResult<Article> {
         val query = BasicDBObject.parse(JSON.toJSONString(pageResult.entity))
         val fields = BasicDBObject("content", false)
         val resultQuery = BasicQuery(query, fields)
-        return myMongoOperator.freeFindPage(pageResult, resultQuery)
+        return dslOperator.findPage(resultQuery,pageResult)
     }
 
 
@@ -89,11 +96,11 @@ class ArticleDaoImpl : ArticleDao {
      * @param entity
      * @return
      */
-    override fun findListWithoutContent(entity: Article): Optional<List<Article>> {
+    override fun findListWithoutContent(entity: Article): List<Article> {
         val query = BasicDBObject.parse(JSON.toJSONString(entity))
         val fields = BasicDBObject("content", false)
         val resultQuery = BasicQuery(query, fields)
-        return myMongoOperator.freeFindList(resultQuery, Article::class.java)
+        return dslOperator.findList(resultQuery,Article::class.java)
     }
 
 

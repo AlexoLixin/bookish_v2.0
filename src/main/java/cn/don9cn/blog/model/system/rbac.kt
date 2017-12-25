@@ -1,10 +1,6 @@
 package cn.don9cn.blog.model.system
 
-import cn.don9cn.blog.annotation.DbCollection
-import cn.don9cn.blog.annotation.DbColumn
 import cn.don9cn.blog.model.BaseModel
-import cn.don9cn.blog.model.system.rbac.SysPermission
-import cn.don9cn.blog.model.system.rbac.SysRole
 import cn.don9cn.blog.util.MyStringUtil
 import java.util.ArrayList
 

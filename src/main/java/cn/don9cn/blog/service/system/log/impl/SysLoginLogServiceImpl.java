@@ -2,7 +2,6 @@ package cn.don9cn.blog.service.system.log.impl;
 
 import cn.don9cn.blog.dao.system.log.interf.SysLoginLogDao;
 import cn.don9cn.blog.model.system.log.SysLoginLog;
-import cn.don9cn.blog.support.daohelper.core.PageResult;
 import cn.don9cn.blog.support.operaresult.core.OperaResult;
 import cn.don9cn.blog.support.operaresult.util.OperaResultUtil;
 import cn.don9cn.blog.service.system.log.interf.SysLoginLogService;

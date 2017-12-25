@@ -3,7 +3,6 @@ package cn.don9cn.blog.action.bussiness.articlecomment;
 import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.bussiness.acticlecomment.ArticleComment;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
-import cn.don9cn.blog.support.daohelper.core.PageResult;
 import cn.don9cn.blog.service.bussiness.articlecomment.interf.ArticleCommentService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

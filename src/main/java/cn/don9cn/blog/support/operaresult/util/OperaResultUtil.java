@@ -1,6 +1,5 @@
 package cn.don9cn.blog.support.operaresult.util;
 
-import cn.don9cn.blog.support.daohelper.core.PageResult;
 import cn.don9cn.blog.support.operaresult.core.OperaResult;
 
 import java.util.List;

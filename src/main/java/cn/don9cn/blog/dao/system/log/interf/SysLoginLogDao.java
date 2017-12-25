@@ -1,6 +1,5 @@
 package cn.don9cn.blog.dao.system.log.interf;
 
-import cn.don9cn.blog.dao.BaseDao;
 import cn.don9cn.blog.model.system.log.SysLoginLog;
 
 import java.util.OptionalInt;
