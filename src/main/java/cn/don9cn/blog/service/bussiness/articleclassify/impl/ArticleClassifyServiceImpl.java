@@ -1,6 +1,5 @@
 package cn.don9cn.blog.service.bussiness.articleclassify.impl;
 
-import cn.booklish.sharp.annotation.RpcService;
 import cn.don9cn.blog.dao.bussiness.articleclassify.interf.ArticleClassifyDao;
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify;
 import cn.don9cn.blog.plugins.daohelper.core.PageResult;
@@ -27,7 +26,6 @@ import java.util.stream.Collectors;
  * @Create: 2017/10/10 10:24
  * @Modify:
  */
-@RpcService(pathPrefix = "/rpc/cn/booklish/blogApplication")
 @SuppressWarnings({"Since15", "Duplicates"})
 @Service
 @Transactional

@@ -1,8 +1,5 @@
 package cn.don9cn.blog.autoconfigs.sharp;
 
-import cn.booklish.sharp.config.SharpAutoConfigureCenter;
-import cn.booklish.sharp.config.SharpRpcConfig;
-import cn.booklish.sharp.server.manage.ServiceBeanFactory;
 import cn.don9cn.blog.autoconfigs.spring.SpringUtil;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
