@@ -105,4 +105,5 @@ public class ArticleAction extends BaseAction<Article> {
     public Object doFindByPageByUser(int page, int limit,String startTime,String endTime, String orderBy, Article article) {
         return articleService.doFindByPageByUser(new PageResult<>(page,limit,startTime,endTime,orderBy,article));
     }
+
 }
