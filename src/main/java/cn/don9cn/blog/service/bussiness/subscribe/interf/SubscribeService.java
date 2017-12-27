@@ -11,4 +11,6 @@ public interface SubscribeService extends BaseService<SubscribeInfo> {
 
     Object delete(String email,String author);
 
+    Object findByAuthor(String author);
+
 }

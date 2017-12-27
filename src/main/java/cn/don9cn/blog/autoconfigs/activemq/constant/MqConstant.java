@@ -42,5 +42,11 @@ public class MqConstant {
     @Value("${spring.activemq.topic-mail-register}")
     public String TOPIC_MAIL_REGISTER;
 
+    /**
+     * 订阅邮件消息topic
+     */
+    @Value("${spring.activemq.topic-mail-subscribe}")
+    public String TOPIC_MAIL_SUBSCRIBE;
+
 
 }

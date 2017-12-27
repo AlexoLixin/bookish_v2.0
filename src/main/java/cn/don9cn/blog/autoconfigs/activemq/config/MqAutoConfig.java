@@ -3,13 +3,11 @@ package cn.don9cn.blog.autoconfigs.activemq.config;
 import cn.don9cn.blog.autoconfigs.activemq.constant.MqConstant;
 import cn.don9cn.blog.autoconfigs.activemq.listener.SysMqListener;
 import org.apache.activemq.command.ActiveMQQueue;
-import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
@@ -23,7 +21,7 @@ import javax.jms.*;
  * @Modify:
  */
 @Configuration
-@AutoConfigureAfter(ConnectionFactory.class)
+@AutoConfigureAfter({ConnectionFactory.class/*, SharpRpcConfig.class*/})
 public class MqAutoConfig {
 
     private final MqConstant mqConstant;

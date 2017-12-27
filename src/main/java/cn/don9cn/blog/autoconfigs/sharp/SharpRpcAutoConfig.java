@@ -1,6 +1,7 @@
 package cn.don9cn.blog.autoconfigs.sharp;
 
 import cn.don9cn.blog.autoconfigs.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,21 +14,12 @@ import org.springframework.context.annotation.Configuration;
 @AutoConfigureAfter(SpringUtil.class)*/
 public class SharpRpcAutoConfig {
 
-    /*@Bean
+   /* @Bean
     public SharpRpcConfig sharpRpcConfig(){
-        return SharpRpcConfig.getInstance().load("sharp.properties");
-    }
-
-    @Bean
-    public SharpAutoConfigureCenter sharpAutoConfigureCenter(SharpRpcConfig sharpRpcConfig){
-        SharpAutoConfigureCenter configureCenter = new SharpAutoConfigureCenter(sharpRpcConfig, new ServiceBeanFactory() {
-            @Override
-            public Object getServiceBean(Class<?> clazz) {
-                return SpringUtil.getBean(clazz);
-            }
-        });
-        configureCenter.autoConfigure();
-        return configureCenter;
+        SharpRpcConfig config = new SharpRpcConfig(SpringUtil::getBean);
+        config.loadProperties("sharp.properties");
+        config.configure();
+        return config;
     }*/
 
 }

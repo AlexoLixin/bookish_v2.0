@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 /**
@@ -22,5 +24,11 @@ public class SubscribeDaoImpl implements SubscribeDao {
     @Override
     public OptionalInt deleteByEmailAndAuthor(String email, String author) {
         return getMyMongoOperator().freeRemove(Query.query(Criteria.where("email").is(email).and("author").is(author)), SubscribeInfo.class);
+    }
+
+    @Override
+    public Optional<List<SubscribeInfo>> findByAuthor(String author) {
+        return getMyMongoOperator()
+                .freeFindList(Query.query(Criteria.where("author").is(author).orOperator(Criteria.where("author").is("*"))),SubscribeInfo.class);
     }
 }

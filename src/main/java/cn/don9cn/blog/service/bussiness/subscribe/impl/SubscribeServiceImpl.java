@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Don9
@@ -17,6 +18,7 @@ import java.util.List;
  **/
 @Service
 @Transactional
+//@RpcService(path = "/subscribe/service")
 public class SubscribeServiceImpl implements SubscribeService {
 
     @Autowired
@@ -74,6 +76,12 @@ public class SubscribeServiceImpl implements SubscribeService {
         }else{
             return OperaResultUtil.deleteBatch(subscribeDao.deleteByEmailAndAuthor(email,author));
         }
+    }
+
+    @Override
+    public Object findByAuthor(String author) {
+        Optional<List<SubscribeInfo>> optional = subscribeDao.findByAuthor(author);
+        return optional.orElse(null);
     }
 
 }

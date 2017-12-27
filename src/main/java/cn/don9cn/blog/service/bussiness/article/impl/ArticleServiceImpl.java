@@ -1,5 +1,10 @@
 package cn.don9cn.blog.service.bussiness.article.impl;
 
+import cn.don9cn.blog.autoconfigs.activemq.constant.MqConstant;
+import cn.don9cn.blog.autoconfigs.activemq.constant.MqDestinationType;
+import cn.don9cn.blog.autoconfigs.activemq.core.MqManager;
+import cn.don9cn.blog.autoconfigs.activemq.model.CommonMqMessage;
+import cn.don9cn.blog.autoconfigs.activemq.model.MqRegisterMessage;
 import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.dao.bussiness.article.interf.ArticleAndFileDao;
 import cn.don9cn.blog.dao.bussiness.article.interf.ArticleDao;
@@ -24,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 
 /**
@@ -48,6 +54,9 @@ public class ArticleServiceImpl implements ArticleService {
 	@Autowired
 	private ArticleAndFileDao articleAndFileDao;
 
+	@Autowired
+	private MqConstant mqConstant;
+
 	@Override
 	//@CacheEvict(value = "Article",allEntries = true)
 	public OperaResult baseInsert(Article entity) {
@@ -56,7 +65,16 @@ public class ArticleServiceImpl implements ArticleService {
 		if(StringUtils.isNotBlank(entity.getFiles())){
 			articleAndFileDao.insertBatch(entity);
 		}
-		return OperaResultUtil.insert(articleDao.baseInsert(entity));
+		OptionalInt optionalInt = articleDao.baseInsert(entity);
+		/*optionalInt.ifPresent(x -> {
+			if(x>0){
+				CommonMqMessage message = new CommonMqMessage();
+				message.setTitle("新文章发布!");
+				message.setContent(entity.getCode()+";"+entity.getAuthor());
+				MqManager.submit(new MqRegisterMessage(MqDestinationType.TOPIC,mqConstant.TOPIC_MAIL_SUBSCRIBE,message));
+			}
+		});*/
+		return OperaResultUtil.insert(optionalInt);
 	}
 
 	@Override

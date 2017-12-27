@@ -53,6 +53,7 @@ spring:
     topic-default: topic-default
     topic-msg-system: topic-msg-system
     topic-mail-register: topic-mail-register
+    topic-mail-subscribe: topic-mail-subscribe
     system-listener-clientId: Pro_BlogApplication
 
 # 文件保存路径
@@ -74,6 +75,7 @@ spring:
     topic-default: topic-default
     topic-msg-system: systemtest
     topic-mail-register: mailtest
+    topic-mail-subscribe: subscribetest
     system-listener-clientId: Dev_BlogApplication
 
 # 文件保存路径
