@@ -1,10 +1,11 @@
 package cn.don9cn.blog.service.bussiness
 
+import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.bussiness.SubscribeInfoDao
 import cn.don9cn.blog.model.bussiness.SubscribeInfo
+import cn.don9cn.blog.service.BaseService
 import cn.don9cn.blog.support.operaresult.core.OperaResult
 import cn.don9cn.blog.support.operaresult.util.OperaResultUtil
-import cn.don9cn.blog.service.BaseService
 import cn.don9cn.blog.util.MyStringUtil
 import cn.don9cn.blog.util.UuidUtil
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +16,11 @@ import org.springframework.transaction.annotation.Transactional
 /**
  * 订阅模块service接口
  */
-interface SubscribeInfoService:BaseService<SubscribeInfo>
+interface SubscribeService:BaseService<SubscribeInfo>{
+    fun delete(email: String, author: String): Int
+
+    fun findByAuthor(author: String): Set<SubscribeInfo>
+}
 
 
 /**
@@ -23,51 +28,53 @@ interface SubscribeInfoService:BaseService<SubscribeInfo>
  */
 @Service
 @Transactional
-open class SubscribeInfoServiceImpl:SubscribeInfoService{
+open class SubscribeServiceImpl:SubscribeService{
 
     @Autowired
     private var subscribeInfoDao: SubscribeInfoDao? = null
 
-    override fun baseInsert(entity: SubscribeInfo): Any {
-        entity.code = UuidUtil.getUuid()
-        return OperaResultUtil.insert(subscribeInfoDao?.baseInsert(entity))
+    override fun baseInsert(entity: SubscribeInfo): Int {
+        return subscribeInfoDao!!.baseInsert(entity)
     }
 
-    override fun baseInsertBatch(list: MutableList<SubscribeInfo>): Any {
-        return OperaResultUtil.insertBatch(subscribeInfoDao?.baseInsertBatch(list))
+    override fun baseInsertBatch(list: List<SubscribeInfo>): Int {
+        return subscribeInfoDao!!.baseInsertBatch(list)
     }
 
-    override fun baseUpdate(entity: SubscribeInfo): Any {
-        return OperaResultUtil.update(subscribeInfoDao?.baseUpdate(entity))
+    override fun baseUpdate(entity: SubscribeInfo): Int {
+        return subscribeInfoDao!!.baseUpdate(entity)
     }
 
-    override fun baseDeleteById(id: String): Any {
-        return OperaResultUtil.deleteOne(subscribeInfoDao?.baseDeleteById(id))
+    override fun baseDeleteById(id: String): Int {
+        return subscribeInfoDao!!.baseDeleteById(id)
     }
 
-    override fun baseDeleteBatch(codes: String): Any {
-        return if(codes.isNotBlank()){
-            val codesList = MyStringUtil.codesStr2List(codes)
-            OperaResultUtil.deleteBatch(subscribeInfoDao?.baseDeleteBatch(codesList))
-        }else{
-            OperaResult(false, "删除失败,传入codes为空!")
-        }
+    override fun baseDeleteBatch(codes: String): Int {
+        return subscribeInfoDao!!.baseDeleteBatch(codes.split(",".toRegex()))
     }
 
-    override fun baseFindById(id: String): Any {
-        return OperaResultUtil.findOne<SubscribeInfo>(subscribeInfoDao?.baseFindById(id))
+    override fun baseFindById(id: String): SubscribeInfo? {
+        return subscribeInfoDao!!.baseFindById(id)
     }
 
-    override fun baseFindAll(): Any {
-        return OperaResultUtil.findAll<SubscribeInfo>(subscribeInfoDao?.baseFindAll())
+    override fun baseFindAll(): List<SubscribeInfo> {
+        return subscribeInfoDao!!.baseFindAll()
     }
 
-    override fun baseFindListByParams(entity: SubscribeInfo): Any {
-        return OperaResultUtil.findListByParams<SubscribeInfo>(subscribeInfoDao?.baseFindListByParams(entity))
+    override fun baseFindListByParams(entity: SubscribeInfo): List<SubscribeInfo> {
+        return subscribeInfoDao!!.baseFindListByParams(entity)
     }
 
-    override fun baseFindByPage(pageResult: PageResult<SubscribeInfo>): Any {
-        return OperaResultUtil.findPage<SubscribeInfo>(subscribeInfoDao?.baseFindByPage(pageResult))
+    override fun baseFindByPage(pageResult: PageResult<SubscribeInfo>): PageResult<SubscribeInfo> {
+        return subscribeInfoDao!!.baseFindByPage(pageResult)
+    }
+
+    override fun delete(email: String, author: String): Int {
+        return subscribeInfoDao!!.deleteByEmail(email)
+    }
+
+    override fun findByAuthor(author: String): Set<SubscribeInfo> {
+        return subscribeInfoDao!!.findByAuthor(author)
     }
 
 }

@@ -19,7 +19,7 @@ interface SysUserDao : BaseDao<SysUser> {
      * @param username
      * @return
      */
-    fun findByUserName(username: String): SysUser
+    fun findByUserName(username: String): SysUser?
 
     /**
      * 检查用户名是否已经存在
@@ -40,7 +40,7 @@ open class SysUserDaoImpl : SysUserDao {
      * @param username
      * @return
      */
-    override fun findByUserName(username: String): SysUser {
+    override fun findByUserName(username: String): SysUser? {
         return dslOperator{
             findOne(query("username" eq username))
         }

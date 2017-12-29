@@ -73,3 +73,8 @@ class SysPermission : BaseModel() {
         this.children.add(sysPermission)
     }
 }
+
+/**
+ * 注册结果实体
+ */
+data class RegisterResult(val success:Boolean,val message:String)

@@ -287,7 +287,7 @@ class DslOperator(mongoClient: MongoClient,database:String){
     /**
      * 删除操作: 根据id删除并返回删除的实体
      */
-    inline fun <reified T:Any> findAndRemoveById(id:String): T {
+    inline fun <reified T:Any> findAndRemoveById(id:String): T? {
         try{
             return mongoTemplate.findAndRemove(createDefaultQuery(id),T::class.java,T::class.java.simpleName)
         }catch (e:Exception){
@@ -298,7 +298,7 @@ class DslOperator(mongoClient: MongoClient,database:String){
     /**
      * 删除操作: 根据id删除并返回删除的实体
      */
-    fun <T:Any> findAndRemoveById(id:String,clazz: Class<T>): T {
+    fun <T:Any> findAndRemoveById(id:String,clazz: Class<T>): T? {
         try{
             return mongoTemplate.findAndRemove(createDefaultQuery(id),clazz,clazz.simpleName)
         }catch (e:Exception){
@@ -353,7 +353,7 @@ class DslOperator(mongoClient: MongoClient,database:String){
     /**
      * 查找操作: 根据id
      */
-    inline fun <reified T:Any> findById(id: String): T {
+    inline fun <reified T:Any> findById(id: String): T? {
         try{
             return mongoTemplate.findById(id,T::class.java,T::class.java.simpleName)
         }catch (e:Exception){
@@ -364,7 +364,7 @@ class DslOperator(mongoClient: MongoClient,database:String){
     /**
      * 查找操作: 根据id
      */
-    fun <T:Any> findById(id: String,clazz:Class<T>): T {
+    fun <T:Any> findById(id: String,clazz:Class<T>): T? {
         try{
             return mongoTemplate.findById(id,clazz,clazz.simpleName)
         }catch (e:Exception){
@@ -375,7 +375,7 @@ class DslOperator(mongoClient: MongoClient,database:String){
     /**
      * 查找操作: 根据自定义查询条件
      */
-    inline fun <reified T:Any> findOne(query: Query): T {
+    inline fun <reified T:Any> findOne(query: Query): T? {
         try{
             return mongoTemplate.findOne(query,T::class.java,T::class.java.simpleName)
         }catch (e:Exception){
@@ -386,7 +386,7 @@ class DslOperator(mongoClient: MongoClient,database:String){
     /**
      * 查找操作: 根据自定义查询条件
      */
-    fun <T:Any> findOne(query: Query,clazz:Class<T>): T {
+    fun <T:Any> findOne(query: Query,clazz:Class<T>): T? {
         try{
             return mongoTemplate.findOne(query,clazz,clazz.simpleName)
         }catch (e:Exception){

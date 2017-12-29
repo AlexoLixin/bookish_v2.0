@@ -4,7 +4,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import java.io.Serializable
 
-class PageResult<T>:Serializable{
+class PageResult<T:Any>:Serializable{
 
     companion object {
         private const val serialVersionUID = 1L

@@ -9,7 +9,7 @@ import cn.don9cn.blog.support.mongo.core.DaoHelper
 import java.lang.reflect.ParameterizedType
 
 
-interface BaseDao<in T:BaseModel> {
+interface BaseDao<T:BaseModel> {
 
     val dslOperator:DslOperator
         get() = DaoHelper.getDslOperator()
@@ -33,7 +33,7 @@ interface BaseDao<in T:BaseModel> {
      * @return
      */
     fun baseInsert(entity: T): Int {
-        return DaoHelper.getDslOperator().insertOne(entity)
+        return dslOperator.insertOne(entity)
     }
 
     /**
@@ -41,7 +41,7 @@ interface BaseDao<in T:BaseModel> {
      * @return
      */
     fun baseInsertBatch(list: List<T>): Int {
-        return DaoHelper.getDslOperator().insertBatch(list)
+        return dslOperator.insertBatch(list)
     }
 
     /**
@@ -50,7 +50,7 @@ interface BaseDao<in T:BaseModel> {
      * @return
      */
     fun baseUpdate(entity: T): Int {
-        return DaoHelper.getDslOperator().updateById(entity.code!!,entity)
+        return dslOperator.updateById(entity.code!!,entity)
     }
 
     /**
@@ -59,7 +59,7 @@ interface BaseDao<in T:BaseModel> {
      * @return
      */
     fun baseDeleteById(id: String): Int {
-        return DaoHelper.getDslOperator().removeById(id,getTypeClass())
+        return dslOperator.removeById(id,getTypeClass())
     }
 
     /**
@@ -67,7 +67,7 @@ interface BaseDao<in T:BaseModel> {
      * @return
      */
     fun baseDeleteBatch(list: List<String>): Int {
-        return DaoHelper.getDslOperator().remove(query("_id" inThe list), getTypeClass())
+        return dslOperator.remove(query("_id" inThe list), getTypeClass())
     }
 
     /**
@@ -75,16 +75,16 @@ interface BaseDao<in T:BaseModel> {
      * @param id
      * @return
      */
-    fun <T> baseFindById(id: String): T {
-        return DaoHelper.getDslOperator().findById(id, getTypeClass()) as T
+    fun baseFindById(id: String): T? {
+        return dslOperator.findById(id, getTypeClass()) as? T
     }
 
     /**
      * 查询所有数据
      * @return
      */
-    fun <T> baseFindAll(): List<T> {
-        return DaoHelper.getDslOperator().findListByClass(getTypeClass()) as List<T>
+    fun baseFindAll(): List<T> {
+        return dslOperator.findListByClass(getTypeClass()) as List<T>
     }
 
     /**
@@ -92,8 +92,8 @@ interface BaseDao<in T:BaseModel> {
      * @param entity
      * @return
      */
-    fun <T : Any> baseFindListByParams(entity: T): List<T> {
-        return DaoHelper.getDslOperator().findListByEntity(entity)
+    fun baseFindListByParams(entity: T): List<T> {
+        return dslOperator.findListByEntity(entity)
     }
 
     /**
@@ -101,8 +101,8 @@ interface BaseDao<in T:BaseModel> {
      * @param pageResult
      * @return
      */
-    fun <T : Any> baseFindByPage(pageResult: PageResult<T>): PageResult<T> {
-        return DaoHelper.getDslOperator().findPage(pageResult)
+    fun baseFindByPage(pageResult: PageResult<T>): PageResult<T> {
+        return dslOperator.findPage(pageResult)
     }
 
     /**
@@ -110,8 +110,8 @@ interface BaseDao<in T:BaseModel> {
      * @param ids
      * @return
      */
-    fun <T> baseFindListInIds(ids: List<String>): List<T> {
-        return DaoHelper.getDslOperator().findList(query("_id" inThe ids),getTypeClass()) as List<T>
+    fun baseFindListInIds(ids: List<String>): List<T> {
+        return dslOperator.findList(query("_id" inThe ids),getTypeClass()) as List<T>
     }
 
 }

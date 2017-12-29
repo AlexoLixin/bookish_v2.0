@@ -16,7 +16,7 @@ interface SysRoleDao : BaseDao<SysRole> {
      * @param encoding
      * @return
      */
-    fun findByRoleEncoding(encoding: String): SysRole
+    fun findByRoleEncoding(encoding: String): SysRole?
 
 }
 
@@ -26,7 +26,7 @@ interface SysRoleDao : BaseDao<SysRole> {
 @Repository
 open class SysRoleDaoImpl : SysRoleDao {
 
-    override fun findByRoleEncoding(encoding: String): SysRole {
+    override fun findByRoleEncoding(encoding: String): SysRole? {
         return dslOperator{
             findOne(query("encoding" eq encoding))
         }

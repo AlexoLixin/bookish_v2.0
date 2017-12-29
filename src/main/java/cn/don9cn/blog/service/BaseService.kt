@@ -1,74 +1,70 @@
-package cn.don9cn.blog.service;
+package cn.don9cn.blog.service
 
-
-import java.io.Serializable;
-import java.util.List;
+import cn.booklish.mongodsl.core.PageResult
+import java.io.Serializable
 
 /**
- * @Author: liuxindong
- * @Description: 基础service接口
- * @Create: 2017/10/23 10:21
- * @Modify:
+ * 基础service接口
  */
-public interface BaseService<T extends Serializable> {
+interface BaseService<T:Serializable> {
 
     /**
      * 添加实体对象
      * @param entity
      * @return
      */
-    Object baseInsert(T entity);
+    fun baseInsert(entity: T): Int
 
     /**
      * 批量添加实体对象
      * @return
      */
-    Object baseInsertBatch(List<T> list);
+    fun baseInsertBatch(list: List<T>): Int
 
     /**
      * 通过id更新实体
      * @param entity
      * @return
      */
-    Object baseUpdate(T entity);
+    fun baseUpdate(entity: T): Int
 
     /**
      * 通过id删除实体
      * @param id
      * @return
      */
-    Object baseDeleteById(String id);
+    fun baseDeleteById(id: String): Int
 
     /**
      * 批量删除实体对象
      * @return
      */
-    Object baseDeleteBatch(String codes);
+    fun baseDeleteBatch(codes: String): Int
 
     /**
      * 通过id查找实体
      * @param id
      * @return
      */
-    Object baseFindById(String id);
+    fun baseFindById(id: String): T?
 
     /**
      * 查询所有数据
      * @return
      */
-    Object baseFindAll();
+    fun baseFindAll(): List<T>
 
     /**
      * 查询指定条件的实体集合
      * @param entity
      * @return
      */
-    Object baseFindListByParams(T entity);
+    fun baseFindListByParams(entity: T): List<T>
 
     /**
      * 带参数的分页查询
      * @param pageResult
      * @return
      */
-    Object baseFindByPage(PageResult<T> pageResult);
+    fun baseFindByPage(pageResult: PageResult<T>): PageResult<T>
 }
