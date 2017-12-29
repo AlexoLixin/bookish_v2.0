@@ -1,4 +1,4 @@
-package cn.don9cn.blog.autoconfigs.mongodb;
+package cn.don9cn.blog.autoconfigs.mongo;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @Modify:
  */
 @Component
-@ConfigurationProperties(prefix = "mongodb")
+@ConfigurationProperties(prefix = "mongo")
 public class MongoClientProperties {
 
     private String host;

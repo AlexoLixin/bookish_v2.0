@@ -20,7 +20,7 @@ public class MongoDbTest {
 
 
     public static void main(String[] args) {
-        // 连接到 mongodb 服务
+        // 连接到 mongo 服务
         MongoClient mongoClient = new MongoClient( "127.0.0.1" , 27017 );
 
         MongoOperations mongoTemplate = new MongoTemplate(mongoClient,"don9blog");

@@ -84,7 +84,7 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
-		<!-- **************** mongodb **************** -->
+		<!-- *************mongogodb **************** -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
@@ -161,14 +161,14 @@
 		<!-- **************** Kotlin **************** -->
 
 		<dependency>
-			<groupId>cn.booklish</groupId>
-			<artifactId>mongo-dsl-operator</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-stdlib</artifactId>
+			<version>${kotlin.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
-			<artifactId>kotlin-stdlib</artifactId>
+			<artifactId>kotlin-reflect</artifactId>
 			<version>${kotlin.version}</version>
 		</dependency>
 

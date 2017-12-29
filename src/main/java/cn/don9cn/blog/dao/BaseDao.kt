@@ -1,11 +1,11 @@
 package cn.don9cn.blog.dao
 
-import cn.booklish.mongodsl.base.inThe
-import cn.booklish.mongodsl.base.query
+import cn.don9cn.blog.support.mongo.ext.inThe
+import cn.don9cn.blog.support.mongo.ext.query
 import cn.booklish.mongodsl.core.DslOperator
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.model.BaseModel
-import cn.don9cn.blog.support.daohelper.core.DaoHelper
+import cn.don9cn.blog.support.mongo.core.DaoHelper
 import java.lang.reflect.ParameterizedType
 
 
@@ -113,8 +113,5 @@ interface BaseDao<in T:BaseModel> {
     fun <T> baseFindListInIds(ids: List<String>): List<T> {
         return DaoHelper.getDslOperator().findList(query("_id" inThe ids),getTypeClass()) as List<T>
     }
-    
-    
-
 
 }

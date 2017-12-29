@@ -1,19 +1,15 @@
 package cn.don9cn.blog.dao.bussiness
 
-import cn.booklish.mongodsl.base.and
-import cn.booklish.mongodsl.base.eq
-import cn.booklish.mongodsl.base.query
+import cn.don9cn.blog.support.mongo.ext.and
+import cn.don9cn.blog.support.mongo.ext.eq
+import cn.don9cn.blog.support.mongo.ext.query
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.BaseDao
 import cn.don9cn.blog.model.bussiness.Article
-import cn.don9cn.blog.support.daohelper.core.DaoHelper
 import com.alibaba.fastjson.JSON
 import com.mongodb.BasicDBObject
 import org.springframework.data.mongodb.core.query.BasicQuery
-import org.springframework.data.mongodb.core.query.Criteria
-import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Repository
-import java.util.*
 
 /**
  * @Author: liuxindong
@@ -52,7 +48,7 @@ interface ArticleDao : BaseDao<Article> {
  * @Modified:
  */
 @Repository
-class ArticleDaoImpl:ArticleDao {
+open class ArticleDaoImpl:ArticleDao {
 
     /**
      * 开放给普通用户的删除文章功能,使其只能删除自己发布的文章

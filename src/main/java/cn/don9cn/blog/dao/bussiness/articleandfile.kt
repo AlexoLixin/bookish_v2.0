@@ -1,8 +1,8 @@
 package cn.don9cn.blog.dao.bussiness
 
-import cn.booklish.mongodsl.base.eq
-import cn.booklish.mongodsl.base.inThe
-import cn.booklish.mongodsl.base.query
+import cn.don9cn.blog.support.mongo.ext.eq
+import cn.don9cn.blog.support.mongo.ext.inThe
+import cn.don9cn.blog.support.mongo.ext.query
 import cn.don9cn.blog.dao.BaseDao
 import cn.don9cn.blog.model.bussiness.Article
 import cn.don9cn.blog.model.bussiness.ArticleAndFile
@@ -42,7 +42,7 @@ interface ArticleAndFileDao : BaseDao<ArticleAndFile> {
 }
 
 @Repository
-class ArticleAndFileDaoImpl : ArticleAndFileDao {
+open class ArticleAndFileDaoImpl : ArticleAndFileDao {
 
     /**
      * 根据articleCode删除记录
@@ -62,7 +62,7 @@ class ArticleAndFileDaoImpl : ArticleAndFileDao {
      */
     override fun deleteByArticleCodes(list: List<String>): Int {
         return dslOperator{
-            remove<ArticleAndFile>(query("articleCode" inThe  list))
+            remove<ArticleAndFile>(query("articleCode" inThe list))
         }
     }
 

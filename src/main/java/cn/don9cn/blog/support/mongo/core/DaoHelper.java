@@ -1,4 +1,4 @@
-package cn.don9cn.blog.support.daohelper.core;
+package cn.don9cn.blog.support.mongo.core;
 
 import cn.booklish.mongodsl.core.DslOperator;
 import org.springframework.beans.factory.annotation.Autowired;
