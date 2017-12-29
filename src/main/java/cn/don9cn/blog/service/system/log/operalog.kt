@@ -1,11 +1,10 @@
 package cn.don9cn.blog.service.system.log
 
 import cn.booklish.mongodsl.core.PageResult
-import cn.don9cn.blog.dao.system.SysLoginLogDao
-import cn.don9cn.blog.dao.system.SysOperaLogDao
-import cn.don9cn.blog.model.system.SysLoginLog
+import cn.don9cn.blog.dao.system.log.SysOperaLogDao
 import cn.don9cn.blog.model.system.SysOperaLog
 import cn.don9cn.blog.service.BaseService
+import cn.don9cn.blog.service.system.rbac.SysUserService
 import cn.don9cn.blog.util.DateUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -61,7 +60,17 @@ open class SysOperaLogServiceImpl : SysOperaLogService {
     }
 
     override fun baseFindById(id: String): SysOperaLog? {
-        return sysOperaLogDao!!.baseFindById(id)
+        val operaLog = sysOperaLogDao!!.baseFindById(id)
+        operaLog?.let { log ->
+            operaLog.userCode?.let{
+                sysUserService!!.baseFindById(it)?.let {
+                    log.userName = it.username
+                    log.userRole = it.roleNames
+                }
+            }
+        }
+
+        return operaLog
     }
 
     override fun baseFindAll(): List<SysOperaLog> {
