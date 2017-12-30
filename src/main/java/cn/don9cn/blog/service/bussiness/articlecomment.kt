@@ -1,16 +1,14 @@
 package cn.don9cn.blog.service.bussiness
 
 import cn.booklish.mongodsl.core.PageResult
-import cn.don9cn.blog.autoconfigs.activemq.constant.MqDestinationType
-import cn.don9cn.blog.autoconfigs.activemq.core.MqManager
-import cn.don9cn.blog.autoconfigs.activemq.model.CommonMqMessage
-import cn.don9cn.blog.autoconfigs.activemq.model.MqRegisterMessage
+import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType
+import cn.don9cn.blog.autoconfigure.activemq.core.MqManager
+import cn.don9cn.blog.autoconfigure.activemq.model.CommonMqMessage
+import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage
 import cn.don9cn.blog.dao.bussiness.ArticleCommentDao
 import cn.don9cn.blog.dao.bussiness.ArticleDao
-import cn.don9cn.blog.model.bussiness.ArticleClassify
 import cn.don9cn.blog.model.bussiness.ArticleComment
 import cn.don9cn.blog.service.BaseService
-import cn.don9cn.blog.support.vue.VueSelectOption
 import cn.don9cn.blog.util.UuidUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

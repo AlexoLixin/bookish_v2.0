@@ -5,7 +5,9 @@ import cn.don9cn.blog.dao.system.log.SysOperaLogDao
 import cn.don9cn.blog.model.system.SysOperaLog
 import cn.don9cn.blog.service.BaseService
 import cn.don9cn.blog.service.system.rbac.SysUserService
-import cn.don9cn.blog.util.DateUtil
+import cn.don9cn.blog.util.ago
+import cn.don9cn.blog.util.days
+import cn.don9cn.blog.util.pattern
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -18,7 +20,7 @@ interface SysOperaLogService : BaseService<SysOperaLog> {
      * 删除30天前的日志
      * @return
      */
-    fun doRemoveEarly30(): Int
+    fun doRemoveEarlyDays(num: Int): Int
 }
 
 /**
@@ -85,7 +87,7 @@ open class SysOperaLogServiceImpl : SysOperaLogService {
         return sysOperaLogDao!!.baseFindByPage(pageResult)
     }
 
-    override fun doRemoveEarly30(): Int {
-        return sysOperaLogDao!!.doRemoveEarly30(DateUtil.getEarly30Date())
+    override fun doRemoveEarlyDays(num: Int): Int {
+        return sysOperaLogDao!!.doRemoveEarlyDays(num.days.ago.pattern)
     }
 }

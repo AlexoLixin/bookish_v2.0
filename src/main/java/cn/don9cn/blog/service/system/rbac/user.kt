@@ -1,19 +1,17 @@
 package cn.don9cn.blog.service.system.rbac
 
 import cn.booklish.mongodsl.core.PageResult
-import cn.don9cn.blog.autoconfigs.activemq.constant.MqConstant
-import cn.don9cn.blog.autoconfigs.activemq.constant.MqDestinationType
-import cn.don9cn.blog.autoconfigs.activemq.core.MqManager
-import cn.don9cn.blog.autoconfigs.activemq.model.MailMessage
-import cn.don9cn.blog.autoconfigs.activemq.model.MqRegisterMessage
-import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil
+import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant
+import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType
+import cn.don9cn.blog.autoconfigure.activemq.core.MqManager
+import cn.don9cn.blog.autoconfigure.activemq.model.MailMessage
+import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage
+import cn.don9cn.blog.autoconfigure.shiro.util.MyShiroSessionUtil
 import cn.don9cn.blog.dao.system.rbac.SysRoleDao
 import cn.don9cn.blog.dao.system.rbac.SysUserDao
 import cn.don9cn.blog.model.system.RegisterResult
 import cn.don9cn.blog.model.system.SysUser
 import cn.don9cn.blog.service.BaseService
-import cn.don9cn.blog.util.MyStringUtil
-import com.google.common.collect.Lists
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

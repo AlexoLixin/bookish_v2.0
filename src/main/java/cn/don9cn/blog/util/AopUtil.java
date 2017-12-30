@@ -1,7 +1,7 @@
 package cn.don9cn.blog.util;
 
 import cn.don9cn.blog.annotation.SkipOperaLog;
-import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
+import cn.don9cn.blog.autoconfigure.shiro.util.MyShiroSessionUtil;
 import cn.don9cn.blog.model.system.log.SysExceptionLog;
 import cn.don9cn.blog.model.system.log.SysOperaLog;
 import cn.don9cn.blog.model.system.rbac.SysUser;

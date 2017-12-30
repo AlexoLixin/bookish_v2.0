@@ -1,10 +1,12 @@
 package cn.don9cn.blog.service.system.log
 
 import cn.booklish.mongodsl.core.PageResult
-import cn.don9cn.blog.dao.system.SysLoginLogDao
+import cn.don9cn.blog.dao.system.log.SysLoginLogDao
 import cn.don9cn.blog.model.system.SysLoginLog
 import cn.don9cn.blog.service.BaseService
-import cn.don9cn.blog.util.DateUtil
+import cn.don9cn.blog.util.ago
+import cn.don9cn.blog.util.days
+import cn.don9cn.blog.util.pattern
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,7 +19,7 @@ interface SysLoginLogService : BaseService<SysLoginLog> {
      * 删除30天前的日志
      * @return
      */
-    fun doRemoveEarly30(): Int
+    fun doRemoveEarlyDays(num: Int): Int
 }
 
 /**
@@ -71,7 +73,7 @@ open class SysLoginLogServiceImpl : SysLoginLogService {
         return sysLoginLogDao!!.baseFindByPage(pageResult)
     }
 
-    override fun doRemoveEarly30(): Int {
-        return sysLoginLogDao!!.doRemoveEarly30(DateUtil.getEarly30Date())
+    override fun doRemoveEarlyDays(num: Int): Int {
+        return sysLoginLogDao!!.doRemoveEarlyDays(num.days.ago.pattern)
     }
 }

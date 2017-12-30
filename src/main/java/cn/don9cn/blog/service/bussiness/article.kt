@@ -1,12 +1,12 @@
 package cn.don9cn.blog.service.bussiness
 
 import cn.booklish.mongodsl.core.PageResult
-import cn.don9cn.blog.autoconfigs.activemq.constant.MqConstant
-import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil
+import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant
+import cn.don9cn.blog.autoconfigure.shiro.util.MyShiroSessionUtil
 import cn.don9cn.blog.dao.bussiness.ArticleAndFileDao
 import cn.don9cn.blog.dao.bussiness.ArticleClassifyDao
 import cn.don9cn.blog.dao.bussiness.ArticleDao
-import cn.don9cn.blog.dao.system.UploadFileDao
+import cn.don9cn.blog.dao.system.file.UploadFileDao
 import cn.don9cn.blog.model.bussiness.Article
 import cn.don9cn.blog.service.BaseService
 import cn.don9cn.blog.util.UuidUtil

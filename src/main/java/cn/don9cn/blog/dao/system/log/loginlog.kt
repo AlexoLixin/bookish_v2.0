@@ -14,7 +14,7 @@ interface SysLoginLogDao : BaseDao<SysLoginLog> {
      * 删除30天前的日志记录
      * @return
      */
-    fun doRemoveEarly30(early30Date: String): Int
+    fun doRemoveEarlyDays(days: String): Int
 }
 
 /**
@@ -27,9 +27,9 @@ open class SysLoginLogDaoImpl : SysLoginLogDao {
      * 删除30天前的日志记录
      * @return
      */
-    override fun doRemoveEarly30(early30Date: String): Int {
+    override fun doRemoveEarlyDays(days: String): Int {
         return dslOperator{
-            remove<SysLoginLog>(query("createTime" lt early30Date))
+            remove<SysLoginLog>(query("createTime" lt days))
         }
     }
 }

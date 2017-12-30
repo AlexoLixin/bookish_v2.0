@@ -1,8 +1,8 @@
 package cn.don9cn.blog.action.system.login;
 
 import cn.don9cn.blog.annotation.SkipOperaLog;
-import cn.don9cn.blog.autoconfigs.shiro.util.MyShiroSessionUtil;
-import cn.don9cn.blog.autoconfigs.websocket.msg.MsgWebSocketHandler;
+import cn.don9cn.blog.autoconfigure.shiro.util.MyShiroSessionUtil;
+import cn.don9cn.blog.autoconfigure.websocket.msg.MsgWebSocketHandler;
 import cn.don9cn.blog.model.system.log.SysLoginLog;
 import cn.don9cn.blog.model.system.rbac.SysRole;
 import cn.don9cn.blog.model.system.rbac.SysUser;

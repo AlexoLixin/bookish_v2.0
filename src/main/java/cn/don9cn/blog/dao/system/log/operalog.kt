@@ -14,7 +14,7 @@ interface SysOperaLogDao : BaseDao<SysOperaLog> {
      * 删除30天前的日志记录
      * @return
      */
-    fun doRemoveEarly30(early30Date: String): Int
+    fun doRemoveEarlyDays(days: String): Int
 }
 
 /**
@@ -27,9 +27,9 @@ open class SysOperaLogDaoImpl : SysOperaLogDao {
      * 删除30天前的日志记录
      * @return
      */
-    override fun doRemoveEarly30(early30Date: String): Int {
+    override fun doRemoveEarlyDays(days: String): Int {
         return dslOperator{
-            remove<SysOperaLog>(query("createTime" lt early30Date))
+            remove<SysOperaLog>(query("createTime" lt days))
         }
     }
 }

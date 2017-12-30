@@ -1,7 +1,7 @@
 package cn.don9cn.blog.util;
 
 import cn.don9cn.blog.action.system.upload.UploadAction;
-import cn.don9cn.blog.autoconfigs.filepath.FileSavePathConfig;
+import cn.don9cn.blog.autoconfigure.filepath.FileSavePathConfig;
 import cn.don9cn.blog.model.system.file.UploadFile;
 import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;

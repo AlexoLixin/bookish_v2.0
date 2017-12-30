@@ -1,8 +1,8 @@
 package cn.don9cn.blog.test;
 
-import cn.don9cn.blog.autoconfigs.activemq.constant.MqDestinationType;
-import cn.don9cn.blog.autoconfigs.activemq.model.MqRegisterMessage;
-import cn.don9cn.blog.autoconfigs.activemq.model.CommonMqMessage;
+import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType;
+import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage;
+import cn.don9cn.blog.autoconfigure.activemq.model.CommonMqMessage;
 
 import java.util.concurrent.*;
 
