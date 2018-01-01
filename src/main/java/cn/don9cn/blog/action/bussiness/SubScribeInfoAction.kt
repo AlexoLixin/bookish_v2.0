@@ -1,6 +1,5 @@
 package cn.don9cn.blog.action.bussiness
 
-import cn.don9cn.blog.action.BaseAction
 import cn.don9cn.blog.model.bussiness.SubscribeInfo
 import cn.don9cn.blog.service.bussiness.SubscribeInfoService
 import org.springframework.beans.factory.annotation.Autowired

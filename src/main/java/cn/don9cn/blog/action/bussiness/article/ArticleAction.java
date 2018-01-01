@@ -1,6 +1,5 @@
 package cn.don9cn.blog.action.bussiness.article;
 
-import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.bussiness.article.Article;
 import cn.don9cn.blog.service.bussiness.article.interf.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;

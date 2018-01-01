@@ -1,6 +1,5 @@
 package cn.don9cn.blog.action.system.file;
 
-import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.system.file.UploadFile;
 import cn.don9cn.blog.service.system.file.interf.UploadFileService;
 import org.apache.log4j.Logger;

@@ -1,6 +1,5 @@
 package cn.don9cn.blog.action.system.rbac;
 
-import cn.don9cn.blog.action.BaseAction;
 import cn.don9cn.blog.model.system.rbac.SysUser;
 import cn.don9cn.blog.service.system.rbac.interf.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
