@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @Modify:
  */
 @Component
-@ConfigurationProperties(prefix = "mongo")
+@ConfigurationProperties(prefix = "mongodb")
 public class MongoClientProperties {
 
     private String host;
