@@ -22,3 +22,4 @@ val Period.fromNow:LocalDateTime
 val LocalDateTime.pattern: String
     get() = this.format(datePattern)
 
+fun getNowDate() = LocalDateTime.now().format(datePattern)

@@ -10,6 +10,7 @@ import java.util.UUID;
  */
 public class UuidUtil {
 
+    private UuidUtil(){}
     /**
      * @Author: liuxindong
      * @Description: 生成uuid

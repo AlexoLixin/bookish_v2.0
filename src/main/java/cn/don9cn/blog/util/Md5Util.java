@@ -8,6 +8,7 @@ import java.security.MessageDigest;
  **/
 public class Md5Util {
 
+    private Md5Util(){}
     /**
      * 生成md5加密字符
      * @param string

@@ -1,15 +1,10 @@
 package cn.don9cn.blog.test;
 
-import cn.don9cn.blog.model.system.rbac.SysPermission;
 import com.mongodb.MongoClient;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Don9

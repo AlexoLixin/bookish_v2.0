@@ -20,7 +20,7 @@ interface SysExceptionLogService : BaseService<SysExceptionLog> {
      * 删除30天前的日志
      * @return
      */
-    fun doRemoveEarlyDays(num: Int): Any
+    fun doRemoveEarlyDays(num: Int): Int
 
 }
 

@@ -1,6 +1,7 @@
 package cn.don9cn.blog.util;
 
-import cn.don9cn.blog.model.system.log.SysLoginLog;
+import cn.don9cn.blog.model.system.SysLoginLog;
+
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -11,14 +12,14 @@ import java.net.UnknownHostException;
  * @Create: 2017/10/18 14:14
  * @Modify:
  */
-public class RequestUtil {
+public class LoginRequestUtil {
 
     /**
      * 组件LoginLog日志实体
      * @param request
      * @return
      */
-    public static SysLoginLog getLoginLog(HttpServletRequest request,String username,String password){
+    public static SysLoginLog getLoginLog(HttpServletRequest request, String username, String password){
         SysLoginLog log = new SysLoginLog();
         log.setHostName(getHostName(getIpAddr(request)));
         log.setBrowser(getRequestBrowserInfo(request));

@@ -15,7 +15,7 @@ class LoginResult(val isSuccess: Boolean, val message: String) {
     fun isAdmin(): Boolean = admin
     fun getUser(): Any? = user
 
-    fun setToken(token: String): LoginResult {
+    fun setToken(token: String?): LoginResult {
         this.token = token
         return this
     }
@@ -25,7 +25,7 @@ class LoginResult(val isSuccess: Boolean, val message: String) {
         return this
     }
 
-    fun setUser(user: Any): LoginResult {
+    fun setUser(user: Any?): LoginResult {
         this.user = user
         return this
     }

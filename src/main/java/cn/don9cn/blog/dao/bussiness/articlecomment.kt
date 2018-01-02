@@ -53,7 +53,7 @@ interface ArticleCommentDao : BaseDao<ArticleComment> {
  * 文章评论dao实现类
  */
 @Repository
-class ArticleCommentDaoImpl : ArticleCommentDao {
+open class ArticleCommentDaoImpl : ArticleCommentDao {
 
 
     /**

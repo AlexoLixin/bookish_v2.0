@@ -1,7 +1,6 @@
 package cn.don9cn.blog.model.system
 
 import cn.don9cn.blog.model.BaseModel
-import cn.don9cn.blog.util.MyStringUtil
 import java.util.ArrayList
 
 
@@ -29,7 +28,7 @@ class SysUser() : BaseModel() {
     }
 
     constructor(code: String, roleCodes: String):this(code) {
-        this.roleCodes = MyStringUtil.codesStr2List(roleCodes)
+        this.roleCodes = roleCodes.split(",")
     }
 }
 
@@ -48,7 +47,7 @@ class SysRole() : BaseModel() {
 
     constructor(roleCode: String, permissionCodes: String):this() {
         this.code = roleCode
-        this.menuCodesList = MyStringUtil.codesStr2List(permissionCodes)
+        this.menuCodesList = permissionCodes.split(",")
     }
 }
 

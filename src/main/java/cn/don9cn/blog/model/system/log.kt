@@ -70,18 +70,20 @@ class SysExceptionLog() : BaseModel() {
     var stackTrace: List<String>? = null    //异常堆栈
 
     constructor(sysOperaLog: SysOperaLog):this() {
-        if (sysOperaLog.requestUrl != null) this.requestUrl = sysOperaLog.requestUrl
-        if (sysOperaLog.requestMethod != null) this.requestMethod = sysOperaLog.requestMethod
-        if (sysOperaLog.type != null) this.type = sysOperaLog.type
-        if (sysOperaLog.module != null) this.module = sysOperaLog.module
-        if (sysOperaLog.actionName != null) this.actionName = sysOperaLog.actionName
-        if (sysOperaLog.methodName != null) this.methodName = sysOperaLog.methodName
-        if (sysOperaLog.params != null) this.params = sysOperaLog.params
-        if (sysOperaLog.userCode != null) this.userCode = sysOperaLog.userCode
-        if (sysOperaLog.costTime != null) this.costTime = sysOperaLog.costTime
-        if (sysOperaLog.state != null) this.state = sysOperaLog.state
-        if (sysOperaLog.userName != null) this.userName = sysOperaLog.userName
-        if (sysOperaLog.userRole != null) this.userRole = sysOperaLog.userRole
-        this.ignoreSave = sysOperaLog.ignoreSave
+        with(sysOperaLog){
+            requestUrl?.let { this.requestUrl = it }
+            requestMethod?.let { this.requestMethod = it }
+            type?.let { this.type = it }
+            module?.let { this.module = it }
+            actionName?.let { this.actionName = it }
+            methodName?.let { this.methodName = it }
+            params?.let { this.params = it }
+            userCode?.let { this.userCode = it }
+            costTime?.let { this.costTime = it }
+            state?.let { this.state = it }
+            userName?.let { this.userName = it }
+            userRole?.let { this.userRole = it }
+            this.ignoreSave = ignoreSave
+        }
     }
 }

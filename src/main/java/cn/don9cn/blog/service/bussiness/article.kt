@@ -2,7 +2,7 @@ package cn.don9cn.blog.service.bussiness
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant
-import cn.don9cn.blog.autoconfigure.shiro.util.MyShiroSessionUtil
+import cn.don9cn.blog.autoconfigure.shiro.util.ShiroSessionUtil
 import cn.don9cn.blog.dao.bussiness.ArticleAndFileDao
 import cn.don9cn.blog.dao.bussiness.ArticleClassifyDao
 import cn.don9cn.blog.dao.bussiness.ArticleDao
@@ -49,7 +49,7 @@ open class ArticleServiceImpl : ArticleService {
     //@CacheEvict(value = "Article",allEntries = true)
     override fun baseInsert(entity: Article): Int {
         entity.code = UuidUtil.getUuid()
-        entity.author = MyShiroSessionUtil.getUserNameFromSession()
+        entity.author = ShiroSessionUtil.getUserName()
         entity.files?.isNotBlank().let {
             articleAndFileDao!!.insertBatch(entity)
         }
@@ -58,7 +58,7 @@ open class ArticleServiceImpl : ArticleService {
 
     //@CacheEvict(value = "Article",allEntries = true)
     override fun baseInsertBatch(list: List<Article>): Int {
-        list.forEach { it.author = MyShiroSessionUtil.getUserNameFromSession() }
+        list.forEach { it.author = ShiroSessionUtil.getUserName() }
         return articleDao!!.baseInsertBatch(list)
     }
 
@@ -128,7 +128,7 @@ open class ArticleServiceImpl : ArticleService {
      */
     //@CacheEvict(value = "Article",allEntries = true)
     override fun doRemoveByUser(code: String): Int {
-        return articleDao!!.removeByUser(code, MyShiroSessionUtil.getUserCodeFromSession())
+        return articleDao!!.removeByUser(code, ShiroSessionUtil.getUserCode())
     }
 
     /**
@@ -138,8 +138,8 @@ open class ArticleServiceImpl : ArticleService {
      */
     //@CacheEvict(value = "Article",allEntries = true)
     override fun doUpdateByUser(article: Article): Int {
-        article.createBy = MyShiroSessionUtil.getUserCodeFromSession()
-        article.modifyBy = MyShiroSessionUtil.getUserCodeFromSession()
+        article.createBy = ShiroSessionUtil.getUserCode()
+        article.modifyBy = ShiroSessionUtil.getUserCode()
         return articleDao!!.updateByUser(article)
     }
 
@@ -150,7 +150,7 @@ open class ArticleServiceImpl : ArticleService {
      */
     //@Cacheable(value = "Article")
     override fun doFindByPageByUser(pageResult: PageResult<Article>): PageResult<Article> {
-        pageResult.entity!!.createBy = MyShiroSessionUtil.getUserCodeFromSession()
+        pageResult.entity!!.createBy = ShiroSessionUtil.getUserCode()
         val page = articleDao!!.findPageWithoutContent(pageResult)
         page.rows.forEach{ article ->
             articleClassifyDao!!.baseFindById(article.classify!!)?.let {

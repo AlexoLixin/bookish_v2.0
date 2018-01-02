@@ -16,7 +16,7 @@ class DslOperator(mongoClient: MongoClient,database:String){
 
     val mongoTemplate = MongoTemplate(mongoClient,database)
 
-    operator fun <T:Any> invoke(operation:DslOperator.() -> T):T{
+    operator fun <T> invoke(operation:DslOperator.() -> T):T{
         return operation()
     }
 

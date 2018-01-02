@@ -87,11 +87,11 @@ open class ArticleAndFileDaoImpl : ArticleAndFileDao {
             findOne<ArticleAndFile>(query("fileCode" eq uploadFile.code!!))
         }
         val article = dslOperator{
-            findById<Article>(articleAndFile.articleCode)
+            findById<Article>(articleAndFile!!.articleCode)
         }
         val articleClassify = dslOperator{
-            findById<ArticleClassify>(article.classify!!)
+            findById<ArticleClassify>(article!!.classify!!)
         }
-        uploadFile.link = articleClassify.name + "-" + article.title
+        uploadFile.link = articleClassify!!.name + "-" + article!!.title
     }
 }

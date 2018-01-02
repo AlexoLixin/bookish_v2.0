@@ -19,7 +19,7 @@ import kotlin.collections.HashMap
  * 文章分类service接口
  */
 interface ArticleCommentService : BaseService<ArticleComment> {
-    fun getTree():List<ArticleComment>
+    fun getTree(articleCode:String):List<ArticleComment>
 }
 
 /**
@@ -126,8 +126,8 @@ open class ArticleCommentServiceImpl : ArticleCommentService {
         return articleCommentDao!!.baseFindByPage(pageResult)
     }
 
-    override fun getTree(): List<ArticleComment> {
-        val all = articleCommentDao!!.baseFindAll()
+    override fun getTree(articleCode:String): List<ArticleComment> {
+        val all = articleCommentDao!!.findListByArticleCode(articleCode)
         val map = HashMap<String,ArticleComment>()
         all.forEach { map[it.code!!] = it }
         all.forEach { node ->

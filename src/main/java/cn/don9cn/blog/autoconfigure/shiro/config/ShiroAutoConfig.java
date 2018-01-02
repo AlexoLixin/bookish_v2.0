@@ -2,9 +2,9 @@ package cn.don9cn.blog.autoconfigure.shiro.config;
 
 import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroAuthcFilter;
 import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroRealm;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -48,7 +48,7 @@ public class ShiroAutoConfig {
         filterChainMap.put("/sockjs/msgWebSocket","anon");
         filterChainMap.put("/chatRoomWebSocket","anon");                        // 聊天室 webSocket
         filterChainMap.put("/sockjs/chatRoomWebSocket","anon");
-        filterChainMap.put("/bussiness/subscribe","anon");
+        filterChainMap.put("/bussiness/subscribe/public","anon");
 
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         // filterChainMap.put("/logout", "logout");
@@ -67,10 +67,10 @@ public class ShiroAutoConfig {
     }
 
     @Bean
-    public SecurityManager securityManager() {
+    public SecurityManager securityManager(MyShiroRealm myShiroRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 设置realm.
-        securityManager.setRealm(myShiroRealm());
+        securityManager.setRealm(myShiroRealm);
         return securityManager;
     }
 

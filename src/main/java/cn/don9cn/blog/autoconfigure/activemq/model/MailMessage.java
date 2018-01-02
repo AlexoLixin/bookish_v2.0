@@ -1,6 +1,6 @@
 package cn.don9cn.blog.autoconfigure.activemq.model;
 
-import cn.don9cn.blog.util.DateUtil;
+import cn.don9cn.blog.util.DateExtKt;
 
 /**
  * @Author: liuxindong
@@ -14,7 +14,7 @@ public class MailMessage implements MqMessage {
 
     private final String email;
 
-    private String createTime = DateUtil.getCreateDateString();
+    private String createTime = DateExtKt.getNowDate();
 
     public MailMessage(String username, String email) {
         this.username = username;

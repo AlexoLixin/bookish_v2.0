@@ -1,7 +1,7 @@
 package cn.don9cn.blog.autoconfigure.activemq.model;
 
-import cn.don9cn.blog.util.DateUtil;
 
+import cn.don9cn.blog.util.DateExtKt;
 
 /**
  * @Author: liuxindong
@@ -29,7 +29,7 @@ public class CommonMqMessage implements MqMessage {
     /**
      * 发布时间
      */
-    private String createTime = DateUtil.getCreateDateString();
+    private String createTime = DateExtKt.getNowDate();
 
     /**
      * 消息链接
