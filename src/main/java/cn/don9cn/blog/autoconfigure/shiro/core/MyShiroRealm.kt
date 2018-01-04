@@ -1,7 +1,5 @@
 package cn.don9cn.blog.autoconfigure.shiro.core
 
-import cn.don9cn.blog.autoconfigure.shiro.util.ShiroSessionUtil
-import cn.don9cn.blog.model.system.rbac.SysRole
 import cn.don9cn.blog.model.system.rbac.SysUser
 import cn.don9cn.blog.service.system.rbac.SysRoleService
 import cn.don9cn.blog.service.system.rbac.SysUserService
@@ -25,6 +23,10 @@ open class MyShiroRealm : AuthorizingRealm() {
     @Autowired
     private val sysRoleService: SysRoleService? = null
 
+    init {
+        this.cacheManager = MyShiroCacheManager.getInstance()
+    }
+
     /**
      * 用户授权(根据验证通过后的用户信息,在数据库中查找其对应的角色和权限,进行授权)
      * @param principalCollection
@@ -34,12 +36,11 @@ open class MyShiroRealm : AuthorizingRealm() {
 
         val username = super.getAvailablePrincipal(principalCollection) as String
 
-        // 1.从session中获取用户的权限信息
-        var info = ShiroSessionUtil.getAuthorizationInfo()
-        if (info == null) {
-            // 2.session中未缓存用户权限信息，从数据库查询，然后将结果放入session中作为缓存
+        val userCache = this.cacheManager.getCache<String,Any>(username)    //从cacheManager缓存管理器中获取用户缓存
+        var info = userCache.get("AuthorizationInfo")                       //获取用户授权信息缓存
+        if (info == null) {                                                 //缓存为null,重新查询
             info = SimpleAuthorizationInfo()
-            val user = ShiroSessionUtil.getUser()  //权限验证发生在登陆之后,所以此时session中是一定会有登录用户信息的
+            val user = userCache.get("UserBean") as? SysUser          //从缓存中获取用户实体
             user!!.roleCodes?.let { roleCodes_ ->
                 roleCodes_.forEach { roleCode ->
                     sysRoleService!!.findRoleWithPermissions(roleCode)?.let { role ->
@@ -50,9 +51,9 @@ open class MyShiroRealm : AuthorizingRealm() {
                     }
                 }
             }
-            setAuthorizationInfoToSession(info)
+            userCache.put("AuthorizationInfo",info)         //将从数据库新查询的用户授权信息放入缓存
         }
-        return info
+        return (info as SimpleAuthorizationInfo)
     }
 
     /**
@@ -66,21 +67,24 @@ open class MyShiroRealm : AuthorizingRealm() {
         val password = String(token.password)
 
         // 1.从session中获取用户认证信息
-        var userInfo = ShiroSessionUtil.getAuthenticationInfo()
-        if (userInfo == null) {
-            // 2.session中没有用户认证信息，查询数据库，重新验证用户
+        // 1.从cacheManager缓存管理器中获取用户缓存
+        val userCache = this.cacheManager.getCache<String,Any>(username)
+        var info = userCache.get("AuthenticationInfo")
+        if (info == null) {
+            // 2.缓存中没有用户认证信息，查询数据库，重新验证用户
             sysUserService!!.findByUserName(username)?.let {
                 if (it.password == password) {
-                    userInfo = SimpleAuthenticationInfo(username, password, this.name)
+                    info = SimpleAuthenticationInfo(username, password, this.name)
                     setUserToSession(it)
-                    setAuthenticationInfoToSession(userInfo!!)
+                    userCache.put("UserBean",it)                //将用户实体存入缓存
+                    userCache.put("AuthenticationInfo",info)    //将用户认证信息存入缓存
                 } else {
                     throw UnknownAccountException("用户名或密码验证失败")
                 }
             }?:throw UnknownAccountException("用户名或密码验证失败")
         }
 
-        return userInfo!!
+        return (info as SimpleAuthenticationInfo)
     }
 
 

@@ -1,6 +1,5 @@
 package cn.don9cn.blog.autoconfigure.shiro.core
 
-import cn.don9cn.blog.autoconfigure.shiro.util.ShiroSessionUtil
 import org.apache.shiro.SecurityUtils
 import java.io.IOException
 import javax.servlet.*
@@ -38,25 +37,28 @@ class MyShiroAuthcFilter : Filter {
         }
 
         val subject = SecurityUtils.getSubject()
+        println(subject.isRemembered)
 
-        if (subject.isAuthenticated) {
+        if (subject.isAuthenticated || subject.isRemembered) {
 
+            /*为实现自动登录,关闭实时token验证
             //已登录,检查用户token与当前用户是否一致
             val token = request.getHeader("authorization")
             // token不一致,提示重新登录
             if (ShiroSessionUtil.getToken() != token) {
-                response.sendRedirect(/*contextPath+*/"/login/reLogin")
+                response.sendRedirect("/login/reLogin")
                 return
-            }
+            }*/
+
             // 验证权限,无权限的话提示并禁止操作
             if (!subject.isPermitted(MyPermission(requestURI, requestMethod))) {
-                response.sendRedirect(/*contextPath+*/"/login/noPermission")
+                response.sendRedirect("/login/noPermission")
                 return
             }
 
         } else {
             // 未登录,提示登录
-            response.sendRedirect(/*contextPath+*/"/login/needLogin")
+            response.sendRedirect("/login/needLogin")
             return
         }
 

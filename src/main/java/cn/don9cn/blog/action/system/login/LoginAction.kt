@@ -92,7 +92,7 @@ open class LoginAction {
      */
     @RequestMapping("/doLogin")
     @Throws(IOException::class, ServletException::class)
-    open fun doLogin(username: String, password: String, validateCode: String, request: HttpServletRequest): LoginResult {
+    open fun doLogin(username: String, password: String, validateCode: String, rememberMe: Boolean, request: HttpServletRequest): LoginResult {
 
         //先校验验证码
         if (StringUtils.isBlank(validateCode)) {
@@ -110,14 +110,13 @@ open class LoginAction {
         val subject = SecurityUtils.getSubject()
 
         if (!subject.isAuthenticated) {
-            val token = UsernamePasswordToken(username, password)
+            val token = UsernamePasswordToken(username, password,rememberMe)
             try {
                 subject.login(token)
             } catch (e: Exception) {
                 sysLoginLogService!!.baseInsert(loginLog.withState("失败"))
                 return LoginResult(false, "用户名或者密码错误")
             }
-
         }
 
         sysLoginLogService!!.baseInsert(loginLog.withState("成功"))

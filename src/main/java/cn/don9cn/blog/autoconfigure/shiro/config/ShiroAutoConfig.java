@@ -1,10 +1,14 @@
 package cn.don9cn.blog.autoconfigure.shiro.config;
 
 import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroAuthcFilter;
+import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager;
 import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroRealm;
+import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -68,17 +72,33 @@ public class ShiroAutoConfig {
     }
 
     @Bean
-    public SecurityManager securityManager(MyShiroRealm myShiroRealm) {
+    public SecurityManager securityManager(CookieRememberMeManager cookieRememberMeManager,MyShiroRealm myShiroRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 设置realm.
         securityManager.setRealm(myShiroRealm);
+        // 设置缓存管理器
+        securityManager.setCacheManager(MyShiroCacheManager.getInstance());
+        // 设置rememberMe管理器
+        securityManager.setRememberMeManager(cookieRememberMeManager);
         return securityManager;
     }
 
     @Bean
     public MyShiroRealm myShiroRealm(){
-        MyShiroRealm myShiroRealm = new MyShiroRealm();
-        return myShiroRealm;
+        return new MyShiroRealm();
+    }
+
+    @Bean
+    public CookieRememberMeManager cookieRememberMeManager(){
+        SimpleCookie rememberMeCookie = new SimpleCookie();
+        rememberMeCookie.setName("rememberMe");
+        rememberMeCookie.setHttpOnly(true);
+        rememberMeCookie.setMaxAge(2592000);       //有效时间30天
+
+        CookieRememberMeManager manager = new CookieRememberMeManager();
+        manager.setCipherKey(Base64.decode("4AvVhmFLUs0KTA3Kprsdag=="));    //设置密钥
+        manager.setCookie(rememberMeCookie);    //设置cookie
+        return manager;
     }
 
 }
