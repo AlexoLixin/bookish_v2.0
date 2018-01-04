@@ -81,3 +81,10 @@ fileSavePath:
   serverUrl: http://localhost:9999
   serverRoot: E:/Apache24/htdocs
 
+# 关闭spring boot状态管理权限
+management:
+  security:
+    enabled: false
+
+
+

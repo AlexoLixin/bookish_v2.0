@@ -10,7 +10,7 @@ class PageResult<T:Any>:Serializable{
         private const val serialVersionUID = 1L
     }
 
-    constructor(nowPage:Int,pageSize:Int,orderBy:String){
+    constructor(nowPage:Int,pageSize:Int,orderBy:String?){
         this.nowPage = nowPage
         this.pageSize = pageSize
         this.skip = (nowPage - 1) * pageSize
@@ -18,11 +18,11 @@ class PageResult<T:Any>:Serializable{
         this.pageRequest = PageRequest(nowPage-1,pageSize,this.orderTurn,this.orderField)
     }
 
-    constructor(nowPage:Int,pageSize:Int,orderBy:String,entity:T):this(nowPage, pageSize, orderBy){
+    constructor(nowPage:Int,pageSize:Int,orderBy:String?,entity:T):this(nowPage, pageSize, orderBy){
         this.entity = entity
     }
 
-    constructor(nowPage:Int,pageSize:Int,startTime:String,endTime:String,orderBy:String,entity:T):this(nowPage, pageSize, orderBy, entity){
+    constructor(nowPage:Int,pageSize:Int,startTime:String?,endTime:String?,orderBy:String?,entity:T):this(nowPage, pageSize, orderBy, entity){
         this.startTime = startTime
         this.endTime = endTime
     }
@@ -40,13 +40,15 @@ class PageResult<T:Any>:Serializable{
     var rows: List<T> = emptyList()                         //查询结果集
     var pageRequest: PageRequest
 
-    private fun parseOrderBy(orderBy: String) {
-        val split = orderBy.split(" ".toRegex())
-        this.orderField = split[0]
-        when(split[1]){
-            "asc" -> this.orderTurn = Sort.Direction.ASC
-            "desc" -> this.orderTurn = Sort.Direction.DESC
-            else -> this.orderTurn = Sort.Direction.DESC
+    private fun parseOrderBy(orderBy: String?) {
+        orderBy?.let {
+            val split = orderBy.split(" ".toRegex())
+            this.orderField = split[0]
+            when(split[1]){
+                "asc" -> this@PageResult.orderTurn = Sort.Direction.ASC
+                "desc" -> this@PageResult.orderTurn = Sort.Direction.DESC
+                else -> this@PageResult.orderTurn = Sort.Direction.DESC
+            }
         }
     }
 

@@ -1,7 +1,7 @@
 package cn.don9cn.blog.dao.bussiness
 
 import cn.don9cn.blog.dao.BaseDao
-import cn.don9cn.blog.model.bussiness.ArticleClassify
+import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify
 import cn.don9cn.blog.support.mongo.ext.*
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Repository
@@ -103,7 +103,7 @@ open class ArticleClassifyDaoImpl : ArticleClassifyDao {
         }
         return dslOperator{
             updateOne<ArticleClassify>(
-                    createQueryByEntity(entity),
+                    createDefaultQuery(entity.code!!),
                     update
             )
         }

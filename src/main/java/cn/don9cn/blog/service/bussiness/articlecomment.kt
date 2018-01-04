@@ -7,7 +7,7 @@ import cn.don9cn.blog.autoconfigure.activemq.model.CommonMqMessage
 import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage
 import cn.don9cn.blog.dao.bussiness.ArticleCommentDao
 import cn.don9cn.blog.dao.bussiness.ArticleDao
-import cn.don9cn.blog.model.bussiness.ArticleComment
+import cn.don9cn.blog.model.bussiness.acticlecomment.ArticleComment
 import cn.don9cn.blog.service.BaseService
 import cn.don9cn.blog.util.UuidUtil
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,10 +30,10 @@ interface ArticleCommentService : BaseService<ArticleComment> {
 open class ArticleCommentServiceImpl : ArticleCommentService {
 
     @Autowired
-    private val articleCommentDao: ArticleCommentDao? = null
+    private var articleCommentDao: ArticleCommentDao? = null
 
     @Autowired
-    private val articleDao: ArticleDao? = null
+    private var articleDao: ArticleDao? = null
 
     //@CacheEvict(value = "ArticleClassify",allEntries = true)
     override fun baseInsert(entity: ArticleComment): Int {
@@ -43,9 +43,9 @@ open class ArticleCommentServiceImpl : ArticleCommentService {
         val x = articleCommentDao!!.baseInsert(entity)
         if(x > 0){
             //更新父节点
-            entity.parent.let {
-                if(it == "ROOT")
-                    articleCommentDao.updateParentForPush(it, code)
+            entity.parent?.let {
+                if(it != "ROOT")
+                    articleCommentDao!!.updateParentForPush(it, code)
             }
 
             //保存成功后推送消息到用户的个人消息队列
@@ -77,10 +77,10 @@ open class ArticleCommentServiceImpl : ArticleCommentService {
         removeNode?.let { node ->
             // 级联删除其子节点
             node.replyCodes.forEach {
-                articleCommentDao.baseDeleteById(it)
+                articleCommentDao!!.baseDeleteById(it)
             }
             // 更新父节点
-            articleCommentDao.updateParentForPull(node.parent!!, node.code!!)
+            articleCommentDao!!.updateParentForPull(node.parent!!, node.code!!)
             return 1
         }
         return 0
@@ -95,10 +95,10 @@ open class ArticleCommentServiceImpl : ArticleCommentService {
             removeNodes.forEach { node ->
                 // 级联删除其子节点
                 node.replyCodes.forEach {
-                    articleCommentDao.baseDeleteById(it)
+                    articleCommentDao!!.baseDeleteById(it)
                 }
                 // 更新父节点
-                articleCommentDao.updateParentForPull(node.parent!!, node.code!!)
+                articleCommentDao!!.updateParentForPull(node.parent!!, node.code!!)
             }
             return removeNodes.size
         } else {
@@ -128,7 +128,7 @@ open class ArticleCommentServiceImpl : ArticleCommentService {
 
     override fun getTree(articleCode:String): List<ArticleComment> {
         val all = articleCommentDao!!.findListByArticleCode(articleCode)
-        val map = HashMap<String,ArticleComment>()
+        val map = HashMap<String, ArticleComment>()
         all.forEach { map[it.code!!] = it }
         all.forEach { node ->
             node.replyCodes.forEach {

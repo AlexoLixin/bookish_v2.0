@@ -2,23 +2,23 @@ package cn.don9cn.blog.action.system.rbac
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.action.BaseAction
-import cn.don9cn.blog.model.system.SysPermission
+import cn.don9cn.blog.model.system.rbac.SysPermission
 import cn.don9cn.blog.service.system.rbac.SysPermissionService
 import cn.don9cn.blog.support.action.ActionMsg
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping(value = "/system/rbac/permission")
+@RequestMapping(value = ["/system/rbac/permission"])
 open class SysPermissionAction : BaseAction<SysPermission>() {
 
     @Autowired
-    private val sysPermissionService: SysPermissionService? = null
+    private var sysPermissionService: SysPermissionService? = null
 
 
     @PostMapping
-    override fun baseInsert(sysPermission: SysPermission): ActionMsg {
-        return super.insert(sysPermissionService!!.baseInsert(sysPermission))
+    override fun baseInsert(t: SysPermission): ActionMsg {
+        return super.insert(sysPermissionService!!.baseInsert(t))
     }
 
     override fun baseInsertBatch(list: List<SysPermission>): ActionMsg {
@@ -26,8 +26,8 @@ open class SysPermissionAction : BaseAction<SysPermission>() {
     }
 
     @PutMapping
-    override fun baseUpdate(sysPermission: SysPermission): ActionMsg {
-        return super.update(sysPermissionService!!.baseUpdate(sysPermission))
+    override fun baseUpdate(t: SysPermission): ActionMsg {
+        return super.update(sysPermissionService!!.baseUpdate(t))
     }
 
     override fun baseRemove(code: String): ActionMsg {
@@ -50,17 +50,17 @@ open class SysPermissionAction : BaseAction<SysPermission>() {
     }
 
     @GetMapping("/list")
-    override fun baseFindListByParams(sysPermission: SysPermission): ActionMsg {
-        return super.find(sysPermissionService!!.baseFindListByParams(sysPermission))
+    override fun baseFindListByParams(t: SysPermission): ActionMsg {
+        return super.find(sysPermissionService!!.baseFindListByParams(t))
     }
 
     @GetMapping("/page")
-    override fun baseFindByPage(page: Int, limit: Int, startTime: String, endTime: String, orderBy: String, sysPermission: SysPermission): ActionMsg {
-        return super.find(sysPermissionService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, sysPermission)))
+    override fun baseFindByPage(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, t: SysPermission): ActionMsg {
+        return super.find(sysPermissionService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, t)))
     }
 
     @GetMapping("/tree")
-    fun getTree():ActionMsg{
+    open fun getTree():ActionMsg{
         return super.find(sysPermissionService!!.getTree())
     }
 }

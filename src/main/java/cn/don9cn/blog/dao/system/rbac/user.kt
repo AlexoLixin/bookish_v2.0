@@ -1,7 +1,7 @@
 package cn.don9cn.blog.dao.system.rbac
 
 import cn.don9cn.blog.dao.BaseDao
-import cn.don9cn.blog.model.system.SysUser
+import cn.don9cn.blog.model.system.rbac.SysUser
 import cn.don9cn.blog.support.mongo.ext.eq
 import cn.don9cn.blog.support.mongo.ext.query
 import org.springframework.data.mongodb.core.query.Criteria
@@ -52,11 +52,11 @@ open class SysUserDaoImpl : SysUserDao {
      * @return
      */
     override fun checkUserName(username: String): Boolean {
-        dslOperator.mongoTemplate.count(query("username" eq username),SysUserDao::class.java).let {
+        dslOperator.mongoTemplate.count(query("username" eq username),SysUser::class.java).let {
             if(it > 0){
-                return true
+                return false
             }
-            return false
+            return true
         }
     }
 

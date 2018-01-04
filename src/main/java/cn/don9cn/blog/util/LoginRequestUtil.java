@@ -1,6 +1,6 @@
 package cn.don9cn.blog.util;
 
-import cn.don9cn.blog.model.system.SysLoginLog;
+import cn.don9cn.blog.model.system.log.SysLoginLog;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;

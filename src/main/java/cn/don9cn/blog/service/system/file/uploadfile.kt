@@ -3,7 +3,7 @@ package cn.don9cn.blog.service.system.file
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.bussiness.ArticleAndFileDao
 import cn.don9cn.blog.dao.system.file.UploadFileDao
-import cn.don9cn.blog.model.system.UploadFile
+import cn.don9cn.blog.model.system.file.UploadFile
 import cn.don9cn.blog.service.BaseService
 import cn.don9cn.blog.util.UuidUtil
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,10 +33,10 @@ interface UploadFileService : BaseService<UploadFile> {
 open class UploadFileServiceImpl : UploadFileService {
 
     @Autowired
-    private val uploadFileDao: UploadFileDao? = null
+    private var uploadFileDao: UploadFileDao? = null
 
     @Autowired
-    private val articleAndFileDao: ArticleAndFileDao? = null
+    private var articleAndFileDao: ArticleAndFileDao? = null
 
 
     override fun baseInsert(entity: UploadFile): Int {

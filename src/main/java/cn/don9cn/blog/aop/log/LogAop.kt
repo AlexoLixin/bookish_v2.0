@@ -1,7 +1,7 @@
 package cn.don9cn.blog.aop.log
 
-import cn.don9cn.blog.model.system.SysExceptionLog
-import cn.don9cn.blog.model.system.SysOperaLog
+import cn.don9cn.blog.model.system.log.SysExceptionLog
+import cn.don9cn.blog.model.system.log.SysOperaLog
 import cn.don9cn.blog.service.system.log.SysExceptionLogService
 import cn.don9cn.blog.service.system.log.SysOperaLogService
 import cn.don9cn.blog.support.action.ActionMsg
@@ -76,9 +76,9 @@ open class OperaAndExceptionLogAop {
 
     @Around("logPoint()")
     @Throws(Throwable::class)
-    fun aroundExec(pjp: ProceedingJoinPoint): Any {
+    fun aroundExec(pjp: ProceedingJoinPoint): Any? {
 
-        val obj = pjp.proceed()
+        val obj:Any? = pjp.proceed()
 
         // 根据操作的结果判断是否操作成功
         checkProceedResult(obj)
@@ -90,7 +90,7 @@ open class OperaAndExceptionLogAop {
      * 根据操作的结果判断是否操作成功
      * @param obj
      */
-    private fun checkProceedResult(obj: Any) {
+    private fun checkProceedResult(obj: Any?) {
         val sysOperaLog = sysOperaLogThreadLocal.get()
         sysOperaLog?.let { log ->
             if(log.ignoreSave == "N"){

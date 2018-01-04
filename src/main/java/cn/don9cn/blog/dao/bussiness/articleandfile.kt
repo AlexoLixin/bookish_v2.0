@@ -4,10 +4,10 @@ import cn.don9cn.blog.support.mongo.ext.eq
 import cn.don9cn.blog.support.mongo.ext.inThe
 import cn.don9cn.blog.support.mongo.ext.query
 import cn.don9cn.blog.dao.BaseDao
-import cn.don9cn.blog.model.bussiness.Article
-import cn.don9cn.blog.model.bussiness.ArticleAndFile
-import cn.don9cn.blog.model.bussiness.ArticleClassify
-import cn.don9cn.blog.model.system.UploadFile
+import cn.don9cn.blog.model.bussiness.article.Article
+import cn.don9cn.blog.model.bussiness.article.ArticleAndFile
+import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify
+import cn.don9cn.blog.model.system.file.UploadFile
 import org.springframework.stereotype.Repository
 
 interface ArticleAndFileDao : BaseDao<ArticleAndFile> {
@@ -72,7 +72,7 @@ open class ArticleAndFileDaoImpl : ArticleAndFileDao {
      * @return
      */
     override fun insertBatch(article: Article): Int {
-        val list = article.files!!.split(",".toRegex()).map { ArticleAndFile(article.code!!,it) }.toList()
+        val list = article.files!!.split(",".toRegex()).map { ArticleAndFile(article.code!!, it) }.toList()
         return dslOperator{
             insertBatch(list)
         }

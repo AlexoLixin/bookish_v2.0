@@ -1,7 +1,7 @@
 package cn.don9cn.blog.dao.system.rbac
 
 import cn.don9cn.blog.dao.BaseDao
-import cn.don9cn.blog.model.system.SysPermission
+import cn.don9cn.blog.model.system.rbac.SysPermission
 import cn.don9cn.blog.support.mongo.ext.*
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Repository

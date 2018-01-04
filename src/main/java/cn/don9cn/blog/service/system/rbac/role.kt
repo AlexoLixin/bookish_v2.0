@@ -3,7 +3,7 @@ package cn.don9cn.blog.service.system.rbac
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.system.rbac.SysPermissionDao
 import cn.don9cn.blog.dao.system.rbac.SysRoleDao
-import cn.don9cn.blog.model.system.SysRole
+import cn.don9cn.blog.model.system.rbac.SysRole
 import cn.don9cn.blog.service.BaseService
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,10 +39,10 @@ interface SysRoleService : BaseService<SysRole> {
 open class SysRoleServiceImpl : SysRoleService {
 
     @Autowired
-    private val sysRoleDao: SysRoleDao? = null
+    private var sysRoleDao: SysRoleDao? = null
 
     @Autowired
-    private val sysPermissionDao: SysPermissionDao? = null
+    private var sysPermissionDao: SysPermissionDao? = null
 
 
     override fun baseInsert(entity: SysRole): Int {

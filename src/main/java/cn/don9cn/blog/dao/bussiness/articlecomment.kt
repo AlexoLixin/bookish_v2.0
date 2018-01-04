@@ -2,7 +2,7 @@ package cn.don9cn.blog.dao.bussiness
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.BaseDao
-import cn.don9cn.blog.model.bussiness.ArticleComment
+import cn.don9cn.blog.model.bussiness.acticlecomment.ArticleComment
 import cn.don9cn.blog.support.mongo.ext.*
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.query.Criteria
@@ -88,7 +88,7 @@ open class ArticleCommentDaoImpl : ArticleCommentDao {
         return dslOperator{
             updateOne<ArticleComment>(
                     query("_id" eq code),
-                    update("childrenCodes" push child)
+                    update("replyCodes" push child)
             )
         }
     }

@@ -1,7 +1,7 @@
 package cn.don9cn.blog.dao.system.file
 
 import cn.don9cn.blog.dao.BaseDao
-import cn.don9cn.blog.model.system.UploadFile
+import cn.don9cn.blog.model.system.file.UploadFile
 import org.springframework.stereotype.Repository
 
 /**

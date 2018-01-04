@@ -3,7 +3,7 @@ package cn.don9cn.blog.action.system.upload
 import cn.don9cn.blog.annotation.SkipOperaLog
 import cn.don9cn.blog.autoconfigure.filepath.FileSavePathConfig
 import cn.don9cn.blog.exception.ExceptionWrapper
-import cn.don9cn.blog.model.system.UploadFile
+import cn.don9cn.blog.model.system.file.UploadFile
 import cn.don9cn.blog.service.system.file.UploadFileService
 import cn.don9cn.blog.support.action.ActionMsg
 import cn.don9cn.blog.support.vue.VueImageUploadMsg
@@ -21,14 +21,14 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-@RequestMapping(value = "/system/upload")
+@RequestMapping(value = ["/system/upload"])
 open class UploadAction {
 
     @Autowired
-    private val uploadFileService: UploadFileService? = null
+    private var uploadFileService: UploadFileService? = null
 
     @Autowired
-    private val fileSavePathConfig: FileSavePathConfig? = null
+    private var fileSavePathConfig: FileSavePathConfig? = null
 
     /**
      * 图片上传
@@ -36,7 +36,7 @@ open class UploadAction {
      * @return
      */
     @PostMapping("/image")
-    fun doImageUpload(request: HttpServletRequest): VueImageUploadMsg {
+    open fun doImageUpload(request: HttpServletRequest): VueImageUploadMsg {
 
         val images = (request as MultipartHttpServletRequest).getFiles("imageName")
 
@@ -66,7 +66,7 @@ open class UploadAction {
      * @return
      */
     @PostMapping("/file")
-    fun doFileUpload(@RequestParam("file") file: CommonsMultipartFile?): Any {
+    open fun doFileUpload(@RequestParam("file") file: CommonsMultipartFile?): Any {
         return file?.let { file_ ->
             //将文件保存至服务器
             val uploadFile = FileSaveUtil.saveFile(file_, fileSavePathConfig!!)
@@ -83,7 +83,7 @@ open class UploadAction {
      * @return
      */
     @PostMapping("/fileBatch")
-    fun doFileUploadBatch(request: HttpServletRequest): Any {
+    open fun doFileUploadBatch(request: HttpServletRequest): Any {
 
         val files = (request as MultipartHttpServletRequest).getFiles("files")
 
@@ -118,7 +118,7 @@ open class UploadAction {
      */
     @SkipOperaLog
     @GetMapping("/fileDownLoad")
-    fun doDownload(code: String, response: HttpServletResponse) {
+    open fun doDownload(code: String, response: HttpServletResponse) {
         val uploadFile = uploadFileService!!.baseFindById(code)
         uploadFile?.let {   file ->
             try {

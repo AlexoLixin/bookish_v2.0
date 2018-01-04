@@ -2,31 +2,31 @@ package cn.don9cn.blog.action.bussiness.article
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.action.BaseAction
-import cn.don9cn.blog.model.bussiness.ArticleComment
+import cn.don9cn.blog.model.bussiness.acticlecomment.ArticleComment
 import cn.don9cn.blog.service.bussiness.ArticleCommentService
 import cn.don9cn.blog.support.action.ActionMsg
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping(value = "/bussiness/articleComment")
+@RequestMapping(value = ["/bussiness/articleComment"])
 open class ArticleCommentAction : BaseAction<ArticleComment>() {
 
     @Autowired
-    private val articleCommentService: ArticleCommentService? = null
+    private var articleCommentService: ArticleCommentService? = null
 
 
     @PostMapping("", "/insert/public")
-    override fun baseInsert(articleComment: ArticleComment): ActionMsg {
-        return super.insert(articleCommentService!!.baseInsert(articleComment))
+    override fun baseInsert(t: ArticleComment): ActionMsg {
+        return super.insert(articleCommentService!!.baseInsert(t))
     }
 
     override fun baseInsertBatch(list: List<ArticleComment>): ActionMsg {
         return super.insert(articleCommentService!!.baseInsertBatch(list))
     }
 
-    override fun baseUpdate(articleComment: ArticleComment): ActionMsg {
-        return super.update(articleCommentService!!.baseUpdate(articleComment))
+    override fun baseUpdate(t: ArticleComment): ActionMsg {
+        return super.update(articleCommentService!!.baseUpdate(t))
     }
 
     @DeleteMapping
@@ -47,13 +47,13 @@ open class ArticleCommentAction : BaseAction<ArticleComment>() {
         return super.find(articleCommentService!!.baseFindAll())
     }
 
-    override fun baseFindListByParams(articleComment: ArticleComment): ActionMsg {
-        return super.find(articleCommentService!!.baseFindListByParams(articleComment))
+    override fun baseFindListByParams(t: ArticleComment): ActionMsg {
+        return super.find(articleCommentService!!.baseFindListByParams(t))
     }
 
     @GetMapping("/page")
-    override fun baseFindByPage(page: Int, limit: Int, startTime: String, endTime: String, orderBy: String, articleComment: ArticleComment): ActionMsg {
-        return super.find(articleCommentService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, articleComment)))
+    override fun baseFindByPage(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, t: ArticleComment): ActionMsg {
+        return super.find(articleCommentService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, t)))
     }
 
     /**
@@ -61,7 +61,7 @@ open class ArticleCommentAction : BaseAction<ArticleComment>() {
      * @return
      */
     @GetMapping("/tree/public")
-    fun getTree(articleCode: String): ActionMsg {
+    open fun getTree(articleCode: String): ActionMsg {
         return super.find(articleCommentService!!.getTree(articleCode))
     }
 }

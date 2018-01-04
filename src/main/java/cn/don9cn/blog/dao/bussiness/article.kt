@@ -5,7 +5,7 @@ import cn.don9cn.blog.support.mongo.ext.eq
 import cn.don9cn.blog.support.mongo.ext.query
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.BaseDao
-import cn.don9cn.blog.model.bussiness.Article
+import cn.don9cn.blog.model.bussiness.article.Article
 import com.alibaba.fastjson.JSON
 import com.mongodb.BasicDBObject
 import org.springframework.data.mongodb.core.query.BasicQuery
@@ -96,7 +96,7 @@ open class ArticleDaoImpl:ArticleDao {
         val query = BasicDBObject.parse(JSON.toJSONString(entity))
         val fields = BasicDBObject("content", false)
         val resultQuery = BasicQuery(query, fields)
-        return dslOperator.findList(resultQuery,Article::class.java)
+        return dslOperator.findList(resultQuery, Article::class.java)
     }
 
 

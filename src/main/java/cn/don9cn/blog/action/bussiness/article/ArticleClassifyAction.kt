@@ -2,8 +2,9 @@ package cn.don9cn.blog.action.bussiness.article
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.action.BaseAction
-import cn.don9cn.blog.model.bussiness.ArticleClassify
+import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify
 import cn.don9cn.blog.service.bussiness.ArticleClassifyService
+import cn.don9cn.blog.service.bussiness.ArticleService
 import cn.don9cn.blog.support.action.ActionMsg
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.*
 open class ArticleClassifyAction : BaseAction<ArticleClassify>() {
 
     @Autowired
-    private val articleClassifyService: ArticleClassifyService? = null
+    private var articleClassifyService: ArticleClassifyService? = null
+
 
 
     @PostMapping
@@ -55,7 +57,7 @@ open class ArticleClassifyAction : BaseAction<ArticleClassify>() {
     }
 
     @GetMapping("/page")
-    override fun baseFindByPage(page: Int, limit: Int, startTime: String, endTime: String, orderBy: String, articleClassify: ArticleClassify): ActionMsg {
+    override fun baseFindByPage(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, articleClassify: ArticleClassify): ActionMsg {
         return super.find(articleClassifyService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, articleClassify)))
     }
 
@@ -63,7 +65,7 @@ open class ArticleClassifyAction : BaseAction<ArticleClassify>() {
      * 获取分类树
      */
     @GetMapping(path = ["/tree", "/tree/public"])
-    fun getTree():ActionMsg{
+    open fun getTree():ActionMsg{
         return super.find(articleClassifyService!!.getTree())
     }
 
@@ -71,7 +73,7 @@ open class ArticleClassifyAction : BaseAction<ArticleClassify>() {
      * 获取分类下拉列表
      */
     @GetMapping("/selectOptions")
-    fun doGetSelectOptions(): ActionMsg {
+    open fun doGetSelectOptions(): ActionMsg {
         return super.find(articleClassifyService!!.doGetSelectOptions())
     }
 

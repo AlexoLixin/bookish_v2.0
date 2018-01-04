@@ -4,8 +4,10 @@ import cn.don9cn.blog.support.mongo.ext.inThe
 import cn.don9cn.blog.support.mongo.ext.query
 import cn.booklish.mongodsl.core.DslOperator
 import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.autoconfigure.shiro.util.ShiroSessionUtil
 import cn.don9cn.blog.model.BaseModel
 import cn.don9cn.blog.support.mongo.core.DaoHelper
+import cn.don9cn.blog.util.getNowDate
 import java.lang.reflect.ParameterizedType
 
 
@@ -33,6 +35,8 @@ interface BaseDao<T:BaseModel> {
      * @return
      */
     fun baseInsert(entity: T): Int {
+        entity.createTime = getNowDate()
+        entity.createBy = ShiroSessionUtil.getUserCode()
         return dslOperator.insertOne(entity)
     }
 
@@ -41,6 +45,10 @@ interface BaseDao<T:BaseModel> {
      * @return
      */
     fun baseInsertBatch(list: List<T>): Int {
+        list.forEach {
+            it.createTime = getNowDate()
+            it.createBy = ShiroSessionUtil.getUserCode()
+        }
         return dslOperator.insertBatch(list)
     }
 
@@ -50,6 +58,8 @@ interface BaseDao<T:BaseModel> {
      * @return
      */
     fun baseUpdate(entity: T): Int {
+        entity.modifyTime = getNowDate()
+        entity.modifyBy = ShiroSessionUtil.getUserCode()
         return dslOperator.updateById(entity.code!!,entity)
     }
 

@@ -2,8 +2,8 @@ package cn.don9cn.blog.action.system.rbac
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.action.BaseAction
-import cn.don9cn.blog.model.system.RegisterResult
-import cn.don9cn.blog.model.system.SysUser
+import cn.don9cn.blog.model.system.rbac.RegisterResult
+import cn.don9cn.blog.model.system.rbac.SysUser
 import cn.don9cn.blog.service.system.rbac.SysUserService
 import cn.don9cn.blog.support.action.ActionMsg
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-@RequestMapping(value = "/system/rbac/user")
+@RequestMapping(value = ["/system/rbac/user"])
 open class SysUserAction : BaseAction<SysUser>() {
 
     @Autowired
-    private val sysUserService: SysUserService? = null
+    private var sysUserService: SysUserService? = null
 
     @PostMapping
-    override fun baseInsert(sysUser: SysUser): ActionMsg {
-        return super.insert(sysUserService!!.baseInsert(sysUser))
+    override fun baseInsert(t: SysUser): ActionMsg {
+        return super.insert(sysUserService!!.baseInsert(t))
     }
 
     override fun baseInsertBatch(list: List<SysUser>): ActionMsg {
@@ -27,8 +27,8 @@ open class SysUserAction : BaseAction<SysUser>() {
     }
 
     @PutMapping
-    override fun baseUpdate(sysUser: SysUser): ActionMsg {
-        return super.update(sysUserService!!.baseUpdate(sysUser))
+    override fun baseUpdate(t: SysUser): ActionMsg {
+        return super.update(sysUserService!!.baseUpdate(t))
     }
 
     @DeleteMapping
@@ -52,17 +52,17 @@ open class SysUserAction : BaseAction<SysUser>() {
     }
 
     @GetMapping("/list")
-    override fun baseFindListByParams(sysUser: SysUser): ActionMsg {
-        return super.find(sysUserService!!.baseFindListByParams(sysUser))
+    override fun baseFindListByParams(t: SysUser): ActionMsg {
+        return super.find(sysUserService!!.baseFindListByParams(t))
     }
 
     @GetMapping("/page")
-    override fun baseFindByPage(page: Int, limit: Int, startTime: String, endTime: String, orderBy: String, sysUser: SysUser): ActionMsg {
-        return super.find(sysUserService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, sysUser)))
+    override fun baseFindByPage(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, t: SysUser): ActionMsg {
+        return super.find(sysUserService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, t)))
     }
 
     @GetMapping("/checkName")
-    fun checkUserName(username: String): ActionMsg {
+    open fun checkUserName(username: String): ActionMsg {
         return when(sysUserService!!.checkUserName(username)){
             true -> ActionMsg(true,"用户名可用")
             false -> ActionMsg(false,"用户名不可用")
@@ -70,17 +70,22 @@ open class SysUserAction : BaseAction<SysUser>() {
     }
 
     @PostMapping("/register")
-    fun register(validateCode: String, sysUser: SysUser, request: HttpServletRequest): RegisterResult {
+    open fun register(validateCode: String, sysUser: SysUser, request: HttpServletRequest): RegisterResult {
         return sysUserService!!.register(validateCode, sysUser, request)
     }
 
     @PutMapping("/authorize")
-    fun authorizeUser(userCode: String, roleCodes: String): ActionMsg {
+    open fun authorizeUser(userCode: String, roleCodes: String): ActionMsg {
         return super.update(sysUserService!!.authorizeUser(userCode, roleCodes))
     }
 
+    @GetMapping("/byUser")
+    open fun getUserInfo(): ActionMsg {
+        return super.find(sysUserService!!.getUserInfo())
+    }
+
     @PutMapping("/byUser")
-    fun updateUserInfo(sysUser: SysUser): ActionMsg {
+    open fun updateUserInfo(sysUser: SysUser): ActionMsg {
         return super.update(sysUserService!!.updateUserInfo(sysUser))
     }
 }

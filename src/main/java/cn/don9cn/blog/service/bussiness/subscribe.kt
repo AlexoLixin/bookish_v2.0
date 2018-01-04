@@ -2,7 +2,7 @@ package cn.don9cn.blog.service.bussiness
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.bussiness.SubscribeInfoDao
-import cn.don9cn.blog.model.bussiness.SubscribeInfo
+import cn.don9cn.blog.model.bussiness.subscribe.SubscribeInfo
 import cn.don9cn.blog.service.BaseService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

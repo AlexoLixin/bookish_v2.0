@@ -2,7 +2,7 @@ package cn.don9cn.blog.service.system.log
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.system.log.SysExceptionLogDao
-import cn.don9cn.blog.model.system.SysExceptionLog
+import cn.don9cn.blog.model.system.log.SysExceptionLog
 import cn.don9cn.blog.service.BaseService
 import cn.don9cn.blog.service.system.rbac.SysUserService
 import cn.don9cn.blog.util.*
@@ -32,10 +32,10 @@ interface SysExceptionLogService : BaseService<SysExceptionLog> {
 open class SysExceptionLogServiceImpl : SysExceptionLogService {
 
     @Autowired
-    private val sysExceptionLogDao: SysExceptionLogDao? = null
+    private var sysExceptionLogDao: SysExceptionLogDao? = null
 
     @Autowired
-    private val sysUserService: SysUserService? = null
+    private var sysUserService: SysUserService? = null
 
 
     override fun baseInsert(entity: SysExceptionLog): Int {

@@ -1,6 +1,6 @@
 package cn.don9cn.blog.autoconfigure.shiro.util
 
-import cn.don9cn.blog.model.system.SysUser
+import cn.don9cn.blog.model.system.rbac.SysUser
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.SimpleAuthenticationInfo
 import org.apache.shiro.authz.SimpleAuthorizationInfo

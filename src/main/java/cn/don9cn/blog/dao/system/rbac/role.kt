@@ -1,7 +1,7 @@
 package cn.don9cn.blog.dao.system.rbac
 
 import cn.don9cn.blog.dao.BaseDao
-import cn.don9cn.blog.model.system.SysRole
+import cn.don9cn.blog.model.system.rbac.SysRole
 import cn.don9cn.blog.support.mongo.ext.eq
 import cn.don9cn.blog.support.mongo.ext.query
 import org.springframework.stereotype.Repository

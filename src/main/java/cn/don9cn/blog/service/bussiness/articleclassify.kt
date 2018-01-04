@@ -2,7 +2,7 @@ package cn.don9cn.blog.service.bussiness
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.bussiness.ArticleClassifyDao
-import cn.don9cn.blog.model.bussiness.ArticleClassify
+import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify
 import cn.don9cn.blog.service.BaseService
 import cn.don9cn.blog.support.vue.VueSelectOption
 import cn.don9cn.blog.util.UuidUtil
@@ -30,7 +30,7 @@ interface ArticleClassifyService : BaseService<ArticleClassify> {
 open class ArticleClassifyServiceImpl : ArticleClassifyService {
 
     @Autowired
-    private val articleClassifyDao: ArticleClassifyDao? = null
+    private var articleClassifyDao: ArticleClassifyDao? = null
 
     //@CacheEvict(value = "ArticleClassify",allEntries = true)
     override fun baseInsert(entity: ArticleClassify): Int {
@@ -39,9 +39,9 @@ open class ArticleClassifyServiceImpl : ArticleClassifyService {
         //保存当前节点
         val x = articleClassifyDao!!.baseInsert(entity)
         if(x > 0){
-            entity.parent.let {
-                if(it == "ROOT")
-                    articleClassifyDao.updateParentForPush(it, code)
+            entity.parent?.let {
+                if(it != "ROOT")
+                    articleClassifyDao!!.updateParentForPush(it, code)
             }
         }
         return x
@@ -71,10 +71,10 @@ open class ArticleClassifyServiceImpl : ArticleClassifyService {
             removeNodes.forEach { node ->
                 // 级联删除其子节点
                 node.childrenCodes.forEach {
-                    articleClassifyDao.baseDeleteById(it)
+                    articleClassifyDao!!.baseDeleteById(it)
                 }
                 // 更新父节点
-                articleClassifyDao.updateParentForPull(node.parent!!, node.code!!)
+                articleClassifyDao!!.updateParentForPull(node.parent!!, node.code!!)
             }
             return removeNodes.size
         } else {
@@ -104,7 +104,7 @@ open class ArticleClassifyServiceImpl : ArticleClassifyService {
 
     override fun getTree(): List<ArticleClassify> {
         val all = articleClassifyDao!!.baseFindAll()
-        val map = HashMap<String,ArticleClassify>()
+        val map = HashMap<String, ArticleClassify>()
         all.forEach { map[it.code!!] = it }
         all.forEach { node ->
             node.childrenCodes.forEach {
@@ -123,7 +123,7 @@ open class ArticleClassifyServiceImpl : ArticleClassifyService {
     //@Cacheable(value = "ArticleClassify")
     override fun doGetSelectOptions(): List<VueSelectOption> {
         val all = articleClassifyDao!!.baseFindAll()
-        val map = HashMap<String,ArticleClassify>()
+        val map = HashMap<String, ArticleClassify>()
         val result = arrayListOf<VueSelectOption>()
         all.forEach { map[it.code!!] = it }
         all.filter { it.childrenCodes.isNotEmpty() }

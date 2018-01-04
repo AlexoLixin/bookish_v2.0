@@ -2,8 +2,8 @@ package cn.don9cn.blog.aop.log
 
 import cn.don9cn.blog.annotation.SkipOperaLog
 import cn.don9cn.blog.autoconfigure.shiro.util.ShiroSessionUtil
-import cn.don9cn.blog.model.system.SysExceptionLog
-import cn.don9cn.blog.model.system.SysOperaLog
+import cn.don9cn.blog.model.system.log.SysExceptionLog
+import cn.don9cn.blog.model.system.log.SysOperaLog
 import org.aspectj.lang.JoinPoint
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes

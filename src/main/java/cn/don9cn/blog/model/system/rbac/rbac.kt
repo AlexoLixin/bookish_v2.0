@@ -1,4 +1,4 @@
-package cn.don9cn.blog.model.system
+package cn.don9cn.blog.model.system.rbac
 
 import cn.don9cn.blog.model.BaseModel
 import java.util.ArrayList

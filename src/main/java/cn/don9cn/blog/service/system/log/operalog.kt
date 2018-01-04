@@ -2,7 +2,7 @@ package cn.don9cn.blog.service.system.log
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.system.log.SysOperaLogDao
-import cn.don9cn.blog.model.system.SysOperaLog
+import cn.don9cn.blog.model.system.log.SysOperaLog
 import cn.don9cn.blog.service.BaseService
 import cn.don9cn.blog.service.system.rbac.SysUserService
 import cn.don9cn.blog.util.ago
@@ -31,10 +31,10 @@ interface SysOperaLogService : BaseService<SysOperaLog> {
 open class SysOperaLogServiceImpl : SysOperaLogService {
 
     @Autowired
-    private val sysOperaLogDao: SysOperaLogDao? = null
+    private var sysOperaLogDao: SysOperaLogDao? = null
 
     @Autowired
-    private val sysUserService: SysUserService? = null
+    private var sysUserService: SysUserService? = null
 
 
     override fun baseInsert(entity: SysOperaLog): Int {

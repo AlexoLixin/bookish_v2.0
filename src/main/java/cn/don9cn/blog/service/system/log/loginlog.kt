@@ -2,7 +2,7 @@ package cn.don9cn.blog.service.system.log
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.system.log.SysLoginLogDao
-import cn.don9cn.blog.model.system.SysLoginLog
+import cn.don9cn.blog.model.system.log.SysLoginLog
 import cn.don9cn.blog.service.BaseService
 import cn.don9cn.blog.util.ago
 import cn.don9cn.blog.util.days
@@ -30,7 +30,7 @@ interface SysLoginLogService : BaseService<SysLoginLog> {
 open class SysLoginLogServiceImpl : SysLoginLogService {
 
     @Autowired
-    private val sysLoginLogDao: SysLoginLogDao? = null
+    private var sysLoginLogDao: SysLoginLogDao? = null
 
 
     override fun baseInsert(entity: SysLoginLog): Int {

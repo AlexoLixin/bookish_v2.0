@@ -7,7 +7,7 @@ import cn.don9cn.blog.dao.bussiness.ArticleAndFileDao
 import cn.don9cn.blog.dao.bussiness.ArticleClassifyDao
 import cn.don9cn.blog.dao.bussiness.ArticleDao
 import cn.don9cn.blog.dao.system.file.UploadFileDao
-import cn.don9cn.blog.model.bussiness.Article
+import cn.don9cn.blog.model.bussiness.article.Article
 import cn.don9cn.blog.service.BaseService
 import cn.don9cn.blog.util.UuidUtil
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,19 +32,19 @@ interface ArticleService : BaseService<Article> {
 open class ArticleServiceImpl : ArticleService {
 
     @Autowired
-    private val articleDao: ArticleDao? = null
+    private var articleDao: ArticleDao? = null
 
     @Autowired
-    private val articleClassifyDao: ArticleClassifyDao? = null
+    private var articleClassifyDao: ArticleClassifyDao? = null
 
     @Autowired
-    private val uploadFileDao: UploadFileDao? = null
+    private var uploadFileDao: UploadFileDao? = null
 
     @Autowired
-    private val articleAndFileDao: ArticleAndFileDao? = null
+    private var articleAndFileDao: ArticleAndFileDao? = null
 
     @Autowired
-    private val mqConstant: MqConstant? = null
+    private var mqConstant: MqConstant? = null
 
     //@CacheEvict(value = "Article",allEntries = true)
     override fun baseInsert(entity: Article): Int {
@@ -66,7 +66,7 @@ open class ArticleServiceImpl : ArticleService {
     override fun baseUpdate(entity: Article): Int {
         articleAndFileDao!!.deleteByArticleCode(entity.code!!)
         entity.files?.isNotBlank().let {
-            articleAndFileDao.insertBatch(entity)
+            articleAndFileDao!!.insertBatch(entity)
         }
         return articleDao!!.baseUpdate(entity)
     }

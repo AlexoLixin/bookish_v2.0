@@ -1,7 +1,7 @@
 package cn.don9cn.blog.dao.system.log
 
 import cn.don9cn.blog.dao.BaseDao
-import cn.don9cn.blog.model.system.SysOperaLog
+import cn.don9cn.blog.model.system.log.SysOperaLog
 import cn.don9cn.blog.support.mongo.ext.lt
 import cn.don9cn.blog.support.mongo.ext.query
 import org.springframework.stereotype.Repository

@@ -22,7 +22,7 @@ interface SysMessageService {
 open class SysMessageServiceImpl : SysMessageService {
 
     @Autowired
-    private val mqConstant: MqConstant? = null
+    private var mqConstant: MqConstant? = null
 
     override fun push(message: CommonMqMessage): ActionMsg {
         try {

@@ -9,8 +9,8 @@ import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage
 import cn.don9cn.blog.autoconfigure.shiro.util.ShiroSessionUtil
 import cn.don9cn.blog.dao.system.rbac.SysRoleDao
 import cn.don9cn.blog.dao.system.rbac.SysUserDao
-import cn.don9cn.blog.model.system.RegisterResult
-import cn.don9cn.blog.model.system.SysUser
+import cn.don9cn.blog.model.system.rbac.RegisterResult
+import cn.don9cn.blog.model.system.rbac.SysUser
 import cn.don9cn.blog.service.BaseService
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -76,13 +76,13 @@ interface SysUserService : BaseService<SysUser> {
 open class SysUserServiceImpl : SysUserService {
 
     @Autowired
-    private val sysUserDao: SysUserDao? = null
+    private var sysUserDao: SysUserDao? = null
 
     @Autowired
-    private val sysRoleDao: SysRoleDao? = null
+    private var sysRoleDao: SysRoleDao? = null
 
     @Autowired
-    private val mqConstant: MqConstant? = null
+    private var mqConstant: MqConstant? = null
 
     override fun baseInsert(entity: SysUser): Int {
         entity.byWay = "管理员添加"

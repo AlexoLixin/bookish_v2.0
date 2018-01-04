@@ -40,6 +40,6 @@ abstract class BaseAction<in T:Any> {
 
     protected abstract fun baseFindListByParams(t: T): ActionMsg
 
-    protected abstract fun baseFindByPage(page: Int, limit: Int, startTime: String, endTime: String, orderBy: String, t: T): ActionMsg
+    protected abstract fun baseFindByPage(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, t: T): ActionMsg
 
 }

@@ -2,7 +2,7 @@ package cn.don9cn.blog.service.system.rbac
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.dao.system.rbac.SysPermissionDao
-import cn.don9cn.blog.model.system.SysPermission
+import cn.don9cn.blog.model.system.rbac.SysPermission
 import cn.don9cn.blog.service.BaseService
 import cn.don9cn.blog.util.UuidUtil
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,7 +32,7 @@ open class SysPermissionServiceImpl : SysPermissionService {
 
 
     @Autowired
-    private val sysPermissionDao: SysPermissionDao? = null
+    private var sysPermissionDao: SysPermissionDao? = null
 
     override fun baseInsert(entity: SysPermission): Int {
         val code = UuidUtil.getUuid()
@@ -42,7 +42,7 @@ open class SysPermissionServiceImpl : SysPermissionService {
         if(x > 0){
             entity.parent.let {
                 if(it == "ROOT")
-                    sysPermissionDao.updateParentForPush(it, code)
+                    sysPermissionDao!!.updateParentForPush(it, code)
             }
         }
         return x
@@ -68,10 +68,10 @@ open class SysPermissionServiceImpl : SysPermissionService {
             removeNodes.forEach { node ->
                 // 级联删除其子节点
                 node.childrenCodes.forEach {
-                    sysPermissionDao.baseDeleteById(it)
+                    sysPermissionDao!!.baseDeleteById(it)
                 }
                 // 更新父节点
-                sysPermissionDao.updateParentForPull(node.parent!!, node.code!!)
+                sysPermissionDao!!.updateParentForPull(node.parent!!, node.code!!)
             }
             return removeNodes.size
         } else {

@@ -1,7 +1,7 @@
 package cn.don9cn.blog.dao.bussiness
 
 import cn.don9cn.blog.dao.BaseDao
-import cn.don9cn.blog.model.bussiness.SubscribeInfo
+import cn.don9cn.blog.model.bussiness.subscribe.SubscribeInfo
 import cn.don9cn.blog.support.mongo.ext.and
 import cn.don9cn.blog.support.mongo.ext.eq
 import cn.don9cn.blog.support.mongo.ext.query

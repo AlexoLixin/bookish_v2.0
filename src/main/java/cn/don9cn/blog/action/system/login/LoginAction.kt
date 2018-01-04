@@ -3,7 +3,7 @@ package cn.don9cn.blog.action.system.login
 import cn.don9cn.blog.annotation.SkipOperaLog
 import cn.don9cn.blog.autoconfigure.shiro.util.ShiroSessionUtil
 import cn.don9cn.blog.autoconfigure.websocket.msg.MsgWebSocketHandler
-import cn.don9cn.blog.model.system.LoginResult
+import cn.don9cn.blog.model.system.login.LoginResult
 import cn.don9cn.blog.service.system.log.SysLoginLogService
 import cn.don9cn.blog.support.action.ActionMsg
 import cn.don9cn.blog.support.validatecode.ValidateCode
@@ -28,16 +28,16 @@ import javax.servlet.http.HttpServletResponse
 open class LoginAction {
 
     @Autowired
-    private val sysLoginLogService: SysLoginLogService? = null
+    private var sysLoginLogService: SysLoginLogService? = null
 
     @Autowired
-    private val msgWebSocketHandler: MsgWebSocketHandler? = null
+    private var msgWebSocketHandler: MsgWebSocketHandler? = null
 
     /**
      * 提示登录
      */
     @RequestMapping("/needLogin")
-    fun needLogin(): ActionMsg {
+    open fun needLogin(): ActionMsg {
         return ActionMsg(false, "请先登录!")
     }
 
@@ -45,7 +45,7 @@ open class LoginAction {
      * 提示重新登录
      */
     @RequestMapping("/reLogin")
-    fun reLogin(): ActionMsg {
+    open fun reLogin(): ActionMsg {
         SecurityUtils.getSubject()?.logout()
         return ActionMsg(false, "用户身份过期,请重新登录!")
     }
@@ -54,7 +54,7 @@ open class LoginAction {
      * 提示权限不足
      */
     @RequestMapping("/noPermission")
-    fun noPermission(): ActionMsg {
+    open fun noPermission(): ActionMsg {
         return ActionMsg(false, "对不起,您没有相应的操作权限!")
     }
 
@@ -62,7 +62,7 @@ open class LoginAction {
      * 注销登陆
      */
     @RequestMapping("/logout")
-    fun logout(): ActionMsg {
+    open fun logout(): ActionMsg {
         //关闭登录用户的webSocket连接
         msgWebSocketHandler!!.closeSession(ShiroSessionUtil.getUserName())
         //注销用户
@@ -75,7 +75,7 @@ open class LoginAction {
      */
     @GetMapping("/generateValidateCode")
     @Throws(IOException::class)
-    fun generateValidateCode(request: HttpServletRequest, response: HttpServletResponse) {
+    open fun generateValidateCode(request: HttpServletRequest, response: HttpServletResponse) {
         //生成文字验证码
         val verifyCode = ValidateCode.generateTextCode(ValidateCode.TYPE_NUM_LOWER, 4, null)
         //将验证码放入缓存
@@ -92,7 +92,7 @@ open class LoginAction {
      */
     @RequestMapping("/doLogin")
     @Throws(IOException::class, ServletException::class)
-    fun doLogin(username: String, password: String, validateCode: String, request: HttpServletRequest): LoginResult {
+    open fun doLogin(username: String, password: String, validateCode: String, request: HttpServletRequest): LoginResult {
 
         //先校验验证码
         if (StringUtils.isBlank(validateCode)) {
@@ -135,7 +135,7 @@ open class LoginAction {
      * 检查当前用户是否是管理员
      */
     @GetMapping("/authcUserRole")
-    fun checkAdmin(): ActionMsg {
+    open fun checkAdmin(): ActionMsg {
         val user = ShiroSessionUtil.getUser()
         user?.roleList?.forEach{
             if (it.encoding!!.contains("ADMIN")) {

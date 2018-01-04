@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController
 open class SysMessageAction {
 
     @Autowired
-    private val sysMessageService: SysMessageService? = null
+    private var sysMessageService: SysMessageService? = null
 
     @PostMapping("/push")
-    fun push(commonMqMessage: CommonMqMessage): ActionMsg {
+    open fun push(commonMqMessage: CommonMqMessage): ActionMsg {
         return sysMessageService!!.push(commonMqMessage)
     }
 

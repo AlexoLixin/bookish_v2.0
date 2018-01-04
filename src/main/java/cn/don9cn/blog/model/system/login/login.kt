@@ -1,4 +1,4 @@
-package cn.don9cn.blog.model.system
+package cn.don9cn.blog.model.system.login
 
 /**
  * @Author: liuxindong

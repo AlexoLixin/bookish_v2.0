@@ -1,8 +1,8 @@
 package cn.don9cn.blog.autoconfigure.shiro.core
 
 import cn.don9cn.blog.autoconfigure.shiro.util.ShiroSessionUtil
-import cn.don9cn.blog.model.system.SysRole
-import cn.don9cn.blog.model.system.SysUser
+import cn.don9cn.blog.model.system.rbac.SysRole
+import cn.don9cn.blog.model.system.rbac.SysUser
 import cn.don9cn.blog.service.system.rbac.SysRoleService
 import cn.don9cn.blog.service.system.rbac.SysUserService
 import cn.don9cn.blog.util.Md5Util

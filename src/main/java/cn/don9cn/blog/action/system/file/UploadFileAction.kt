@@ -2,7 +2,7 @@ package cn.don9cn.blog.action.system.file
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.action.BaseAction
-import cn.don9cn.blog.model.system.UploadFile
+import cn.don9cn.blog.model.system.file.UploadFile
 import cn.don9cn.blog.service.system.file.UploadFileService
 import cn.don9cn.blog.support.action.ActionMsg
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 open class UploadFileAction : BaseAction<UploadFile>() {
 
     @Autowired
-    private val uploadFileService: UploadFileService? = null
+    private var uploadFileService: UploadFileService? = null
 
 
     override fun baseInsert(uploadFile: UploadFile): ActionMsg {
@@ -57,7 +57,7 @@ open class UploadFileAction : BaseAction<UploadFile>() {
     }
 
     @GetMapping("/page")
-    override fun baseFindByPage(page: Int, limit: Int, startTime: String, endTime: String, orderBy: String, uploadFile: UploadFile): ActionMsg {
+    override fun baseFindByPage(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, uploadFile: UploadFile): ActionMsg {
         return super.find(uploadFileService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, uploadFile)))
     }
 

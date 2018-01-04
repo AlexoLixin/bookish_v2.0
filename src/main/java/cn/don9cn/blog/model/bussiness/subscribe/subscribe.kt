@@ -1,4 +1,4 @@
-package cn.don9cn.blog.model.bussiness
+package cn.don9cn.blog.model.bussiness.subscribe
 
 import cn.don9cn.blog.model.BaseModel
 

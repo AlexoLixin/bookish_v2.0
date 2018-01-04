@@ -2,23 +2,23 @@ package cn.don9cn.blog.action.bussiness.article
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.action.BaseAction
-import cn.don9cn.blog.model.bussiness.Article
+import cn.don9cn.blog.model.bussiness.article.Article
 import cn.don9cn.blog.service.bussiness.ArticleService
 import cn.don9cn.blog.support.action.ActionMsg
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping(value = "/bussiness/article")
+@RequestMapping(value = ["/bussiness/article"])
 open class ArticleAction : BaseAction<Article>() {
 
     @Autowired
-    private val articleService: ArticleService? = null
+    private var articleService: ArticleService? = null
 
 
     @PostMapping
-    override fun baseInsert(entity: Article): ActionMsg {
-        return super.insert(articleService!!.baseInsert(entity))
+    override fun baseInsert(t: Article): ActionMsg {
+        return super.insert(articleService!!.baseInsert(t))
     }
 
     override fun baseInsertBatch(list: List<Article>): ActionMsg {
@@ -26,8 +26,8 @@ open class ArticleAction : BaseAction<Article>() {
     }
 
     @PutMapping
-    override fun baseUpdate(entity: Article): ActionMsg {
-        return super.update(articleService!!.baseUpdate(entity))
+    override fun baseUpdate(t: Article): ActionMsg {
+        return super.update(articleService!!.baseUpdate(t))
     }
 
     @DeleteMapping
@@ -51,20 +51,20 @@ open class ArticleAction : BaseAction<Article>() {
     }
 
     @GetMapping(path = ["/list", "/list/public"])
-    override fun baseFindListByParams(entity: Article): ActionMsg {
-        return super.find(articleService!!.baseFindListByParams(entity))
+    override fun baseFindListByParams(t: Article): ActionMsg {
+        return super.find(articleService!!.baseFindListByParams(t))
     }
 
     @GetMapping("/page", "/publish/new/public")
-    override fun baseFindByPage(page: Int, limit: Int, startTime: String, endTime: String, orderBy: String, article: Article): ActionMsg {
-        return super.find(articleService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, article)))
+    override fun baseFindByPage(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, t: Article): ActionMsg {
+        return super.find(articleService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, t)))
     }
 
     /**
      * 个人中心-普通用户更新文章(只能更新自己发布的文章,防止其他用户数据被恶意篡改)
      */
     @PutMapping("/byUser")
-    fun doUpdateByUser(article: Article): ActionMsg {
+    open fun doUpdateByUser(article: Article): ActionMsg {
         return super.update(articleService!!.doUpdateByUser(article))
     }
 
@@ -72,7 +72,7 @@ open class ArticleAction : BaseAction<Article>() {
      * 个人中心-普通用户删除文章(只能删除自己发布的文章,防止其他用户数据被恶意篡改)
      */
     @DeleteMapping("/byUser")
-    fun doRemoveByUser(code: String): ActionMsg {
+    open fun doRemoveByUser(code: String): ActionMsg {
         return super.delete(articleService!!.doRemoveByUser(code))
     }
 
@@ -80,7 +80,7 @@ open class ArticleAction : BaseAction<Article>() {
      * 个人中心-普通获取文章列表(只能获取自己发布的文章列表,防止其他用户数据被恶意篡改)
      */
     @GetMapping("/page/byUser")
-    fun doFindByPageByUser(page: Int, limit: Int, startTime: String, endTime: String, orderBy: String, article: Article): ActionMsg {
+    open fun doFindByPageByUser(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, article: Article): ActionMsg {
         return super.find(articleService!!.doFindByPageByUser(PageResult(page, limit, startTime, endTime, orderBy, article)))
     }
 
