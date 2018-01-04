@@ -40,8 +40,8 @@ open class SysPermissionServiceImpl : SysPermissionService {
         //保存当前节点
         val x = sysPermissionDao!!.baseInsert(entity)
         if(x > 0){
-            entity.parent.let {
-                if(it == "ROOT")
+            entity.parent?.let {
+                if(it != "ROOT")
                     sysPermissionDao!!.updateParentForPush(it, code)
             }
         }

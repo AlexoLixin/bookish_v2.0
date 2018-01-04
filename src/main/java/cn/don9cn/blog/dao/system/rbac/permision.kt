@@ -102,7 +102,7 @@ open class SysPermissionDaoImpl : SysPermissionDao {
         }
         return dslOperator{
             updateOne<SysPermission>(
-                    createQueryByEntity(entity),
+                    createDefaultQuery(entity.code!!),
                     update
             )
         }

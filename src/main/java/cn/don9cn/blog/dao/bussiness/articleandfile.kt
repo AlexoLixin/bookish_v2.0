@@ -83,15 +83,21 @@ open class ArticleAndFileDaoImpl : ArticleAndFileDao {
      * @param uploadFile
      */
     override fun fillLink(uploadFile: UploadFile) {
-        val articleAndFile = dslOperator{
-            findOne<ArticleAndFile>(query("fileCode" eq uploadFile.code!!))
+        var classifyResult = ""
+        var articleTitleResult = ""
+        uploadFile.code?.let { fileCode ->
+            val articleAndFile = dslOperator.findOne<ArticleAndFile>(query("fileCode" eq fileCode))
+            articleAndFile?.articleCode?.let { articleCode ->
+                val article = dslOperator.findById<Article>(articleCode)
+                article?.classify?.let { classify ->
+                    val articleClassify = dslOperator.findById<ArticleClassify>(classify)
+                    articleClassify?.let {
+                        classifyResult = articleClassify.name?:""
+                        articleTitleResult = article.title?:""
+                    }
+                }
+            }
         }
-        val article = dslOperator{
-            findById<Article>(articleAndFile!!.articleCode)
-        }
-        val articleClassify = dslOperator{
-            findById<ArticleClassify>(article!!.classify!!)
-        }
-        uploadFile.link = articleClassify!!.name + "-" + article!!.title
+        uploadFile.link = classifyResult + " - " + articleTitleResult
     }
 }
