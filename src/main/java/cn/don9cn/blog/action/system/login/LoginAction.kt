@@ -126,9 +126,10 @@ open class LoginAction {
         request.getSession(false).setAttribute("CURRENT_USER", username)
 
         return LoginResult(true, "登陆成功!")
-                .setAdmin(false)
                 .setToken(MyShiroCacheManager.getToken())
-                .setUser(MyShiroCacheManager.getUser())
+                .setUsername(MyShiroCacheManager.getUserName())
+                .setRoleName(MyShiroCacheManager.getUserRoleName())
+                .setAdmin(MyShiroCacheManager.checkAdmin())
 
     }
 
@@ -137,13 +138,29 @@ open class LoginAction {
      */
     @GetMapping("/authcUserRole")
     open fun checkAdmin(): ActionMsg {
-        val user = MyShiroCacheManager.getUser()
-        user?.roleList?.forEach{
-            if (it.encoding!!.contains("ADMIN")) {
-                return ActionMsg(true, "验证成功!")
-            }
+        return if(MyShiroCacheManager.checkAdmin()){
+            ActionMsg(true, "验证成功!")
+        }else{
+            ActionMsg(false, "对不起,验证失败,您不是系统管理员")
         }
-        return ActionMsg(false, "对不起,验证失败,您不是系统管理员")
+    }
+
+
+    /**
+     * 检查当前用户是否设置了RememberMe
+     */
+    @GetMapping("/checkRememberMe")
+    open fun checkRememberMe(): LoginResult {
+        val subject = SecurityUtils.getSubject()
+        return if(subject.isRemembered){
+            LoginResult(true, "当前用户设置了RememberMe")
+                    .setToken(MyShiroCacheManager.getToken())
+                    .setUsername(MyShiroCacheManager.getUserName())
+                    .setRoleName(MyShiroCacheManager.getUserRoleName())
+                    .setAdmin(MyShiroCacheManager.checkAdmin())
+        }else{
+            LoginResult(false, "当前用户未设置RememberMe")
+        }
     }
 
 

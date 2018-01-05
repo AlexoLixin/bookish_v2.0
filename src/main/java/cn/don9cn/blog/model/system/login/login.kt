@@ -9,11 +9,13 @@ package cn.don9cn.blog.model.system.login
 class LoginResult(val isSuccess: Boolean, val message: String) {
     private var token: String? = null
     private var admin: Boolean = false
-    private var user: Any? = null
+    private var roleName: String? = null
+    private var username: String? = null
 
     fun getToken(): String? = token
     fun isAdmin(): Boolean = admin
-    fun getUser(): Any? = user
+    fun getUsername(): String? = username
+    fun getRoleName(): String? = roleName
 
     fun setToken(token: String?): LoginResult {
         this.token = token
@@ -25,8 +27,13 @@ class LoginResult(val isSuccess: Boolean, val message: String) {
         return this
     }
 
-    fun setUser(user: Any?): LoginResult {
-        this.user = user
+    fun setUsername(username: String?): LoginResult {
+        this.username = username
+        return this
+    }
+
+    fun setRoleName(roleName: String?): LoginResult {
+        this.roleName = roleName
         return this
     }
 
