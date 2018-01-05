@@ -1,7 +1,8 @@
 package cn.don9cn.blog.action.system.login
 
 import cn.don9cn.blog.annotation.SkipOperaLog
-import cn.don9cn.blog.autoconfigure.shiro.util.ShiroSessionUtil
+import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager
+import cn.don9cn.blog.autoconfigure.shiro.util.ShiroUtil
 import cn.don9cn.blog.autoconfigure.websocket.msg.MsgWebSocketHandler
 import cn.don9cn.blog.model.system.login.LoginResult
 import cn.don9cn.blog.service.system.log.SysLoginLogService
@@ -64,7 +65,7 @@ open class LoginAction {
     @RequestMapping("/logout")
     open fun logout(): ActionMsg {
         //关闭登录用户的webSocket连接
-        msgWebSocketHandler!!.closeSession(ShiroSessionUtil.getUserName())
+        msgWebSocketHandler!!.closeSession(MyShiroCacheManager.getUserName())
         //注销用户
         SecurityUtils.getSubject()?.logout()
         return ActionMsg(true, "注销成功!")
@@ -125,8 +126,8 @@ open class LoginAction {
 
         return LoginResult(true, "登陆成功!")
                 .setAdmin(false)
-                .setToken(ShiroSessionUtil.getToken())
-                .setUser(ShiroSessionUtil.getUser())
+                .setToken(MyShiroCacheManager.getToken())
+                .setUser(MyShiroCacheManager.getUser())
 
     }
 
@@ -135,7 +136,7 @@ open class LoginAction {
      */
     @GetMapping("/authcUserRole")
     open fun checkAdmin(): ActionMsg {
-        val user = ShiroSessionUtil.getUser()
+        val user = MyShiroCacheManager.getUser()
         user?.roleList?.forEach{
             if (it.encoding!!.contains("ADMIN")) {
                 return ActionMsg(true, "验证成功!")

@@ -1,7 +1,8 @@
 package cn.don9cn.blog.aop.log
 
 import cn.don9cn.blog.annotation.SkipOperaLog
-import cn.don9cn.blog.autoconfigure.shiro.util.ShiroSessionUtil
+import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager
+import cn.don9cn.blog.autoconfigure.shiro.util.ShiroUtil
 import cn.don9cn.blog.model.system.log.SysExceptionLog
 import cn.don9cn.blog.model.system.log.SysOperaLog
 import org.aspectj.lang.JoinPoint
@@ -28,7 +29,7 @@ object LogAopUtil {
             module = exceClass.simpleName.replace("Action", "")     //模块名称
             methodName = joinPoint.signature.name                                       //执行方法名称
 
-            userCode = ShiroSessionUtil.getUserCode()                   // 执行用户
+            userCode = MyShiroCacheManager.getUserCode()                   // 执行用户
 
             val request = (RequestContextHolder.getRequestAttributes() as ServletRequestAttributes).request
             requestUrl = request.requestURI         //请求url

@@ -37,7 +37,7 @@ class MyShiroAuthcFilter : Filter {
         }
 
         val subject = SecurityUtils.getSubject()
-        println(subject.isRemembered)
+        //println(subject.isRemembered)
 
         if (subject.isAuthenticated || subject.isRemembered) {
 
@@ -45,7 +45,7 @@ class MyShiroAuthcFilter : Filter {
             //已登录,检查用户token与当前用户是否一致
             val token = request.getHeader("authorization")
             // token不一致,提示重新登录
-            if (ShiroSessionUtil.getToken() != token) {
+            if (ShiroUtil.getToken() != token) {
                 response.sendRedirect("/login/reLogin")
                 return
             }*/

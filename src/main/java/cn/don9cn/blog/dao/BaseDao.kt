@@ -4,7 +4,8 @@ import cn.don9cn.blog.support.mongo.ext.inThe
 import cn.don9cn.blog.support.mongo.ext.query
 import cn.booklish.mongodsl.core.DslOperator
 import cn.booklish.mongodsl.core.PageResult
-import cn.don9cn.blog.autoconfigure.shiro.util.ShiroSessionUtil
+import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager
+import cn.don9cn.blog.autoconfigure.shiro.util.ShiroUtil
 import cn.don9cn.blog.model.BaseModel
 import cn.don9cn.blog.support.mongo.core.DaoHelper
 import cn.don9cn.blog.util.getNowDate
@@ -36,7 +37,7 @@ interface BaseDao<T:BaseModel> {
      */
     fun baseInsert(entity: T): Int {
         entity.createTime = getNowDate()
-        entity.createBy = ShiroSessionUtil.getUserCode()
+        entity.createBy = MyShiroCacheManager.getUserCode()
         return dslOperator.insertOne(entity)
     }
 
@@ -47,7 +48,7 @@ interface BaseDao<T:BaseModel> {
     fun baseInsertBatch(list: List<T>): Int {
         list.forEach {
             it.createTime = getNowDate()
-            it.createBy = ShiroSessionUtil.getUserCode()
+            it.createBy = MyShiroCacheManager.getUserCode()
         }
         return dslOperator.insertBatch(list)
     }
@@ -59,7 +60,7 @@ interface BaseDao<T:BaseModel> {
      */
     fun baseUpdate(entity: T): Int {
         entity.modifyTime = getNowDate()
-        entity.modifyBy = ShiroSessionUtil.getUserCode()
+        entity.modifyBy = MyShiroCacheManager.getUserCode()
         return dslOperator.updateById(entity.code!!,entity)
     }
 

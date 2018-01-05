@@ -75,8 +75,8 @@ open class MyShiroRealm : AuthorizingRealm() {
             sysUserService!!.findByUserName(username)?.let {
                 if (it.password == password) {
                     info = SimpleAuthenticationInfo(username, password, this.name)
-                    setUserToSession(it)
                     userCache.put("UserBean",it)                //将用户实体存入缓存
+                    userCache.put("Token",Md5Util.getMD5(it.username + it.password)) //生成用户token并放入缓存
                     userCache.put("AuthenticationInfo",info)    //将用户认证信息存入缓存
                 } else {
                     throw UnknownAccountException("用户名或密码验证失败")
@@ -87,32 +87,5 @@ open class MyShiroRealm : AuthorizingRealm() {
         return (info as SimpleAuthenticationInfo)
     }
 
-
-    /**
-     * 将登陆用户数据放入session,同时自动生成token并放入到session
-     */
-    private fun setUserToSession(user: SysUser) {
-        setSession("currentUser", user)
-        // 根据用户名和密码生成token,存入session
-        setSession("token", Md5Util.getMD5(user.username + user.password))
-    }
-
-    /**
-     * 将登陆用户认证信息存入session,作为缓存
-     */
-    private fun setAuthenticationInfoToSession(authenticationInfo: SimpleAuthenticationInfo) {
-        setSession("AuthenticationInfo", authenticationInfo)
-    }
-
-    /**
-     * 将用户权限信息存入session,作为缓存
-     */
-    private fun setAuthorizationInfoToSession(authorizationInfo: SimpleAuthorizationInfo) {
-        setSession("AuthorizationInfo", authorizationInfo)
-    }
-
-    private fun setSession(key: Any, value: Any) {
-        SecurityUtils.getSubject()?.session?.setAttribute(key, value)
-    }
 
 }

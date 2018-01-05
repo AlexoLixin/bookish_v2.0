@@ -6,7 +6,7 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo
 import org.apache.shiro.authz.SimpleAuthorizationInfo
 
 
-object ShiroSessionUtil {
+object ShiroUtil {
 
     /**
      * 从session获取用户数据

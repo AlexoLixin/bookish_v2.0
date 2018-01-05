@@ -6,7 +6,8 @@ import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType
 import cn.don9cn.blog.autoconfigure.activemq.core.MqManager
 import cn.don9cn.blog.autoconfigure.activemq.model.MailMessage
 import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage
-import cn.don9cn.blog.autoconfigure.shiro.util.ShiroSessionUtil
+import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager
+import cn.don9cn.blog.autoconfigure.shiro.util.ShiroUtil
 import cn.don9cn.blog.dao.system.rbac.SysRoleDao
 import cn.don9cn.blog.dao.system.rbac.SysUserDao
 import cn.don9cn.blog.model.system.rbac.RegisterResult
@@ -176,7 +177,7 @@ open class SysUserServiceImpl : SysUserService {
     }
 
     override fun updateUserInfo(sysUser: SysUser): Int {
-        return if (sysUser.code == ShiroSessionUtil.getUserCode()) {
+        return if (sysUser.code == MyShiroCacheManager.getUserCode()) {
             sysUserDao!!.baseUpdate(sysUser)
         } else {
             0
@@ -184,7 +185,7 @@ open class SysUserServiceImpl : SysUserService {
     }
 
     override fun getUserInfo(): SysUser? {
-        return sysUserDao!!.baseFindById(ShiroSessionUtil.getUserCode())
+        return sysUserDao!!.baseFindById(MyShiroCacheManager.getUserCode())
     }
 
     override fun register(validateCode: String, sysUser: SysUser, request: HttpServletRequest): RegisterResult {
