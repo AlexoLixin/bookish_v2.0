@@ -1,7 +1,7 @@
 package cn.don9cn.blog.test;
 
 
-import cn.don9cn.blog.autoconfigs.activemq.model.CommonMqMessage;
+import cn.don9cn.blog.autoconfigure.activemq.model.CommonMqMessage;
 import com.alibaba.fastjson.JSON;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
