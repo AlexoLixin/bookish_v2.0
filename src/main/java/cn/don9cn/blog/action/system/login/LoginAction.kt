@@ -67,7 +67,8 @@ open class LoginAction {
         //关闭登录用户的webSocket连接
         msgWebSocketHandler!!.closeSession(MyShiroCacheManager.getUserName())
         //注销用户
-        SecurityUtils.getSubject()?.logout()
+        MyShiroCacheManager.getCurrentUserCache()?.clear()      //清空用户的shiro缓存(包括身份认证和权限认证等信息)
+        SecurityUtils.getSubject()?.logout()                    //调用shiro提供的注销方法
         return ActionMsg(true, "注销成功!")
     }
 

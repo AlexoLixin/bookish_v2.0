@@ -72,16 +72,16 @@ open class MyShiroRealm : AuthorizingRealm() {
         var info = userCache.get("AuthenticationInfo")
         if (info == null) {
             // 2.缓存中没有用户认证信息，查询数据库，重新验证用户
-            sysUserService!!.findByUserName(username)?.let {
-                if (it.password == password) {
-                    info = SimpleAuthenticationInfo(username, password, this.name)
-                    userCache.put("UserBean",it)                //将用户实体存入缓存
-                    userCache.put("Token",Md5Util.getMD5(it.username + it.password)) //生成用户token并放入缓存
-                    userCache.put("AuthenticationInfo",info)    //将用户认证信息存入缓存
-                } else {
+            val user = sysUserService!!.findByUserName(username) ?: throw UnknownAccountException("用户名或密码验证失败")
+            user.let {
+                if (it.password != password) {
                     throw UnknownAccountException("用户名或密码验证失败")
                 }
-            }?:throw UnknownAccountException("用户名或密码验证失败")
+                info = SimpleAuthenticationInfo(username, password, this.name)
+                userCache.put("UserBean",it)                //将用户实体存入缓存
+                userCache.put("Token",Md5Util.getMD5(it.username + it.password)) //生成用户token并放入缓存
+                userCache.put("AuthenticationInfo",info)    //将用户认证信息存入缓存
+            }
         }
 
         return (info as SimpleAuthenticationInfo)

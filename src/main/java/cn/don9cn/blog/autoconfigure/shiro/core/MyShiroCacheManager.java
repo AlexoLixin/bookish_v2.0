@@ -29,7 +29,7 @@ public class MyShiroCacheManager extends AbstractCacheManager {
     }
 
     public static SysUser getUser(){
-        Cache<String, Object> cache = getUserCache();
+        Cache<String, Object> cache = getCurrentUserCache();
         Object userBean = cache.get("UserBean");
         if(userBean!=null){
             return (SysUser)userBean;
@@ -54,7 +54,7 @@ public class MyShiroCacheManager extends AbstractCacheManager {
     }
 
     public static String getToken(){
-        Cache<String, Object> cache = getUserCache();
+        Cache<String, Object> cache = getCurrentUserCache();
         Object token = cache.get("Token");
         if(token!=null){
             return token.toString();
@@ -62,7 +62,7 @@ public class MyShiroCacheManager extends AbstractCacheManager {
         return "";
     }
 
-    private static Cache<String,Object> getUserCache(){
+    public static Cache<String,Object> getCurrentUserCache(){
         SimplePrincipalCollection principals = (SimplePrincipalCollection)SecurityUtils.getSubject().getPrincipals();
         String username = principals.toString();
         Cache<String, Object> cache = INSTANCE.getCache(username);

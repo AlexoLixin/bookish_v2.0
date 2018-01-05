@@ -1,5 +1,6 @@
 package cn.don9cn.blog.aop.log
 
+import cn.don9cn.blog.annotation.SkipOperaLog
 import cn.don9cn.blog.model.system.log.SysExceptionLog
 import cn.don9cn.blog.model.system.log.SysOperaLog
 import cn.don9cn.blog.service.system.log.SysExceptionLogService
@@ -11,6 +12,7 @@ import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Aspect
 @Component
@@ -36,6 +38,8 @@ open class OperaAndExceptionLogAop {
     @Before("logPoint()")
     @Throws(NoSuchMethodException::class)
     fun beforeExce(joinPoint: JoinPoint) {
+
+        if(checkSkipOpLog(joinPoint)) return
         // 生成操作日志实体并存入本地线程变量中
         sysOperaLogThreadLocal.set(LogAopUtil.parseToSysOperaLog(joinPoint))
         // 方法执行前,开始计时
@@ -49,6 +53,7 @@ open class OperaAndExceptionLogAop {
 
     @AfterThrowing(value = "logPoint()", throwing = "e")
     fun throwException(joinPoint: JoinPoint, e: Throwable) {
+        if(checkSkipOpLog(joinPoint)) return
         val sysOperaLog = sysOperaLogThreadLocal.get()
         val startTime = costTimeThreadLocal.get()
         sysOperaLog?.let {
@@ -63,6 +68,7 @@ open class OperaAndExceptionLogAop {
 
     @AfterReturning("logPoint()")
     fun afterReturning(joinPoint: JoinPoint) {
+        if(checkSkipOpLog(joinPoint)) return
         // 为了不影响方法的执行,日志保存到数据库的动作在方法成功返回后执行
         val sysOperaLog = sysOperaLogThreadLocal.get()
         val startTime = costTimeThreadLocal.get()
@@ -80,8 +86,10 @@ open class OperaAndExceptionLogAop {
 
         val obj:Any? = pjp.proceed()
 
-        // 根据操作的结果判断是否操作成功
-        checkProceedResult(obj)
+        if(!checkSkipOpLog(pjp)){
+            // 根据操作的结果判断是否操作成功
+            checkProceedResult(obj)
+        }
 
         return obj
     }
@@ -107,6 +115,10 @@ open class OperaAndExceptionLogAop {
                 }
             }
         }
+    }
+
+    private fun checkSkipOpLog(joinPoint: JoinPoint):Boolean{
+        return joinPoint.target.javaClass.getAnnotation(SkipOperaLog::class.java) != null
     }
 
 

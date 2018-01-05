@@ -92,7 +92,9 @@ public class ShiroAutoConfig {
     public CookieRememberMeManager cookieRememberMeManager(){
         SimpleCookie rememberMeCookie = new SimpleCookie();
         rememberMeCookie.setName("rememberMe");
-        rememberMeCookie.setHttpOnly(true);
+        rememberMeCookie.setDomain("www.booklish.cn");  //设置网站域名
+        //rememberMeCookie.setPath("/*");                 //设置cookie作用域
+        rememberMeCookie.setHttpOnly(true);         //当设置为true时,客户端javascript无法获取该cookie
         rememberMeCookie.setMaxAge(2592000);       //有效时间30天
 
         CookieRememberMeManager manager = new CookieRememberMeManager();
