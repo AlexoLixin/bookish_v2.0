@@ -48,8 +48,8 @@ public class ShiroAutoConfig {
         filterChainMap.put("/bussiness/articleComment/tree/public","anon");     // 加载文章留言
         filterChainMap.put("/system/upload/image","anon");                      // 图片上传
         filterChainMap.put("/system/upload/fileDownLoad","anon");               // 文件下载
-        filterChainMap.put("/msgWebSocket","anon");                             // 消息推送 webSocket
-        filterChainMap.put("/sockjs/msgWebSocket","anon");
+        //filterChainMap.put("/msgWebSocket","anon");                             // 消息推送 webSocket
+        //filterChainMap.put("/sockjs/msgWebSocket","anon");
         filterChainMap.put("/chatRoomWebSocket","anon");                        // 聊天室 webSocket
         filterChainMap.put("/sockjs/chatRoomWebSocket","anon");
         filterChainMap.put("/bussiness/subscribe/public","anon");

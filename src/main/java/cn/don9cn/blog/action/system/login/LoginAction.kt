@@ -122,7 +122,8 @@ open class LoginAction {
         }
 
         sysLoginLogService!!.baseInsert(loginLog.withState("成功"))
-        //登陆成功,设置用户名到session,消息推送中用得到
+
+        //设置用户名到session,用于前端自动连接webSocket后,打开用户监听的消息queue和topic
         request.getSession(false).setAttribute("CURRENT_USER", username)
 
         return LoginResult(true, "登陆成功!")
@@ -150,12 +151,17 @@ open class LoginAction {
      * 检查当前用户是否设置了RememberMe
      */
     @GetMapping("/checkRememberMe")
-    open fun checkRememberMe(): LoginResult {
+    open fun checkRememberMe(request: HttpServletRequest): LoginResult {
         val subject = SecurityUtils.getSubject()
-        return if(subject.isRemembered){
+
+        //如果用户已经通过认证或者设置了RememberMe,直接返回用户登陆信息
+        return if(subject.isAuthenticated || subject.isRemembered ){
+            val username = MyShiroCacheManager.getUserName()
+            //设置用户名到session,用于前端自动连接webSocket后,打开用户监听的消息queue和topic
+            request.getSession(false).setAttribute("CURRENT_USER", username)
             LoginResult(true, "当前用户设置了RememberMe")
                     .setToken(MyShiroCacheManager.getToken())
-                    .setUsername(MyShiroCacheManager.getUserName())
+                    .setUsername(username)
                     .setRoleName(MyShiroCacheManager.getUserRoleName())
                     .setAdmin(MyShiroCacheManager.checkAdmin())
         }else{

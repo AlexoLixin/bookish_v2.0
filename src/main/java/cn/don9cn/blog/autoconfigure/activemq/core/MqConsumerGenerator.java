@@ -49,7 +49,7 @@ public class MqConsumerGenerator {
                         //设置消息处理器
                         consumer1.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
                         consumer2.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
-                        cache.putIfAbsent(username,connection);
+                        cache.put(username,connection);
                     }
                 }
             }
