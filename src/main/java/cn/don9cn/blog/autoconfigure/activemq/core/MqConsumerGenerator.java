@@ -4,6 +4,7 @@ import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant;
 import cn.don9cn.blog.autoconfigure.activemq.listener.UserMqListener;
 import cn.don9cn.blog.autoconfigure.websocket.msg.MsgWebSocketHandler;
 import cn.don9cn.blog.exception.ExceptionWrapper;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,8 @@ public class MqConsumerGenerator {
     private MqConstant mqConstant;
 
     private final ConcurrentHashMap<String,Connection> cache = new ConcurrentHashMap<>();
+
+    private static Logger logger = Logger.getLogger(MqConsumerGenerator.class);
 
     public void startListen(String username, MsgWebSocketHandler msgWebSocketHandler){
 
@@ -54,9 +57,9 @@ public class MqConsumerGenerator {
                 }
             }
             connection.start();
-            System.out.println("成功启动用户 ["+username+"] 的ActiveMQ消息监听器 >>>");
+            logger.info("ActiveMQ : 成功启动用户 ["+username+"] 消息监听 >>>");
         } catch (JMSException e) {
-            throw new ExceptionWrapper(e,"MqConsumerGenerator.startListen 启动订阅者监听失败");
+            throw new ExceptionWrapper(e,"MqConsumerGenerator.startListen 启动ActiveMQ订阅者监听失败");
         }
 
     }
@@ -70,9 +73,9 @@ public class MqConsumerGenerator {
                 if(connection!=null){
                     try {
                         connection.close();
-                        cache.remove(username,connection);
+                        logger.info("ActiveMQ : 成功关闭用户 ["+username+"] 消息监听 >>>");
                     } catch (JMSException e) {
-                        throw new ExceptionWrapper(e,"MqConsumerGenerator.closeListen 关闭订阅者监听失败");
+                        throw new ExceptionWrapper(e,"MqConsumerGenerator.closeListen 关闭ActiveMQ订阅者监听失败");
                     }
                 }
             }

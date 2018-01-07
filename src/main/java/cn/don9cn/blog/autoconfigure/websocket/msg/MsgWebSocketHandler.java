@@ -41,11 +41,12 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
     /**
      * 连接成功时候，会触发前端onopen方法
      */
+    @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 
         String username = (String) session.getAttributes().get("system_msg_webSocket_user");
         userMap.put(username,session);
-        System.out.println("MsgWebSocket: 新用户 ["+username+"] 连接成功... 当前用户数量: " + userMap.values().size());
+        logger.info("MsgWebSocket: 用户 ["+username+"] 连接成功. 当前用户数量: " + userMap.values().size());
         // 开始监听并推送消息
         mqConsumerGenerator.startListen(username,this);
 
@@ -54,13 +55,13 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
     /**
      * 关闭连接时触发
      */
+    @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 
         String username= (String) session.getAttributes().get("system_msg_webSocket_user");
         userMap.remove(username);
+        logger.info("MsgWebSocket: 用户 [" + username + "] 退出连接... 当前用户数量: " + userMap.values().size());
         mqConsumerGenerator.closeListen(username);
-        System.out.println("MsgWebSocket: 用户 [" + username + "] 退出连接... 当前用户数量: " + userMap.values().size());
-        System.out.println("用户 ["+username+"] 关闭系统消息监听");
 
     }
 
@@ -75,15 +76,16 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
         super.handleTextMessage(session, message);
     }
 
+    @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         if(session.isOpen()) session.close();
         String username= (String) session.getAttributes().get("system_msg_webSocket_user");
         userMap.remove(username);
         mqConsumerGenerator.closeListen(username);
-        System.out.println("MsgWebSocket: 发生异常,用户 [" + username + "] 退出连接... 当前用户数量: " + userMap.values().size());
-        System.out.println("用户 ["+username+"] 关闭系统消息监听");
+        logger.info("MsgWebSocket: 发生异常,用户 [" + username + "] 退出连接... 当前用户数量: " + userMap.values().size());
     }
 
+    @Override
     public boolean supportsPartialMessages() {
         return false;
     }
@@ -99,7 +101,7 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
                 session.sendMessage(new TextMessage(message));
             }
         } catch (IOException e) {
-            System.out.println("MsgWebSocket: 推送给用户 [" + username + "] 消息时发生异常,推送失败...");
+            logger.error("MsgWebSocket: 推送给用户 [" + username + "] 消息时发生异常,推送失败...");
             e.printStackTrace();
         }
     }
@@ -111,12 +113,10 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
         try{
             WebSocketSession session = userMap.get(username);
             if(session!=null && session.isOpen()){
-                session.close();
+                session.close();    //触发afterConnectionClosed方法
             }
-            userMap.remove(username);
         } catch (IOException e) {
-            System.out.println("MsgWebSocket: 用户 [" + username + "] 的会话session关闭失败...");
-        } finally {
+            logger.error("MsgWebSocket: 用户 [" + username + "] 的会话session关闭失败...");
             mqConsumerGenerator.closeListen(username);
         }
     }
