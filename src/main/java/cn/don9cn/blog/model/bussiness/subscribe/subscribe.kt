@@ -9,6 +9,7 @@ import cn.don9cn.blog.model.BaseModel
  * @Modified:
  */
 class SubscribeInfo: BaseModel(){
-    var email:String? = null
-    var author:String? = null
+    var user:String = "visitor"
+    var email:String = ""
+    var author:String = ""
 }

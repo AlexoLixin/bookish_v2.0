@@ -16,7 +16,7 @@ import javax.jms.*;
 
 /**
  * @Author: liuxindong
- * @Description: ActiveMQ自动配置 javaonfig
+ * @Description: ActiveMQ自动配置 javaconfig
  * @Create: 2017/10/26 15:19
  * @Modify:
  */
@@ -32,7 +32,7 @@ public class MqAutoConfig {
     public MqAutoConfig(MqConstant mqConstant, ConnectionFactory connectionFactory){
         this.mqConstant = mqConstant;
         this.connectionFactory = connectionFactory;
-        initListener();
+        //initListener();
     }
 
     /**

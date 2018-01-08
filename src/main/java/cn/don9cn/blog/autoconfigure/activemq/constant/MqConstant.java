@@ -48,5 +48,17 @@ public class MqConstant {
     @Value("${spring.activemq.topic-mail-subscribe}")
     public String TOPIC_MAIL_SUBSCRIBE;
 
+    /**
+     * 用户queue前缀
+     */
+    @Value("${spring.activemq.queue-user-prefix}")
+    public String QUEUE_USER_PREFIX;
+
+    /**
+     * 用户文章订阅topic前缀
+     */
+    @Value("${spring.activemq.topic-author-subscribe-prefix}")
+    public String TOPIC_AUTHOR_SUBSCRIBE_PREFIX;
+
 
 }

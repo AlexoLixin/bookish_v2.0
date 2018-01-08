@@ -40,31 +40,31 @@ class ActionMsg : Serializable {
  */
 object ActionMsgHandler{
 
-    fun insert(x:Int):ActionMsg{
+    fun insert(x:Int,successMsg:String = "添加成功",failMsg:String = "添加失败"):ActionMsg{
         return when{
-            x>0 -> ActionMsg(true,"添加成功")
-            else -> ActionMsg(false,"添加失败")
+            x>0 -> ActionMsg(true,successMsg)
+            else -> ActionMsg(false,failMsg)
         }
     }
 
-    fun update(x:Int):ActionMsg{
+    fun update(x:Int,successMsg:String = "更新成功",failMsg:String = "更新失败"):ActionMsg{
         return when{
-            x>0 -> ActionMsg(true,"更新成功")
-            else -> ActionMsg(false,"更新失败")
+            x>0 -> ActionMsg(true,successMsg)
+            else -> ActionMsg(false,failMsg)
         }
     }
 
-    fun delete(x:Int):ActionMsg{
+    fun delete(x:Int,successMsg:String = "删除成功",failMsg:String = "删除失败"):ActionMsg{
         return when{
-            x>0 -> ActionMsg(true,"删除成功,$x 条记录被删除")
-            else -> ActionMsg(false,"删除失败")
+            x>0 -> ActionMsg(true,successMsg)
+            else -> ActionMsg(false,failMsg)
         }
     }
 
-    fun find(entity:Any?):ActionMsg{
+    fun find(entity:Any?,successMsg:String = "查询失败",failMsg:String = "查询成功"):ActionMsg{
         return when (entity) {
-            null -> ActionMsg(false,"查询失败")
-            else -> ActionMsg(true,"查询成功").setObj(entity)
+            null -> ActionMsg(false,successMsg)
+            else -> ActionMsg(true,failMsg).setObj(entity)
         }
     }
 

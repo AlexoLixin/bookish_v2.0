@@ -8,22 +8,6 @@ import cn.don9cn.blog.support.action.ActionMsgHandler
  */
 abstract class BaseAction<in T:Any> {
 
-    protected fun insert(x:Int): ActionMsg{
-        return ActionMsgHandler.insert(x)
-    }
-
-    protected fun update(x:Int): ActionMsg{
-        return ActionMsgHandler.update(x)
-    }
-
-    protected fun delete(x:Int): ActionMsg{
-        return ActionMsgHandler.delete(x)
-    }
-
-    protected fun find(entity:Any?): ActionMsg{
-        return ActionMsgHandler.find(entity)
-    }
-
     protected abstract fun baseInsert(t: T): ActionMsg
 
     protected abstract fun baseInsertBatch(list: List<T>): ActionMsg

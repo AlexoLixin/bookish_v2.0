@@ -5,6 +5,7 @@ import cn.don9cn.blog.action.BaseAction
 import cn.don9cn.blog.model.bussiness.article.Article
 import cn.don9cn.blog.service.bussiness.ArticleService
 import cn.don9cn.blog.support.action.ActionMsg
+import cn.don9cn.blog.support.action.ActionMsgHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -18,46 +19,46 @@ open class ArticleAction : BaseAction<Article>() {
 
     @PostMapping
     override fun baseInsert(t: Article): ActionMsg {
-        return super.insert(articleService!!.baseInsert(t))
+        return ActionMsgHandler.insert(articleService!!.baseInsert(t))
     }
 
     override fun baseInsertBatch(list: List<Article>): ActionMsg {
-        return super.insert(articleService!!.baseInsertBatch(list))
+        return ActionMsgHandler.insert(articleService!!.baseInsertBatch(list))
     }
 
     @PutMapping
     override fun baseUpdate(t: Article): ActionMsg {
-        return super.update(articleService!!.baseUpdate(t))
+        return ActionMsgHandler.update(articleService!!.baseUpdate(t))
     }
 
     @DeleteMapping
     override fun baseRemove(code: String): ActionMsg {
-        return super.delete(articleService!!.baseDeleteById(code))
+        return ActionMsgHandler.delete(articleService!!.baseDeleteById(code))
     }
 
     @DeleteMapping("/batch")
     override fun baseRemoveBatch(codes: String): ActionMsg {
-        return super.delete(articleService!!.baseDeleteBatch(codes))
+        return ActionMsgHandler.delete(articleService!!.baseDeleteBatch(codes))
     }
 
     @GetMapping(path = ["", "/public"])
     override fun baseFindById(code: String): ActionMsg {
-        return super.find(articleService!!.baseFindById(code))
+        return ActionMsgHandler.find(articleService!!.baseFindById(code))
     }
 
     @GetMapping("/all")
     override fun baseFindAll(): ActionMsg {
-        return super.find(articleService!!.baseFindAll())
+        return ActionMsgHandler.find(articleService!!.baseFindAll())
     }
 
     @GetMapping(path = ["/list", "/list/public"])
     override fun baseFindListByParams(t: Article): ActionMsg {
-        return super.find(articleService!!.baseFindListByParams(t))
+        return ActionMsgHandler.find(articleService!!.baseFindListByParams(t))
     }
 
     @GetMapping("/page", "/publish/new/public")
     override fun baseFindByPage(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, t: Article): ActionMsg {
-        return super.find(articleService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, t)))
+        return ActionMsgHandler.find(articleService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, t)))
     }
 
     /**
@@ -65,7 +66,7 @@ open class ArticleAction : BaseAction<Article>() {
      */
     @PutMapping("/byUser")
     open fun doUpdateByUser(article: Article): ActionMsg {
-        return super.update(articleService!!.doUpdateByUser(article))
+        return ActionMsgHandler.update(articleService!!.doUpdateByUser(article))
     }
 
     /**
@@ -73,7 +74,7 @@ open class ArticleAction : BaseAction<Article>() {
      */
     @DeleteMapping("/byUser")
     open fun doRemoveByUser(code: String): ActionMsg {
-        return super.delete(articleService!!.doRemoveByUser(code))
+        return ActionMsgHandler.delete(articleService!!.doRemoveByUser(code))
     }
 
     /**
@@ -81,7 +82,7 @@ open class ArticleAction : BaseAction<Article>() {
      */
     @GetMapping("/page/byUser")
     open fun doFindByPageByUser(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, article: Article): ActionMsg {
-        return super.find(articleService!!.doFindByPageByUser(PageResult(page, limit, startTime, endTime, orderBy, article)))
+        return ActionMsgHandler.find(articleService!!.doFindByPageByUser(PageResult(page, limit, startTime, endTime, orderBy, article)))
     }
 
 }

@@ -6,6 +6,7 @@ import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify
 import cn.don9cn.blog.service.bussiness.ArticleClassifyService
 import cn.don9cn.blog.service.bussiness.ArticleService
 import cn.don9cn.blog.support.action.ActionMsg
+import cn.don9cn.blog.support.action.ActionMsgHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -20,45 +21,45 @@ open class ArticleClassifyAction : BaseAction<ArticleClassify>() {
 
     @PostMapping
     override fun baseInsert(articleClassify: ArticleClassify): ActionMsg {
-        return super.insert(articleClassifyService!!.baseInsert(articleClassify))
+        return ActionMsgHandler.insert(articleClassifyService!!.baseInsert(articleClassify))
     }
 
     override fun baseInsertBatch(list: List<ArticleClassify>): ActionMsg {
-        return super.insert(articleClassifyService!!.baseInsertBatch(list))
+        return ActionMsgHandler.insert(articleClassifyService!!.baseInsertBatch(list))
     }
 
     @PutMapping
     override fun baseUpdate(articleClassify: ArticleClassify): ActionMsg {
-        return super.update(articleClassifyService!!.baseUpdate(articleClassify))
+        return ActionMsgHandler.update(articleClassifyService!!.baseUpdate(articleClassify))
     }
 
     override fun baseRemove(code: String): ActionMsg {
-        return super.delete(articleClassifyService!!.baseDeleteById(code))
+        return ActionMsgHandler.delete(articleClassifyService!!.baseDeleteById(code))
     }
 
     @DeleteMapping
     override fun baseRemoveBatch(codes: String): ActionMsg {
-        return super.delete(articleClassifyService!!.baseDeleteBatch(codes))
+        return ActionMsgHandler.delete(articleClassifyService!!.baseDeleteBatch(codes))
     }
 
     @GetMapping
     override fun baseFindById(code: String): ActionMsg {
-        return super.find(articleClassifyService!!.baseFindById(code))
+        return ActionMsgHandler.find(articleClassifyService!!.baseFindById(code))
     }
 
     @GetMapping("/all")
     override fun baseFindAll(): ActionMsg {
-        return super.find(articleClassifyService!!.baseFindAll())
+        return ActionMsgHandler.find(articleClassifyService!!.baseFindAll())
     }
 
     @GetMapping("/list")
     override fun baseFindListByParams(articleClassify: ArticleClassify): ActionMsg {
-        return super.find(articleClassifyService!!.baseFindListByParams(articleClassify))
+        return ActionMsgHandler.find(articleClassifyService!!.baseFindListByParams(articleClassify))
     }
 
     @GetMapping("/page")
     override fun baseFindByPage(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, articleClassify: ArticleClassify): ActionMsg {
-        return super.find(articleClassifyService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, articleClassify)))
+        return ActionMsgHandler.find(articleClassifyService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, articleClassify)))
     }
 
     /**
@@ -66,7 +67,7 @@ open class ArticleClassifyAction : BaseAction<ArticleClassify>() {
      */
     @GetMapping(path = ["/tree", "/tree/public"])
     open fun getTree():ActionMsg{
-        return super.find(articleClassifyService!!.getTree())
+        return ActionMsgHandler.find(articleClassifyService!!.getTree())
     }
 
     /**
@@ -74,7 +75,7 @@ open class ArticleClassifyAction : BaseAction<ArticleClassify>() {
      */
     @GetMapping("/selectOptions")
     open fun doGetSelectOptions(): ActionMsg {
-        return super.find(articleClassifyService!!.doGetSelectOptions())
+        return ActionMsgHandler.find(articleClassifyService!!.doGetSelectOptions())
     }
 
 }

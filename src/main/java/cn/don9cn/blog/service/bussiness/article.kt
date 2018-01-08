@@ -2,6 +2,10 @@ package cn.don9cn.blog.service.bussiness
 
 import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant
+import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType
+import cn.don9cn.blog.autoconfigure.activemq.core.MqManager
+import cn.don9cn.blog.autoconfigure.activemq.model.CommonMqMessage
+import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage
 import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager
 import cn.don9cn.blog.autoconfigure.shiro.util.ShiroUtil
 import cn.don9cn.blog.dao.bussiness.ArticleAndFileDao
@@ -54,7 +58,15 @@ open class ArticleServiceImpl : ArticleService {
         entity.files?.isNotBlank().let {
             articleAndFileDao!!.insertBatch(entity)
         }
-        return articleDao!!.baseInsert(entity)
+        val x = articleDao!!.baseInsert(entity)
+        if(x>0){
+            val message = CommonMqMessage()
+            message.title = "新文章!"
+            message.content = "您订阅的作者 [${entity.author}] 发布了新文章 <<${entity.title}>>!"
+            message.link = "/loadArticle?articleCode=" + entity.code
+            MqManager.submit(MqRegisterMessage(MqDestinationType.TOPIC, mqConstant!!.TOPIC_AUTHOR_SUBSCRIBE_PREFIX + entity.author, message))
+        }
+        return x
     }
 
     //@CacheEvict(value = "Article",allEntries = true)

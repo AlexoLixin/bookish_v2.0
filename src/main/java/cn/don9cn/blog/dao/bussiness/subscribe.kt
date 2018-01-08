@@ -12,11 +12,15 @@ import org.springframework.stereotype.Repository
  * 订阅模块dao接口
  */
 interface SubscribeInfoDao:BaseDao<SubscribeInfo>{
-    fun deleteByEmail(email: String): Int
+    fun deleteByEmail(entity: SubscribeInfo): Int
 
-    fun deleteByEmailAndAuthor(email: String, author: String): Int
+    fun deleteByEmailAndAuthor(entity: SubscribeInfo): Int
 
-    fun findByAuthor(author: String): Set<SubscribeInfo>
+    fun findEmailSetByAuthor(author: String): Set<String>
+
+    fun findSubscribeAuthorSetByUserName(userCode: String): Set<String>
+
+    fun checkEmailExists(email: String): Boolean
 }
 
 /**
@@ -25,20 +29,30 @@ interface SubscribeInfoDao:BaseDao<SubscribeInfo>{
 @Repository
 open class SubscribeInfoDaoImpl:SubscribeInfoDao{
 
-    override fun deleteByEmail(email: String): Int {
+    override fun deleteByEmail(entity: SubscribeInfo): Int {
         return dslOperator{
-            remove<SubscribeInfo>(query("email" eq email))
+            remove<SubscribeInfo>(query("user" eq entity.user ).and("email" eq entity.email!!))
         }
     }
 
-    override fun deleteByEmailAndAuthor(email: String, author: String): Int {
+    override fun deleteByEmailAndAuthor(entity: SubscribeInfo): Int {
         return dslOperator{
-            remove<SubscribeInfo>(query("email" eq email).and("author" eq author))
+            remove<SubscribeInfo>(createQueryByEntity(entity))
         }
     }
 
-    override fun findByAuthor(author: String): Set<SubscribeInfo> {
+    override fun findEmailSetByAuthor(author: String): Set<String> {
         val list = dslOperator.findList<SubscribeInfo>(query("author" eq author))
-        return list.toSet()
+        return list.map { it.email!! }.toSet()
+    }
+
+    override fun findSubscribeAuthorSetByUserName(userCode: String): Set<String> {
+        val list = dslOperator.findList<SubscribeInfo>(query("user" eq userCode))
+        return list.map { it.author!! }.toSet()
+    }
+
+    override fun checkEmailExists(email: String): Boolean {
+        return dslOperator.findOne<SubscribeInfo>(query("email" eq email)) != null
     }
 }
+

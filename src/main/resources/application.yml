@@ -50,7 +50,9 @@ spring:
     port: 6379
   activemq:
     queue-default: queue-default
+    queue-user-prefix: queue-user-
     topic-default: topic-default
+    topic-author-subscribe-prefix: topic-article-subscribe-
     topic-msg-system: topic-msg-system
     topic-mail-register: topic-mail-register
     topic-mail-subscribe: topic-mail-subscribe
@@ -72,7 +74,9 @@ spring:
     port: 6379
   activemq:
     queue-default: queue-default
+    queue-user-prefix: queue-user-test-
     topic-default: topic-default
+    topic-author-subscribe-prefix: topic-article-subscribe-test-
     topic-msg-system: systemtest
     topic-mail-register: mailtest
     topic-mail-subscribe: subscribetest

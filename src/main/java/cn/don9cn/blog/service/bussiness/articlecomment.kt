@@ -1,6 +1,7 @@
 package cn.don9cn.blog.service.bussiness
 
 import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType
 import cn.don9cn.blog.autoconfigure.activemq.core.MqManager
 import cn.don9cn.blog.autoconfigure.activemq.model.CommonMqMessage
@@ -35,6 +36,9 @@ open class ArticleCommentServiceImpl : ArticleCommentService {
     @Autowired
     private var articleDao: ArticleDao? = null
 
+    @Autowired
+    private var mqConstant: MqConstant? = null
+
     //@CacheEvict(value = "ArticleClassify",allEntries = true)
     override fun baseInsert(entity: ArticleComment): Int {
         val code = UuidUtil.getUuid()
@@ -55,7 +59,7 @@ open class ArticleCommentServiceImpl : ArticleCommentService {
                 message.title = "您有新留言!"
                 message.content = "您的文章 《" + it.title + "》 收到一条来自 [" + entity.nickname + "] 的新留言!"
                 message.link = "/loadArticle?articleCode=" + it.code
-                MqManager.submit(MqRegisterMessage(MqDestinationType.QUEUE, "queue-user-" + it.author, message))
+                MqManager.submit(MqRegisterMessage(MqDestinationType.QUEUE, mqConstant!!.QUEUE_USER_PREFIX + it.author, message))
             }
         }
         return x
