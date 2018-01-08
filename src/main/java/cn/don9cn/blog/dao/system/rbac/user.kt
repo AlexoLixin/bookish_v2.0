@@ -52,12 +52,7 @@ open class SysUserDaoImpl : SysUserDao {
      * @return
      */
     override fun checkUserName(username: String): Boolean {
-        dslOperator.mongoTemplate.count(query("username" eq username),SysUser::class.java).let {
-            if(it > 0){
-                return false
-            }
-            return true
-        }
+        return dslOperator.findOne<SysUser>(query("username" eq username)) == null
     }
 
 }
