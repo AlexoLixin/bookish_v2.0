@@ -5,9 +5,9 @@ import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType
 import cn.don9cn.blog.autoconfigure.activemq.core.MqManager
 import cn.don9cn.blog.autoconfigure.activemq.model.CommonMqMessage
-import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage
+import cn.don9cn.blog.autoconfigure.activemq.core.MqTask
+import cn.don9cn.blog.autoconfigure.activemq.model.SubscribeMailMessage
 import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager
-import cn.don9cn.blog.autoconfigure.shiro.util.ShiroUtil
 import cn.don9cn.blog.dao.bussiness.ArticleAndFileDao
 import cn.don9cn.blog.dao.bussiness.ArticleClassifyDao
 import cn.don9cn.blog.dao.bussiness.ArticleDao
@@ -66,12 +66,14 @@ open class ArticleServiceImpl : ArticleService {
         if(x>0){
             val subscribers = subscribeInfoDao!!.findUserNameSetByAuthor(entity.author!!)
             val message = CommonMqMessage()
-            message.title = "新文章!"
+            message.title = "新文章发布!"
             message.content = "您订阅的作者 [${entity.author}] 发布了新文章 <<${entity.title}>> "
+            message.producer = entity.author
             message.link = "/loadArticle?articleCode=" + entity.code
             subscribers.forEach{
-                MqManager.submit(MqRegisterMessage(MqDestinationType.QUEUE, mqConstant!!.QUEUE_USER_PREFIX + it, message))
+                MqManager.submit(MqTask(MqDestinationType.QUEUE, mqConstant!!.QUEUE_USER_PREFIX + it, message))
             }
+            MqManager.submit(MqTask(MqDestinationType.TOPIC, mqConstant!!.TOPIC_MAIL_SUBSCRIBE, SubscribeMailMessage(entity.title,entity.author)))
         }
         return x
     }

@@ -1,6 +1,5 @@
 package cn.don9cn.blog.autoconfigure.activemq.core;
 
-import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +24,7 @@ public class MqManager {
     /**
      * 管理待push到ActiveMQ的队列
      */
-    private static final BlockingQueue<MqRegisterMessage> queue = new LinkedBlockingDeque<>();
+    private static final BlockingQueue<MqTask> queue = new LinkedBlockingDeque<>();
 
     /**
      * 线程池
@@ -48,7 +47,7 @@ public class MqManager {
         exec.execute(() -> {
             while (true) {
                 try {
-                    MqRegisterMessage take = queue.take();
+                    MqTask take = queue.take();
                     mqExTemplate.parseAndPush(take);
                 } catch(InterruptedException e){
                     break;
@@ -62,7 +61,7 @@ public class MqManager {
      * 注册新消息到管理器
      * @param message
      */
-    public static void submit(MqRegisterMessage message){
+    public static void submit(MqTask message){
 
         //生产者线程将新消息放入队列
         exec.execute(() -> {

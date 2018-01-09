@@ -5,7 +5,7 @@ import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType
 import cn.don9cn.blog.autoconfigure.activemq.core.MqManager
 import cn.don9cn.blog.autoconfigure.activemq.model.CommonMqMessage
-import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage
+import cn.don9cn.blog.autoconfigure.activemq.core.MqTask
 import cn.don9cn.blog.dao.bussiness.ArticleCommentDao
 import cn.don9cn.blog.dao.bussiness.ArticleDao
 import cn.don9cn.blog.model.bussiness.acticlecomment.ArticleComment
@@ -59,7 +59,7 @@ open class ArticleCommentServiceImpl : ArticleCommentService {
                 message.title = "您有新留言!"
                 message.content = "您的文章 《" + it.title + "》 收到一条来自 [" + entity.nickname + "] 的新留言!"
                 message.link = "/loadArticle?articleCode=" + it.code
-                MqManager.submit(MqRegisterMessage(MqDestinationType.QUEUE, mqConstant!!.QUEUE_USER_PREFIX + it.author, message))
+                MqManager.submit(MqTask(MqDestinationType.QUEUE, mqConstant!!.QUEUE_USER_PREFIX + it.author, message))
             }
         }
         return x

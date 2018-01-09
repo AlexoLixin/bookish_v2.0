@@ -3,7 +3,6 @@ package cn.don9cn.blog.autoconfigure.activemq.core;
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant;
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType;
 import cn.don9cn.blog.autoconfigure.activemq.model.MqMessage;
-import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,14 +64,14 @@ public class MqExTemplate {
 
     /**
      * 解析注册的消息并且推送到ActiveMQ
-     * @param mqRegisterMessage
+     * @param mqTask
      */
-    public void parseAndPush(MqRegisterMessage mqRegisterMessage){
-        MqDestinationType destinationType = mqRegisterMessage.getDestinationType();
+    public void parseAndPush(MqTask mqTask){
+        MqDestinationType destinationType = mqTask.getDestinationType();
         if(destinationType.equals(MqDestinationType.QUEUE)){
-            sendToQueue(mqRegisterMessage.getDestination(),mqRegisterMessage.getMessage());
+            sendToQueue(mqTask.getDestination(), mqTask.getMessage());
         }else{
-            pushToTopic(mqRegisterMessage.getDestination(),mqRegisterMessage.getMessage());
+            pushToTopic(mqTask.getDestination(), mqTask.getMessage());
         }
     }
 

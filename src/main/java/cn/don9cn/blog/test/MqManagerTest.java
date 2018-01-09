@@ -1,7 +1,7 @@
 package cn.don9cn.blog.test;
 
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType;
-import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage;
+import cn.don9cn.blog.autoconfigure.activemq.core.MqTask;
 import cn.don9cn.blog.autoconfigure.activemq.model.CommonMqMessage;
 
 import java.util.concurrent.*;
@@ -19,9 +19,9 @@ public class MqManagerTest {
     public static void main(String[] args) {
 
 
-        MqRegisterMessage mqRegisterMessage = new MqRegisterMessage(MqDestinationType.QUEUE,"",new CommonMqMessage());
+        MqTask mqTask = new MqTask(MqDestinationType.QUEUE,"",new CommonMqMessage());
 
-        System.out.println(mqRegisterMessage.getDestinationType().equals(MqDestinationType.QUEUE));
+        System.out.println(mqTask.getDestinationType().equals(MqDestinationType.QUEUE));
 
 
     }

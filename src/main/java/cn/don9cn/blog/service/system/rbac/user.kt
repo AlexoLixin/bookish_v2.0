@@ -4,10 +4,9 @@ import cn.booklish.mongodsl.core.PageResult
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType
 import cn.don9cn.blog.autoconfigure.activemq.core.MqManager
-import cn.don9cn.blog.autoconfigure.activemq.model.MailMessage
-import cn.don9cn.blog.autoconfigure.activemq.model.MqRegisterMessage
+import cn.don9cn.blog.autoconfigure.activemq.model.RegisterMailMessage
+import cn.don9cn.blog.autoconfigure.activemq.core.MqTask
 import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager
-import cn.don9cn.blog.autoconfigure.shiro.util.ShiroUtil
 import cn.don9cn.blog.dao.system.rbac.SysRoleDao
 import cn.don9cn.blog.dao.system.rbac.SysUserDao
 import cn.don9cn.blog.model.system.rbac.RegisterResult
@@ -190,7 +189,7 @@ open class SysUserServiceImpl : SysUserService {
 
     override fun register(validateCode: String, sysUser: SysUser, request: HttpServletRequest): RegisterResult {
         //先校验验证码
-        if (validateCode.isNotBlank()) {
+        if (validateCode.isBlank()) {
             return RegisterResult(false, "验证码校验失败")
         } else {
             val verifyCode = request.session.getAttribute("verifyCode")
@@ -218,15 +217,14 @@ open class SysUserServiceImpl : SysUserService {
         //注册成功后,推送信息到activeMq
         return if (x > 0) {
             try {
-                MqManager.submit(MqRegisterMessage(MqDestinationType.TOPIC, mqConstant!!.TOPIC_MAIL_REGISTER,
-                        MailMessage(sysUser.username, sysUser.email)))
+                MqManager.submit(MqTask(MqDestinationType.TOPIC, mqConstant!!.TOPIC_MAIL_REGISTER,
+                        RegisterMailMessage(sysUser.username, sysUser.email)))
             } catch (e: Exception) {
-                // TODO
                 //将用户的注册信息推送到activeMq失败,暂时先不处理,等完善好了异常处理系统再修改
                 println("新用户的注册消息推送到ActiveMQ失败!")
             }
 
-            RegisterResult(false, "注册成功")
+            RegisterResult(true, "注册成功")
         }else{
             RegisterResult(false, "注册失败")
         }

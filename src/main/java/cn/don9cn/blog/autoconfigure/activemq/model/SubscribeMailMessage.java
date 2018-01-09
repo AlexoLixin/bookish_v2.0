@@ -4,21 +4,21 @@ import cn.don9cn.blog.util.DateExtKt;
 
 /**
  * @Author: liuxindong
- * @Description: 邮件消息实体
+ * @Description: 用户文章订阅邮件消息实体
  * @Create: 2017/11/10 8:53
  * @Modify:
  */
-public class MailMessage implements MqMessage {
+public class SubscribeMailMessage implements MqMessage {
 
-    private final String username;
+    private final String title;
 
-    private final String email;
+    private final String author;
 
     private String createTime = DateExtKt.getNowDate();
 
-    public MailMessage(String username, String email) {
-        this.username = username;
-        this.email = email;
+    public SubscribeMailMessage(String title, String author) {
+        this.title = title;
+        this.author = author;
     }
 
     public String getCreateTime() {
@@ -29,11 +29,12 @@ public class MailMessage implements MqMessage {
         this.createTime = createTime;
     }
 
-    public String getUsername() {
-        return username;
+
+    public String getTitle() {
+        return title;
     }
 
-    public String getEmail() {
-        return email;
+    public String getAuthor() {
+        return author;
     }
 }

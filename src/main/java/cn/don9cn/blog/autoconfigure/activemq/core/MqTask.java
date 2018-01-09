@@ -1,6 +1,7 @@
-package cn.don9cn.blog.autoconfigure.activemq.model;
+package cn.don9cn.blog.autoconfigure.activemq.core;
 
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType;
+import cn.don9cn.blog.autoconfigure.activemq.model.MqMessage;
 
 /**
  * @Author: liuxindong
@@ -8,7 +9,7 @@ import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType;
  * @Create: 2017/11/17 8:58
  * @Modify:
  */
-public class MqRegisterMessage {
+public class MqTask {
 
     private final MqDestinationType destinationType;
 
@@ -17,7 +18,7 @@ public class MqRegisterMessage {
     private final MqMessage message;
 
 
-    public MqRegisterMessage(MqDestinationType destinationType, String destination, MqMessage message) {
+    public MqTask(MqDestinationType destinationType, String destination, MqMessage message) {
         this.destinationType = destinationType;
         this.destination = destination;
         this.message = message;
