@@ -94,6 +94,10 @@ open class SubscribeServiceImpl:SubscribeService{
             entity.user = it.username!!
         }
 
+        if(subscribeInfoDao!!.checkInfoExists(entity)){
+            return ActionMsg(false,"您已订阅作者 ${entity.author} ,无需重复订阅 !")
+        }
+
         return ActionMsgHandler.insert(subscribeInfoDao!!.baseInsert(entity),"订阅成功","订阅失败")
 
     }
@@ -104,7 +108,7 @@ open class SubscribeServiceImpl:SubscribeService{
     override fun delete(email: String, author: String): ActionMsg {
 
         if(!subscribeInfoDao!!.checkEmailExists(email)){
-            return ActionMsg(false,"退订失败,该邮箱 $email 没有订阅任何作者,无需退订 !")
+            return ActionMsg(false,"该邮箱 $email 没有订阅任何作者,无需退订 !")
         }
 
         val entity = SubscribeInfo().apply {

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository
  * 订阅模块dao接口
  */
 interface SubscribeInfoDao:BaseDao<SubscribeInfo>{
+
     fun deleteByEmail(entity: SubscribeInfo): Int
 
     fun deleteByEmailAndAuthor(entity: SubscribeInfo): Int
@@ -21,6 +22,8 @@ interface SubscribeInfoDao:BaseDao<SubscribeInfo>{
     fun findUserNameSetByAuthor(author: String): Set<String>
 
     fun checkEmailExists(email: String): Boolean
+
+    fun checkInfoExists(entity: SubscribeInfo): Boolean
 }
 
 /**
@@ -54,5 +57,15 @@ open class SubscribeInfoDaoImpl:SubscribeInfoDao{
     override fun checkEmailExists(email: String): Boolean {
         return dslOperator.findOne<SubscribeInfo>(query("email" eq email)) != null
     }
+
+    override fun checkInfoExists(entity: SubscribeInfo): Boolean {
+        return dslOperator{
+            findOne<SubscribeInfo>(query("user" eq entity.user )
+                                        .and("email" eq entity.email)
+                                        .and("author" eq entity.author)
+            )
+        } != null
+    }
+
 }
 
