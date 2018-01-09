@@ -18,7 +18,7 @@ interface SubscribeInfoDao:BaseDao<SubscribeInfo>{
 
     fun findEmailSetByAuthor(author: String): Set<String>
 
-    fun findSubscribeAuthorSetByUserName(userCode: String): Set<String>
+    fun findUserNameSetByAuthor(author: String): Set<String>
 
     fun checkEmailExists(email: String): Boolean
 }
@@ -31,7 +31,7 @@ open class SubscribeInfoDaoImpl:SubscribeInfoDao{
 
     override fun deleteByEmail(entity: SubscribeInfo): Int {
         return dslOperator{
-            remove<SubscribeInfo>(query("user" eq entity.user ).and("email" eq entity.email!!))
+            remove<SubscribeInfo>(query("user" eq entity.user ).and("email" eq entity.email))
         }
     }
 
@@ -43,12 +43,12 @@ open class SubscribeInfoDaoImpl:SubscribeInfoDao{
 
     override fun findEmailSetByAuthor(author: String): Set<String> {
         val list = dslOperator.findList<SubscribeInfo>(query("author" eq author))
-        return list.map { it.email!! }.toSet()
+        return list.map { it.email }.toSet()
     }
 
-    override fun findSubscribeAuthorSetByUserName(userCode: String): Set<String> {
-        val list = dslOperator.findList<SubscribeInfo>(query("user" eq userCode))
-        return list.map { it.author!! }.toSet()
+    override fun findUserNameSetByAuthor(author: String): Set<String> {
+        val list = dslOperator.findList<SubscribeInfo>(query("author" eq author))
+        return list.map { it.user }.filter { it != "this is a visitor" }.toSet()
     }
 
     override fun checkEmailExists(email: String): Boolean {

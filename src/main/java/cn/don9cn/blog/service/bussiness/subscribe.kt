@@ -28,7 +28,6 @@ interface SubscribeService:BaseService<SubscribeInfo>{
      */
     fun findEmailSetByAuthor(author: String): Set<String>
 
-    fun findSubscribeAuthorSetByUserName(userCode: String): Set<String>
 }
 
 
@@ -86,8 +85,10 @@ open class SubscribeServiceImpl:SubscribeService{
      */
     override fun insert(entity: SubscribeInfo): ActionMsg {
 
-        if(sysUserDao!!.checkUserName(entity.author)){
-            return ActionMsg(false,"订阅失败,不存在作者 ${entity.author} !")
+        if(entity.author != "*"){
+            if(sysUserDao!!.checkUserName(entity.author)){
+                return ActionMsg(false,"订阅失败,不存在作者 ${entity.author} !")
+            }
         }
 
         //如果是登录用户
@@ -125,10 +126,6 @@ open class SubscribeServiceImpl:SubscribeService{
 
     override fun findEmailSetByAuthor(author: String): Set<String> {
         return subscribeInfoDao!!.findEmailSetByAuthor(author)
-    }
-
-    override fun findSubscribeAuthorSetByUserName(userCode: String): Set<String> {
-        return subscribeInfoDao!!.findSubscribeAuthorSetByUserName(userCode)
     }
 
 }

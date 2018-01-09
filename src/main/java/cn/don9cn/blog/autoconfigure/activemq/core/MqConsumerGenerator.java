@@ -5,6 +5,7 @@ import cn.don9cn.blog.autoconfigure.activemq.listener.UserMqListener;
 import cn.don9cn.blog.autoconfigure.websocket.msg.MsgWebSocketHandler;
 import cn.don9cn.blog.exception.ExceptionWrapper;
 import cn.don9cn.blog.service.bussiness.SubscribeService;
+import org.apache.activemq.ActiveMQConnection;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,48 +29,45 @@ public class MqConsumerGenerator {
     @Autowired
     private MqConstant mqConstant;
 
-    @Autowired
-    private SubscribeService subscribeService;
-
-    private final ConcurrentHashMap<String,Connection> cache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String,ActiveMQConnection> cache = new ConcurrentHashMap<>();
 
     private static Logger logger = Logger.getLogger(MqConsumerGenerator.class);
 
     public void startListen(String username, MsgWebSocketHandler msgWebSocketHandler){
 
         try {
-            Connection connection = cache.get(username);
-            if(connection==null){
+            ActiveMQConnection connection = cache.get(username);
+            //关闭后的activeMq connection不可再次start使用,所以如果由于activeMq服务端可能
+            //      导致的连接关闭,也要校验
+            if(connection==null || connection.isClosed()){
                 synchronized (cache){
                     connection = cache.get(username);
-                    if(connection==null){
-                        connection = connectionFactory.createConnection();
-                        connection.setClientID(username);
-                        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                    if(connection==null || connection.isClosed()){
+                        //考虑到此时connection可能不为空,但是出于closed状态,那么进行删除,消除引用,方便gc回收
+                        cache.remove(username);
+
+                        ActiveMQConnection newConnection = (ActiveMQConnection) connectionFactory.createConnection();
+                        newConnection.setClientID(username);
+                        Session session = newConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
                         //监听系统通知
                         Topic topic = session.createTopic(mqConstant.TOPIC_MSG_SYSTEM);
                         TopicSubscriber topicSubscriber = session.createDurableSubscriber(topic, username);
                         topicSubscriber.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
+                        logger.info("ActiveMQ : 创建用户 ["+username+"] 监听: "+mqConstant.TOPIC_MSG_SYSTEM);
 
                         //监听用户自身的queue队列
                         Queue queue = session.createQueue(mqConstant.QUEUE_USER_PREFIX + username);
                         MessageConsumer queueConsumer = session.createConsumer(queue);
                         queueConsumer.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
+                        logger.info("ActiveMQ : 创建用户 ["+username+"] 监听: "+mqConstant.QUEUE_USER_PREFIX + username);
 
-                        //监听用户订阅的作者topic
-                        Set<String> set = subscribeService.findSubscribeAuthorSetByUserName(username);
-                        for(String author:set){
-                            Topic authorTopic = session.createTopic(mqConstant.TOPIC_AUTHOR_SUBSCRIBE_PREFIX + author);
-                            TopicSubscriber authorTopicSubscriber = session.createDurableSubscriber(authorTopic, username);
-                            authorTopicSubscriber.setMessageListener(new UserMqListener(username,msgWebSocketHandler));
-                        }
+                        newConnection.start();
 
-                        cache.put(username,connection);
+                        cache.put(username,newConnection);
                     }
                 }
             }
-            connection.start();
             logger.info("ActiveMQ : 成功启动用户 ["+username+"] 消息监听 >>>");
         } catch (JMSException e) {
             throw new ExceptionWrapper(e,"MqConsumerGenerator.startListen 启动ActiveMQ订阅者监听失败");
@@ -79,13 +77,14 @@ public class MqConsumerGenerator {
 
     public void closeListen(String username){
 
-        Connection connection = cache.get(username);
+        ActiveMQConnection connection = cache.get(username);
         if(connection!=null){
             synchronized (cache){
                 connection = cache.get(username);
                 if(connection!=null){
                     try {
                         connection.close();
+                        cache.remove(username);
                         logger.info("ActiveMQ : 成功关闭用户 ["+username+"] 消息监听 >>>");
                     } catch (JMSException e) {
                         throw new ExceptionWrapper(e,"MqConsumerGenerator.closeListen 关闭ActiveMQ订阅者监听失败");

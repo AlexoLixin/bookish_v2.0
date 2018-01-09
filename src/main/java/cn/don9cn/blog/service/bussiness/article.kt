@@ -11,6 +11,7 @@ import cn.don9cn.blog.autoconfigure.shiro.util.ShiroUtil
 import cn.don9cn.blog.dao.bussiness.ArticleAndFileDao
 import cn.don9cn.blog.dao.bussiness.ArticleClassifyDao
 import cn.don9cn.blog.dao.bussiness.ArticleDao
+import cn.don9cn.blog.dao.bussiness.SubscribeInfoDao
 import cn.don9cn.blog.dao.system.file.UploadFileDao
 import cn.don9cn.blog.model.bussiness.article.Article
 import cn.don9cn.blog.service.BaseService
@@ -49,6 +50,9 @@ open class ArticleServiceImpl : ArticleService {
     private var articleAndFileDao: ArticleAndFileDao? = null
 
     @Autowired
+    private var subscribeInfoDao: SubscribeInfoDao? = null
+
+    @Autowired
     private var mqConstant: MqConstant? = null
 
     //@CacheEvict(value = "Article",allEntries = true)
@@ -60,11 +64,14 @@ open class ArticleServiceImpl : ArticleService {
         }
         val x = articleDao!!.baseInsert(entity)
         if(x>0){
+            val subscribers = subscribeInfoDao!!.findUserNameSetByAuthor(entity.author!!)
             val message = CommonMqMessage()
             message.title = "新文章!"
-            message.content = "您订阅的作者 [${entity.author}] 发布了新文章 <<${entity.title}>>!"
+            message.content = "您订阅的作者 [${entity.author}] 发布了新文章 <<${entity.title}>> "
             message.link = "/loadArticle?articleCode=" + entity.code
-            MqManager.submit(MqRegisterMessage(MqDestinationType.TOPIC, mqConstant!!.TOPIC_AUTHOR_SUBSCRIBE_PREFIX + entity.author, message))
+            subscribers.forEach{
+                MqManager.submit(MqRegisterMessage(MqDestinationType.QUEUE, mqConstant!!.QUEUE_USER_PREFIX + it, message))
+            }
         }
         return x
     }
@@ -136,8 +143,6 @@ open class ArticleServiceImpl : ArticleService {
 
     /**
      * 个人中心-普通用户删除文章(只能删除自己发布的文章,防止其他用户数据被恶意篡改)
-     * @param code
-     * @return
      */
     //@CacheEvict(value = "Article",allEntries = true)
     override fun doRemoveByUser(code: String): Int {
@@ -146,8 +151,6 @@ open class ArticleServiceImpl : ArticleService {
 
     /**
      * 个人中心-普通用户更新文章(只能更新自己发布的文章,防止其他用户数据被恶意篡改)
-     * @param article
-     * @return
      */
     //@CacheEvict(value = "Article",allEntries = true)
     override fun doUpdateByUser(article: Article): Int {
@@ -158,8 +161,6 @@ open class ArticleServiceImpl : ArticleService {
 
     /**
      * 个人中心-普通获取文章列表(只能获取自己发布的文章列表,防止其他用户数据被恶意篡改)
-     * @param pageResult
-     * @return
      */
     //@Cacheable(value = "Article")
     override fun doFindByPageByUser(pageResult: PageResult<Article>): PageResult<Article> {
