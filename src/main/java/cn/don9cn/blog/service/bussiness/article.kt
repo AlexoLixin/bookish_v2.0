@@ -69,11 +69,11 @@ open class ArticleServiceImpl : ArticleService {
             message.title = "新文章发布!"
             message.content = "您订阅的作者 [${entity.author}] 发布了新文章 <<${entity.title}>> "
             message.producer = entity.author
-            message.link = "/loadArticle?articleCode=" + entity.code
+            message.link = entity.code
             subscribers.forEach{
                 MqManager.submit(MqTask(MqDestinationType.QUEUE, mqConstant!!.QUEUE_USER_PREFIX + it, message))
             }
-            MqManager.submit(MqTask(MqDestinationType.TOPIC, mqConstant!!.TOPIC_MAIL_SUBSCRIBE, SubscribeMailMessage(entity.title,entity.author)))
+            MqManager.submit(MqTask(MqDestinationType.TOPIC, mqConstant!!.TOPIC_MAIL_SUBSCRIBE, SubscribeMailMessage(entity.title, entity.author, entity.code)))
         }
         return x
     }

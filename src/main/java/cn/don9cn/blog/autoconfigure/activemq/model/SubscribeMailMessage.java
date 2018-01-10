@@ -14,11 +14,14 @@ public class SubscribeMailMessage implements MqMessage {
 
     private final String author;
 
+    private final String articleCode;
+
     private String createTime = DateExtKt.getNowDate();
 
-    public SubscribeMailMessage(String title, String author) {
+    public SubscribeMailMessage(String title, String author, String articleCode) {
         this.title = title;
         this.author = author;
+        this.articleCode = articleCode;
     }
 
     public String getCreateTime() {
@@ -36,5 +39,9 @@ public class SubscribeMailMessage implements MqMessage {
 
     public String getAuthor() {
         return author;
+    }
+
+    public String getArticleCode() {
+        return articleCode;
     }
 }
