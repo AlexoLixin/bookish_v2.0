@@ -1,9 +1,14 @@
 package cn.don9cn.blog.service.bussiness
 
 import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant
+import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType
+import cn.don9cn.blog.autoconfigure.activemq.core.MqManager
+import cn.don9cn.blog.autoconfigure.activemq.core.MqTask
+import cn.don9cn.blog.autoconfigure.activemq.model.CommonMqMessage
+import cn.don9cn.blog.autoconfigure.activemq.model.SubscribeMailMessage
 import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager
 import cn.don9cn.blog.dao.bussiness.SubscribeInfoDao
-import cn.don9cn.blog.dao.system.rbac.SysRoleDao
 import cn.don9cn.blog.dao.system.rbac.SysUserDao
 import cn.don9cn.blog.model.bussiness.subscribe.SubscribeInfo
 import cn.don9cn.blog.service.BaseService
@@ -28,6 +33,10 @@ interface SubscribeService:BaseService<SubscribeInfo>{
      */
     fun findEmailSetByAuthor(author: String): Set<String>
 
+    fun findByPageByUser(pageResult: PageResult<SubscribeInfo>): PageResult<SubscribeInfo>
+
+    fun findSubscribesByPageByUser(pageResult: PageResult<SubscribeInfo>): PageResult<SubscribeInfo>
+
 }
 
 
@@ -38,11 +47,15 @@ interface SubscribeService:BaseService<SubscribeInfo>{
 @Transactional
 open class SubscribeServiceImpl:SubscribeService{
 
+
     @Autowired
     private var subscribeInfoDao: SubscribeInfoDao? = null
 
     @Autowired
     private var sysUserDao: SysUserDao? = null
+
+    @Autowired
+    private var mqConstant: MqConstant? = null
 
     override fun baseInsert(entity: SubscribeInfo): Int {
         return subscribeInfoDao!!.baseInsert(entity)
@@ -80,25 +93,43 @@ open class SubscribeServiceImpl:SubscribeService{
         return subscribeInfoDao!!.baseFindByPage(pageResult)
     }
 
+    override fun findByPageByUser(pageResult: PageResult<SubscribeInfo>): PageResult<SubscribeInfo> {
+        pageResult.entity!!.user = MyShiroCacheManager.getUser()?.username
+        return subscribeInfoDao!!.baseFindByPage(pageResult)
+    }
+
+    override fun findSubscribesByPageByUser(pageResult: PageResult<SubscribeInfo>): PageResult<SubscribeInfo> {
+        pageResult.entity!!.author = MyShiroCacheManager.getUser()?.username
+        return subscribeInfoDao!!.baseFindByPage(pageResult)
+    }
+
+
     /**
      * 添加订阅信息
      */
     override fun insert(entity: SubscribeInfo): ActionMsg {
 
-        if(sysUserDao!!.checkUserName(entity.author)){
+        if(sysUserDao!!.checkUserName(entity.author!!)){
             return ActionMsg(false,"订阅失败,不存在作者 ${entity.author} !")
         }
 
-        //如果是登录用户
-        MyShiroCacheManager.getUser()?.let {
-            entity.user = it.username!!
-        }
+        //判断是否是登录用户
+        entity.user = MyShiroCacheManager.getUser()?.username?:"this is a visitor"
 
         if(subscribeInfoDao!!.checkInfoExists(entity)){
             return ActionMsg(false,"您已订阅作者 ${entity.author} ,无需重复订阅 !")
         }
 
-        return ActionMsgHandler.insert(subscribeInfoDao!!.baseInsert(entity),"订阅成功","订阅失败")
+        val x = subscribeInfoDao!!.baseInsert(entity)
+        if(x>0){
+            val message = CommonMqMessage()
+            message.title = "您有新的订阅者!"
+            message.content = "用户 ${entity.user} 订阅了您的文章 "
+            message.producer = "system-subscribe"
+            MqManager.submit(MqTask(MqDestinationType.QUEUE, mqConstant!!.QUEUE_USER_PREFIX + entity.author, message))
+        }
+
+        return ActionMsgHandler.insert(x,"订阅成功","订阅失败")
 
     }
 
@@ -115,10 +146,10 @@ open class SubscribeServiceImpl:SubscribeService{
             this.email = email
             this.author = author
         }
-        //如果是登录用户
-        MyShiroCacheManager.getUser()?.let {
-            entity.user = it.username!!
-        }
+
+        //判断是否是登录用户
+        entity.user = MyShiroCacheManager.getUser()?.username?:"this is a visitor"
+
         val x = when (author) {
             "*" -> subscribeInfoDao!!.deleteByEmail(entity)
             else -> subscribeInfoDao!!.deleteByEmailAndAuthor(entity)

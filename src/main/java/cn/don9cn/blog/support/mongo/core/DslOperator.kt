@@ -466,8 +466,12 @@ class DslOperator(mongoClient: MongoClient,database:String){
     fun <T:Any> findPage(page:PageResult<T>):PageResult<T>{
         val entity = page.entity?:throw DslOperationException("findPage 查找失败,PageResult中参数实体entity为空")
         val query = createQueryByEntity(entity)
-        page.startTime?.let { query.addCriteria(Criteria.where("createTime").gt(it)) }
-        page.endTime?.let { query.addCriteria(Criteria.where("createTime").lt(it)) }
+        if(page.startTime!=null || page.endTime!=null){
+            val createTimeCriteria = Criteria.where("createTime")
+            page.startTime?.let { createTimeCriteria.gt(it) }
+            page.endTime?.let { createTimeCriteria.lt(it) }
+            query.addCriteria(createTimeCriteria)
+        }
         try {
             val count = mongoTemplate.count(query,entity.javaClass,entity.javaClass.simpleName)
             page.totalCount = count
@@ -484,8 +488,12 @@ class DslOperator(mongoClient: MongoClient,database:String){
      * 查找操作: 分页查询
      */
     inline fun <reified T:Any> findPage(query: Query,page:PageResult<T>): PageResult<T> {
-        page.startTime?.let { query.addCriteria(Criteria.where("createTime").gt(it)) }
-        page.endTime?.let { query.addCriteria(Criteria.where("createTime").lt(it)) }
+        if(page.startTime!=null || page.endTime!=null){
+            val createTimeCriteria = Criteria.where("createTime")
+            page.startTime?.let { createTimeCriteria.gt(it) }
+            page.endTime?.let { createTimeCriteria.lt(it) }
+            query.addCriteria(createTimeCriteria)
+        }
         try {
             val count = mongoTemplate.count(query,T::class.java,T::class.java.simpleName)
             page.totalCount = count
@@ -502,8 +510,12 @@ class DslOperator(mongoClient: MongoClient,database:String){
      * 查找操作: 分页查询
      */
     fun <T:Any> findPage(query: Query,page:PageResult<T>,clazz:Class<T>): PageResult<T> {
-        page.startTime?.let { query.addCriteria(Criteria.where("createTime").gt(it)) }
-        page.endTime?.let { query.addCriteria(Criteria.where("createTime").lt(it)) }
+        if(page.startTime!=null || page.endTime!=null){
+            val createTimeCriteria = Criteria.where("createTime")
+            page.startTime?.let { createTimeCriteria.gt(it) }
+            page.endTime?.let { createTimeCriteria.lt(it) }
+            query.addCriteria(createTimeCriteria)
+        }
         try {
             val count = mongoTemplate.count(query,clazz,clazz.simpleName)
             page.totalCount = count

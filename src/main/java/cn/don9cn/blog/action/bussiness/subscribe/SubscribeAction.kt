@@ -29,10 +29,12 @@ open class SubscribeAction : BaseAction<SubscribeInfo>() {
         return ActionMsgHandler.update(subscribeService!!.baseUpdate(t))
     }
 
+
     override fun baseRemove(code: String): ActionMsg {
         return ActionMsgHandler.delete(subscribeService!!.baseDeleteById(code))
     }
 
+    @DeleteMapping
     override fun baseRemoveBatch(codes: String): ActionMsg {
         return ActionMsgHandler.delete(subscribeService!!.baseDeleteBatch(codes))
     }
@@ -45,7 +47,6 @@ open class SubscribeAction : BaseAction<SubscribeInfo>() {
         return ActionMsgHandler.find(subscribeService!!.baseFindAll())
     }
 
-    @GetMapping("/list")
     override fun baseFindListByParams(t: SubscribeInfo): ActionMsg {
         return ActionMsgHandler.find(subscribeService!!.baseFindListByParams(t))
     }
@@ -53,6 +54,16 @@ open class SubscribeAction : BaseAction<SubscribeInfo>() {
     @GetMapping("/page")
     override fun baseFindByPage(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, t: SubscribeInfo): ActionMsg {
         return ActionMsgHandler.find(subscribeService!!.baseFindByPage(PageResult(page, limit, startTime, endTime, orderBy, t)))
+    }
+
+    @GetMapping("/page/byUser")
+    open fun findByPageByUser(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, t: SubscribeInfo): ActionMsg {
+        return ActionMsgHandler.find(subscribeService!!.findByPageByUser(PageResult(page, limit, startTime, endTime, orderBy, t)))
+    }
+
+    @GetMapping("/subscribes/page/byUser")
+    open fun findSubscribesByPageByUser(page: Int, limit: Int, startTime: String?, endTime: String?, orderBy: String?, t: SubscribeInfo): ActionMsg {
+        return ActionMsgHandler.find(subscribeService!!.findSubscribesByPageByUser(PageResult(page, limit, startTime, endTime, orderBy, t)))
     }
 
     @DeleteMapping("/public")
