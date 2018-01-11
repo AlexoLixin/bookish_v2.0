@@ -71,7 +71,7 @@ spring:
   profiles: development
   redis:
     host: 47.94.206.26
-    port: 6379
+    port: 6380
   activemq:
     queue-default: queue-default
     queue-user-prefix: queue-user-test-
