@@ -1,5 +1,6 @@
 package cn.don9cn.blog.autoconfigure.websocket.msg;
 
+import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager;
 import cn.don9cn.blog.util.UuidUtil;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -38,7 +39,7 @@ public class MsgWebSocketHandlerInterceptor extends HttpSessionHandshakeIntercep
                 String username = (String) session.getAttribute("CURRENT_USER");
                 //当前session中没有用户信息,说明是匿名用户,随机生成一个uuid作为用户名
                 if (username==null) {
-                    username = UuidUtil.getUuid();
+                    username = MyShiroCacheManager.INSTANCE.getUserName();
                 }
                 //因为用户名是唯一的,所以可以作为webSocket连接用户的唯一标识
                 attributes.put("system_msg_webSocket_user",username);
