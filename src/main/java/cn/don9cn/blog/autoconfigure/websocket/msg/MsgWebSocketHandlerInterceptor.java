@@ -36,11 +36,11 @@ public class MsgWebSocketHandlerInterceptor extends HttpSessionHandshakeIntercep
             HttpSession session = servletRequest.getServletRequest().getSession(true);
             if (session != null) {
                 //使用userName区分WebSocketHandler，以便定向发送消息
-                String username = (String) session.getAttribute("CURRENT_USER");
-                //当前session中没有用户信息,说明是匿名用户,随机生成一个uuid作为用户名
+                String username = MyShiroCacheManager.INSTANCE.getUserName();
+                /*//当前session中没有用户信息,说明是匿名用户,随机生成一个uuid作为用户名
                 if (username==null) {
                     username = MyShiroCacheManager.INSTANCE.getUserName();
-                }
+                }*/
                 //因为用户名是唯一的,所以可以作为webSocket连接用户的唯一标识
                 attributes.put("system_msg_webSocket_user",username);
             }

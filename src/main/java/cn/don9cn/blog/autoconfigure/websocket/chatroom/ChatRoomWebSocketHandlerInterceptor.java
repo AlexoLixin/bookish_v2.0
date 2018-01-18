@@ -1,5 +1,6 @@
 package cn.don9cn.blog.autoconfigure.websocket.chatroom;
 
+import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager;
 import cn.don9cn.blog.autoconfigure.websocket.chatroom.util.RandomNameUtil;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -26,10 +27,10 @@ public class ChatRoomWebSocketHandlerInterceptor extends HttpSessionHandshakeInt
             HttpSession session = servletRequest.getServletRequest().getSession(true);
             if (session != null) {
                 // 如果是登陆用户,就使用其用户名加入聊天室
-                String username = (String) session.getAttribute("CURRENT_USER");
+                String username = MyShiroCacheManager.INSTANCE.getUserName();
                 // 否则随机创建一个用户名
-                if (username==null) {
-                    username = RandomNameUtil.get();
+                if (username.equals("")) {
+                    username = "visitor-"+RandomNameUtil.get();
                 }
                 attributes.put("chatRoom_msg_webSocket_user",username);
             }
