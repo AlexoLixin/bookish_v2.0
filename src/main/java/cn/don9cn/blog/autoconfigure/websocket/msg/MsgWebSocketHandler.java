@@ -1,6 +1,6 @@
 package cn.don9cn.blog.autoconfigure.websocket.msg;
 
-import cn.don9cn.blog.autoconfigure.activemq.core.MqConsumerGenerator;
+import cn.don9cn.blog.autoconfigure.activemq.core.MqConsumerManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentMap;
 public class MsgWebSocketHandler extends TextWebSocketHandler {
 
     @Autowired
-    private MqConsumerGenerator mqConsumerGenerator;
+    private MqConsumerManager mqConsumerManager;
 
     private static final ConcurrentMap<String,WebSocketSession> userMap;
 
@@ -48,7 +48,7 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
         userMap.put(username,session);
         logger.info("MsgWebSocket: 用户 ["+username+"] 连接成功. 当前用户数量: " + userMap.values().size());
         // 开始监听并推送消息
-        mqConsumerGenerator.startListen(username,this);
+        mqConsumerManager.startListen(username,this);
 
     }
 
@@ -61,7 +61,7 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
         String username= (String) session.getAttributes().get("system_msg_webSocket_user");
         userMap.remove(username);
         logger.info("MsgWebSocket: 用户 [" + username + "] 退出连接... 当前用户数量: " + userMap.values().size());
-        mqConsumerGenerator.closeListen(username);
+        mqConsumerManager.closeListen(username);
 
     }
 
@@ -81,7 +81,7 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
         if(session.isOpen()) session.close();
         String username= (String) session.getAttributes().get("system_msg_webSocket_user");
         userMap.remove(username);
-        mqConsumerGenerator.closeListen(username);
+        mqConsumerManager.closeListen(username);
         logger.info("MsgWebSocket: 发生异常,用户 [" + username + "] 退出连接... 当前用户数量: " + userMap.values().size());
     }
 
@@ -117,7 +117,7 @@ public class MsgWebSocketHandler extends TextWebSocketHandler {
             }
         } catch (IOException e) {
             logger.error("MsgWebSocket: 用户 [" + username + "] 的会话session关闭失败...");
-            mqConsumerGenerator.closeListen(username);
+            mqConsumerManager.closeListen(username);
         }
     }
 

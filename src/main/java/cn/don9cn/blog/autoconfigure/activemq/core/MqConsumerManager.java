@@ -4,16 +4,13 @@ import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant;
 import cn.don9cn.blog.autoconfigure.activemq.listener.UserMqListener;
 import cn.don9cn.blog.autoconfigure.websocket.msg.MsgWebSocketHandler;
 import cn.don9cn.blog.exception.ExceptionWrapper;
-import cn.don9cn.blog.service.bussiness.SubscribeService;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.jms.*;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 /**
@@ -23,7 +20,7 @@ import java.util.concurrent.FutureTask;
  * @Modify:
  */
 @Component
-public class MqConsumerGenerator {
+public class MqConsumerManager {
 
     @Autowired
     private ConnectionFactory connectionFactory;
@@ -33,7 +30,7 @@ public class MqConsumerGenerator {
 
     private final ConcurrentHashMap<String,FutureTask<ActiveMQConnection>> cache = new ConcurrentHashMap<>();
 
-    private static Logger logger = Logger.getLogger(MqConsumerGenerator.class);
+    private static Logger logger = Logger.getLogger(MqConsumerManager.class);
 
     public void startListen(String username, MsgWebSocketHandler msgWebSocketHandler){
 
