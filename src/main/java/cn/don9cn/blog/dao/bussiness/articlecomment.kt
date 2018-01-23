@@ -1,6 +1,6 @@
 package cn.don9cn.blog.dao.bussiness
 
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.PageResult
 import cn.don9cn.blog.dao.BaseDao
 import cn.don9cn.blog.model.bussiness.acticlecomment.ArticleComment
 import cn.don9cn.blog.support.mongo.ext.*

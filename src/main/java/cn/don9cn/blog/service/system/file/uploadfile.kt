@@ -1,6 +1,6 @@
 package cn.don9cn.blog.service.system.file
 
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.PageResult
 import cn.don9cn.blog.dao.bussiness.ArticleAndFileDao
 import cn.don9cn.blog.dao.system.file.UploadFileDao
 import cn.don9cn.blog.model.system.file.UploadFile

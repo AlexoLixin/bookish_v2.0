@@ -3,7 +3,7 @@ package cn.don9cn.blog.dao.bussiness
 import cn.don9cn.blog.support.mongo.ext.and
 import cn.don9cn.blog.support.mongo.ext.eq
 import cn.don9cn.blog.support.mongo.ext.query
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.PageResult
 import cn.don9cn.blog.dao.BaseDao
 import cn.don9cn.blog.model.bussiness.article.Article
 import com.alibaba.fastjson.JSON

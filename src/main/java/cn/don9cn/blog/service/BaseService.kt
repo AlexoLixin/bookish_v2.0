@@ -1,6 +1,6 @@
 package cn.don9cn.blog.service
 
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.PageResult
 import java.io.Serializable
 
 /**

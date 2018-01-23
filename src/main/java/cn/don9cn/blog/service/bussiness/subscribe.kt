@@ -1,12 +1,11 @@
 package cn.don9cn.blog.service.bussiness
 
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.PageResult
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType
 import cn.don9cn.blog.autoconfigure.activemq.core.MqManager
 import cn.don9cn.blog.autoconfigure.activemq.core.MqTask
 import cn.don9cn.blog.autoconfigure.activemq.model.CommonMqMessage
-import cn.don9cn.blog.autoconfigure.activemq.model.SubscribeMailMessage
 import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager
 import cn.don9cn.blog.dao.bussiness.SubscribeInfoDao
 import cn.don9cn.blog.dao.system.rbac.SysUserDao

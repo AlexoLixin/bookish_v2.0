@@ -1,10 +1,9 @@
 package cn.don9cn.blog.action.bussiness.article
 
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.PageResult
 import cn.don9cn.blog.action.BaseAction
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify
 import cn.don9cn.blog.service.bussiness.ArticleClassifyService
-import cn.don9cn.blog.service.bussiness.ArticleService
 import cn.don9cn.blog.support.action.ActionMsg
 import cn.don9cn.blog.support.action.ActionMsgHandler
 import org.springframework.beans.factory.annotation.Autowired

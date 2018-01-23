@@ -1,4 +1,4 @@
-package cn.booklish.mongodsl.core
+package cn.don9cn.blog.support.mongo.core
 
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort

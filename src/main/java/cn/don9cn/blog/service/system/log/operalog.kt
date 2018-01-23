@@ -1,6 +1,6 @@
 package cn.don9cn.blog.service.system.log
 
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.PageResult
 import cn.don9cn.blog.dao.system.log.SysOperaLogDao
 import cn.don9cn.blog.model.system.log.SysOperaLog
 import cn.don9cn.blog.service.BaseService

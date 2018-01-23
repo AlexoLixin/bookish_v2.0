@@ -1,6 +1,6 @@
 package cn.don9cn.blog.service.bussiness
 
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.PageResult
 import cn.don9cn.blog.dao.bussiness.ArticleClassifyDao
 import cn.don9cn.blog.model.bussiness.articleclassify.ArticleClassify
 import cn.don9cn.blog.service.BaseService

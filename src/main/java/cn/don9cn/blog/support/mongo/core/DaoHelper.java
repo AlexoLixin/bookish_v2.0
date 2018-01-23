@@ -1,6 +1,5 @@
 package cn.don9cn.blog.support.mongo.core;
 
-import cn.booklish.mongodsl.core.DslOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;

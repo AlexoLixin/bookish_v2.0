@@ -1,4 +1,4 @@
-package cn.booklish.mongodsl.core
+package cn.don9cn.blog.support.mongo.core
 
 import cn.don9cn.blog.support.mongo.ext.eq
 import cn.don9cn.blog.support.mongo.ext.query
@@ -16,7 +16,7 @@ class DslOperator(mongoClient: MongoClient,database:String){
 
     val mongoTemplate = MongoTemplate(mongoClient,database)
 
-    operator fun <T> invoke(operation:DslOperator.() -> T):T{
+    operator fun <T> invoke(operation: DslOperator.() -> T):T{
         return operation()
     }
 
@@ -463,7 +463,7 @@ class DslOperator(mongoClient: MongoClient,database:String){
     /**
      * 查找操作: 分页查询
      */
-    fun <T:Any> findPage(page:PageResult<T>):PageResult<T>{
+    fun <T:Any> findPage(page: PageResult<T>): PageResult<T> {
         val entity = page.entity?:throw DslOperationException("findPage 查找失败,PageResult中参数实体entity为空")
         val query = createQueryByEntity(entity)
         if(page.startTime!=null || page.endTime!=null){
@@ -487,7 +487,7 @@ class DslOperator(mongoClient: MongoClient,database:String){
     /**
      * 查找操作: 分页查询
      */
-    inline fun <reified T:Any> findPage(query: Query,page:PageResult<T>): PageResult<T> {
+    inline fun <reified T:Any> findPage(query: Query,page: PageResult<T>): PageResult<T> {
         if(page.startTime!=null || page.endTime!=null){
             val createTimeCriteria = Criteria.where("createTime")
             page.startTime?.let { createTimeCriteria.gt(it) }
@@ -509,7 +509,7 @@ class DslOperator(mongoClient: MongoClient,database:String){
     /**
      * 查找操作: 分页查询
      */
-    fun <T:Any> findPage(query: Query,page:PageResult<T>,clazz:Class<T>): PageResult<T> {
+    fun <T:Any> findPage(query: Query, page: PageResult<T>, clazz:Class<T>): PageResult<T> {
         if(page.startTime!=null || page.endTime!=null){
             val createTimeCriteria = Criteria.where("createTime")
             page.startTime?.let { createTimeCriteria.gt(it) }

@@ -1,6 +1,6 @@
 package cn.don9cn.blog.action.bussiness.article
 
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.PageResult
 import cn.don9cn.blog.action.BaseAction
 import cn.don9cn.blog.model.bussiness.article.Article
 import cn.don9cn.blog.service.bussiness.ArticleService

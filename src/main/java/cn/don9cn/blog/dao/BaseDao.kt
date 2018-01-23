@@ -2,10 +2,9 @@ package cn.don9cn.blog.dao
 
 import cn.don9cn.blog.support.mongo.ext.inThe
 import cn.don9cn.blog.support.mongo.ext.query
-import cn.booklish.mongodsl.core.DslOperator
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.DslOperator
+import cn.don9cn.blog.support.mongo.core.PageResult
 import cn.don9cn.blog.autoconfigure.shiro.core.MyShiroCacheManager
-import cn.don9cn.blog.autoconfigure.shiro.util.ShiroUtil
 import cn.don9cn.blog.model.BaseModel
 import cn.don9cn.blog.support.mongo.core.DaoHelper
 import cn.don9cn.blog.util.getNowDate
@@ -14,7 +13,7 @@ import java.lang.reflect.ParameterizedType
 
 interface BaseDao<T:BaseModel> {
 
-    val dslOperator:DslOperator
+    val dslOperator: DslOperator
         get() = DaoHelper.getDslOperator()
 
     /**

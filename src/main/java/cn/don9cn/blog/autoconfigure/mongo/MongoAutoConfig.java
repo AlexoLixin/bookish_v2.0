@@ -1,6 +1,6 @@
 package cn.don9cn.blog.autoconfigure.mongo;
 
-import cn.booklish.mongodsl.core.DslOperator;
+import cn.don9cn.blog.support.mongo.core.DslOperator;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;

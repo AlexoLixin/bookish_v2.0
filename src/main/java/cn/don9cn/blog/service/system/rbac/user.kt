@@ -1,6 +1,6 @@
 package cn.don9cn.blog.service.system.rbac
 
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.PageResult
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqConstant
 import cn.don9cn.blog.autoconfigure.activemq.constant.MqDestinationType
 import cn.don9cn.blog.autoconfigure.activemq.core.MqManager

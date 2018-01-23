@@ -1,6 +1,6 @@
 package cn.don9cn.blog.action.system.rbac
 
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.PageResult
 import cn.don9cn.blog.action.BaseAction
 import cn.don9cn.blog.model.system.rbac.RegisterResult
 import cn.don9cn.blog.model.system.rbac.SysUser

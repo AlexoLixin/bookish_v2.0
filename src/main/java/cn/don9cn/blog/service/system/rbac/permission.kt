@@ -1,6 +1,6 @@
 package cn.don9cn.blog.service.system.rbac
 
-import cn.booklish.mongodsl.core.PageResult
+import cn.don9cn.blog.support.mongo.core.PageResult
 import cn.don9cn.blog.dao.system.rbac.SysPermissionDao
 import cn.don9cn.blog.model.system.rbac.SysPermission
 import cn.don9cn.blog.service.BaseService
